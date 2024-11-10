@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import interface_adapter.write_review.WriteReviewController;
+import interface_adapter.write_review.WriteReviewViewModel;
 import main.data_access.InMemoryUserDataAccessObject;
 import entity.CommonUserFactory;
 import entity.UserFactory;
@@ -34,10 +36,11 @@ import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
-import view.LoggedInView;
-import view.LoginView;
-import view.SignupView;
-import view.ViewManager;
+import use_case.write_review.WriteReviewInputBoundary;
+import use_case.write_review.WriteReviewInteractor;
+import use_case.write_review.WriteReviewOutputBoundary;
+import interface_adapter.write_review.WriteReviewPresenter;
+import view.*;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -67,6 +70,8 @@ public class AppBuilder {
     private LoggedInViewModel loggedInViewModel;
     private LoggedInView loggedInView;
     private LoginView loginView;
+    private WriteReviewView writeReviewView;
+    private WriteReviewViewModel writeReviewViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -102,6 +107,17 @@ public class AppBuilder {
         loggedInViewModel = new LoggedInViewModel();
         loggedInView = new LoggedInView(loggedInViewModel);
         cardPanel.add(loggedInView, loggedInView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the WriteReview View to the application.
+     * @return this builder
+     */
+    public AppBuilder addWriteReviewView() {
+        writeReviewViewModel = new WriteReviewViewModel();
+        writeReviewView = new WriteReviewView(writeReviewViewModel);
+        cardPanel.add(writeReviewView, writeReviewView.getViewName());
         return this;
     }
 
@@ -165,6 +181,22 @@ public class AppBuilder {
 
         final LogoutController logoutController = new LogoutController(logoutInteractor);
         loggedInView.setLogoutController(logoutController);
+        return this;
+    }
+
+    public AppBuilder addWriteReviewUseCase() {
+
+
+        final WriteReviewPresenter writeReviewOutputBoundary = new WriteReviewPresenter(writeReviewViewModel,
+                loggedInViewModel, viewManagerModel);
+        final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel,
+                loggedInViewModel, loginViewModel);
+
+        final WriteReviewInputBoundary writeReviewInteractor =
+                new WriteReviewInteractor(userDataAccessObject, writeReviewOutputBoundary);
+
+        final WriteReviewController writeReviewController = new WriteReviewController(writeReviewInteractor);
+        writeReviewView.setWriteReviewController(writeReviewController);
         return this;
     }
 
