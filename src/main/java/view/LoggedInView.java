@@ -36,6 +36,7 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
     private final JTextField passwordInputField = new JTextField(15);
     private final JButton changePassword;
+    private final JButton writeReview;
 
     public LoggedInView(LoggedInViewModel loggedInViewModel) {
         this.loggedInViewModel = loggedInViewModel;
@@ -56,6 +57,9 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
 
         changePassword = new JButton("Change Password");
         buttons.add(changePassword);
+
+        writeReview = new JButton("Write Review");
+        buttons.add(writeReview);
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -106,6 +110,22 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                         final String username = state.getUsername();
 
                         logoutController.execute(username);
+                        // 1. get the state out of the loggedInViewModel. It contains the username.
+                        // 2. Execute the logout Controller.
+                    }
+                }
+        );
+
+        // New Code to handle what happens when the user wants to create a new review
+        writeReview.addActionListener(
+                // This creates an anonymous subclass of ActionListener and instantiates it.
+                evt -> {
+                    if (evt.getSource().equals(writeReview)) {
+
+                        final LoggedInState state = loggedInViewModel.getState();
+                        final String username = state.getUsername();
+
+                        logoutController.execute(username); // Change to WriteReview Controller when necessary
                         // 1. get the state out of the loggedInViewModel. It contains the username.
                         // 2. Execute the logout Controller.
                     }
