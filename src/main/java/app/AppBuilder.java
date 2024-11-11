@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import interface_adapter.account.AccountViewModel;
 import interface_adapter.write_review.WriteReviewController;
 import interface_adapter.write_review.WriteReviewViewModel;
 import main.data_access.InMemoryUserDataAccessObject;
@@ -67,11 +68,13 @@ public class AppBuilder {
     private SignupView signupView;
     private SignupViewModel signupViewModel;
     private LoginViewModel loginViewModel;
-    private LoggedInViewModel loggedInViewModel;
-    private LoggedInView loggedInView;
+//    private LoggedInViewModel loggedInViewModel;
+//    private LoggedInView loggedInView;
     private LoginView loginView;
     private WriteReviewView writeReviewView;
     private WriteReviewViewModel writeReviewViewModel;
+    private AccountViewModel accountViewModel;
+    private AccountView accountView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -100,13 +103,13 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the LoggedIn View to the application.
+     * Adds the Account View to the application.
      * @return this builder
      */
-    public AppBuilder addLoggedInView() {
-        loggedInViewModel = new LoggedInViewModel();
-        loggedInView = new LoggedInView(loggedInViewModel);
-        cardPanel.add(loggedInView, loggedInView.getViewName());
+    public AppBuilder addAccountView() {
+        accountViewModel = new AccountViewModel();
+        accountView = new AccountView(accountViewModel);
+        cardPanel.add(accountView, accountView.getViewName());
         return this;
     }
 
@@ -142,7 +145,7 @@ public class AppBuilder {
      */
     public AppBuilder addLoginUseCase() {
         final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel,
-                loggedInViewModel, loginViewModel);
+                accountViewModel, loginViewModel);
         final LoginInputBoundary loginInteractor = new LoginInteractor(
                 userDataAccessObject, loginOutputBoundary);
 
@@ -151,22 +154,22 @@ public class AppBuilder {
         return this;
     }
 
-    /**
-     * Adds the Change Password Use Case to the application.
-     * @return this builder
-     */
-    public AppBuilder addChangePasswordUseCase() {
-        final ChangePasswordOutputBoundary changePasswordOutputBoundary =
-                new ChangePasswordPresenter(loggedInViewModel);
-
-        final ChangePasswordInputBoundary changePasswordInteractor =
-                new ChangePasswordInteractor(userDataAccessObject, changePasswordOutputBoundary, userFactory);
-
-        final ChangePasswordController changePasswordController =
-                new ChangePasswordController(changePasswordInteractor);
-        loggedInView.setChangePasswordController(changePasswordController);
-        return this;
-    }
+//    /**
+//     * Adds the Change Password Use Case to the application.
+//     * @return this builder
+//     */
+//    public AppBuilder addChangePasswordUseCase() {
+//        final ChangePasswordOutputBoundary changePasswordOutputBoundary =
+//                new ChangePasswordPresenter(loggedInViewModel);
+//
+//        final ChangePasswordInputBoundary changePasswordInteractor =
+//                new ChangePasswordInteractor(userDataAccessObject, changePasswordOutputBoundary, userFactory);
+//
+//        final ChangePasswordController changePasswordController =
+//                new ChangePasswordController(changePasswordInteractor);
+//        loggedInView.setChangePasswordController(changePasswordController);
+//        return this;
+//    }
 
     /**
      * Adds the Logout Use Case to the application.
@@ -174,31 +177,31 @@ public class AppBuilder {
      */
     public AppBuilder addLogoutUseCase() {
         final LogoutOutputBoundary logoutOutputBoundary = new LogoutPresenter(viewManagerModel,
-                loggedInViewModel, loginViewModel);
+                accountViewModel, loginViewModel);
 
         final LogoutInputBoundary logoutInteractor =
                 new LogoutInteractor(userDataAccessObject, logoutOutputBoundary);
 
         final LogoutController logoutController = new LogoutController(logoutInteractor);
-        loggedInView.setLogoutController(logoutController);
+        accountView.setLogoutController(logoutController);
         return this;
     }
 
-    public AppBuilder addWriteReviewUseCase() {
-
-
-        final WriteReviewPresenter writeReviewOutputBoundary = new WriteReviewPresenter(writeReviewViewModel,
-                loggedInViewModel, viewManagerModel);
-        final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel,
-                loggedInViewModel, loginViewModel);
-
-        final WriteReviewInputBoundary writeReviewInteractor =
-                new WriteReviewInteractor(userDataAccessObject, writeReviewOutputBoundary);
-
-        final WriteReviewController writeReviewController = new WriteReviewController(writeReviewInteractor);
-        writeReviewView.setWriteReviewController(writeReviewController);
-        return this;
-    }
+//    public AppBuilder addWriteReviewUseCase() {
+//
+//
+//        final WriteReviewPresenter writeReviewOutputBoundary = new WriteReviewPresenter(writeReviewViewModel,
+//                loggedInViewModel, viewManagerModel);
+//        final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel,
+//                loggedInViewModel, loginViewModel);
+//
+//        final WriteReviewInputBoundary writeReviewInteractor =
+//                new WriteReviewInteractor(userDataAccessObject, writeReviewOutputBoundary);
+//
+//        final WriteReviewController writeReviewController = new WriteReviewController(writeReviewInteractor);
+//        writeReviewView.setWriteReviewController(writeReviewController);
+//        return this;
+//    }
 
     /**
      * Creates the JFrame for the application and initially sets the SignupView to be displayed.

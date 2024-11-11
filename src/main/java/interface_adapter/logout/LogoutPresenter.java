@@ -1,8 +1,8 @@
 package interface_adapter.logout;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.change_password.LoggedInState;
-import interface_adapter.change_password.LoggedInViewModel;
+import interface_adapter.account.AccountState;
+import interface_adapter.account.AccountViewModel;
 import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
 import use_case.logout.LogoutOutputBoundary;
@@ -13,15 +13,15 @@ import use_case.logout.LogoutOutputData;
  */
 public class LogoutPresenter implements LogoutOutputBoundary {
 
-    private LoggedInViewModel loggedInViewModel;
+    private AccountViewModel accountViewModel;
     private ViewManagerModel viewManagerModel;
     private LoginViewModel loginViewModel;
 
     public LogoutPresenter(ViewManagerModel viewManagerModel,
-                          LoggedInViewModel loggedInViewModel,
+                          AccountViewModel accountViewModel,
                            LoginViewModel loginViewModel) {
         // assign to the three instance variables.
-        this.loggedInViewModel = loggedInViewModel;
+        this.accountViewModel = accountViewModel;
         this.viewManagerModel = viewManagerModel;
         this.loginViewModel = loginViewModel;
     }
@@ -39,10 +39,10 @@ public class LogoutPresenter implements LogoutOutputBoundary {
         // 2. set the username in the state to the empty string
         // 3. set the state in the LoggedInViewModel to the updated state
         // 4. firePropertyChanged so that the View that is listening is updated.
-        final LoggedInState loggedInState = loggedInViewModel.getState();
-        loggedInState.setUsername("");
-        loggedInViewModel.setState(loggedInState);
-        loggedInViewModel.firePropertyChanged();
+        final AccountState accountState = accountViewModel.getState();
+        accountState.setUsername("");
+        accountViewModel.setState(accountState);
+        accountViewModel.firePropertyChanged();
 
         // have prepareSuccessView update the LoginState
         // 5. get the LoginState out of the appropriate View Model,
