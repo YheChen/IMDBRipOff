@@ -5,7 +5,7 @@ public interface WriteReviewDataAccessInterface {
 
     /**
      * Checks if the given review exists.
-     * @param id the id of the review to look for
+     * @param id the id of the review to look for.
      * @return true if a review with the given id exists, false otherwise.
      */
     boolean existsByID(String id);
