@@ -44,6 +44,7 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
         this.writeReviewViewModel.addPropertyChangeListener(this);
 
         final JLabel title = new JLabel("Write Review");
+        final JLabel user = new JLabel("User: ");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Add text fields for the media reviewed, it's rating and content (text).
@@ -93,7 +94,8 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
                     if (evt.getSource().equals(submitReview)) {
 
                         final WriteReviewState state = writeReviewViewModel.getState();
-                        final String username = state.getUsername();
+                        writeReviewController.execute(state.getUsername(), state.getContent(), state.getRating(),
+                                state.getMediaID());
 
 
 
