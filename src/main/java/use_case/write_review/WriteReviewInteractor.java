@@ -26,11 +26,11 @@ public class WriteReviewInteractor implements WriteReviewInputBoundary {
                 writeReviewInputData.getDate());
         reviewDataAccessObject.save(review);
 
-
         final WriteReviewOutputData writeReviewOutputData =
                 new WriteReviewOutputData(review.getUsername(), review.getContent(),
                         review.getRating(), review.getMediaID(), review.getDateCreated(), true);
         userPresenter.prepareSuccessView(writeReviewOutputData);
+
 
     }
 }
