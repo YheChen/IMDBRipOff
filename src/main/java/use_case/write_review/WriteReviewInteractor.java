@@ -1,37 +1,31 @@
 package use_case.write_review;
 
 import entity.User;
-import interface_adapter.write_review.WriteReviewPresenter;
-import use_case.login.*;
+import entity.Review;
+import use_case.signup.SignupOutputData;
+import use_case.signup.SignupUserDataAccessInterface;
 
 /**
- * The Login Interactor.
+ * The Signup Interactor.
  */
 public class WriteReviewInteractor implements WriteReviewInputBoundary {
-    private final LoginUserDataAccessInterface userDataAccessObject;
-    private final WriteReviewPresenter writeReviewPresenter;
+    private final WriteReviewDataAccessInterface reviewDataAccessObject;
+    private final WriteReviewOutputBoundary userPresenter;
 
-    public WriteReviewInteractor(LoginUserDataAccessInterface userDataAccessInterface,
-                           WriteReviewPresenter writeReviewPresenter) {
-        this.userDataAccessObject = userDataAccessInterface;
-        this.writeReviewPresenter = writeReviewPresenter;
+    public WriteReviewInteractor(WriteReviewDataAccessInterface signupDataAccessInterface,
+                            WriteReviewOutputBoundary userPresenter) {
+        this.reviewDataAccessObject = signupDataAccessInterface;
+        this.userPresenter = userPresenter;
     }
 
+
     @Override
-    public void execute(WriteReviewInputData writeReviewInputData){
-        final String username = writeReviewInputData.getUsername();
-        if (!userDataAccessObject.existsByName(username)) {
-            // loginPresenter.prepareFailView(username + ": Account does not exist."); // Eventually this will
-            // change to WriteReviewPresenter
-        }
-        else {
+    public void execute(WriteReviewInputData writeReviewInputData) {
+        final Review review = new Review(writeReviewInputData.getContent(),
+                writeReviewInputData.getMedia(), writeReviewInputData.getUsername(), writeReviewInputData.getMedia(),
+                writeReviewInputData.getRating(), writeReviewInputData.getDate());
+        reviewDataAccessObject.save(review);
+        final WriteReviewOutputData writeReviewOutputData = new SignupOutputData(user.getUsername(), false);
 
-            // final User user = userDataAccessObject.get(WriteReviewInputData.getUsername());
-           //  final WriteReviewOutputData writeReviewOutputData = new WriteReviewOutputData()
-
-            // userDataAccessObject.setCurrentUsername(user.getUsername());
-            // final LoginOutputData loginOutputData = new LoginOutputData(user.getUsername(), false);
-            // loginPresenter.prepareSuccessView(loginOutputData); // change to view presenter
-        }
     }
 }

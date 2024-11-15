@@ -19,9 +19,12 @@ public class WriteReviewController {
     /**
      * Executes the Write Review Use Case.
      * @param username the username of the user logging in
+     * @param content the content of the review (optional)
+     * @param rating the rating of the review out of 5
+     * @param media the media being reviewed
      */
-    public void execute(String username) {
-        final WriteReviewInputData writeReviewInputData = new WriteReviewInputData(username);
+    public void execute(String username, String content, int rating, String media) {
+        final WriteReviewInputData writeReviewInputData = new WriteReviewInputData(username, content, rating, media);
 
         writeReviewUseCaseInteractor.execute(writeReviewInputData);
     }
