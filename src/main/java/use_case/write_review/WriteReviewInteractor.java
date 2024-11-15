@@ -21,10 +21,16 @@ public class WriteReviewInteractor implements WriteReviewInputBoundary {
 
     @Override
     public void execute(WriteReviewInputData writeReviewInputData) {
-        final Review review = new Review(writeReviewInputData.getContent(),
-                writeReviewInputData.getMedia(), writeReviewInputData.getUsername(), writeReviewInputData.getMedia(),
-                writeReviewInputData.getRating(), writeReviewInputData.getDate());
+        final Review review = new Review(writeReviewInputData.getUsername(),
+                writeReviewInputData.getMedia(), writeReviewInputData.getContent(), writeReviewInputData.getRating(),
+                writeReviewInputData.getDate());
         reviewDataAccessObject.save(review);
+
+        final WriteReviewOutputData writeReviewOutputData =
+                new WriteReviewOutputData(review.getUsername(), review.getContent(),
+                        review.getRating(), review.getMediaID(), review.getDateCreated(), true);
+        userPresenter.prepareSuccessView(writeReviewOutputData);
+
 
     }
 }
