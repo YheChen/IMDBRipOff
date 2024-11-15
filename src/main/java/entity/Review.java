@@ -21,4 +21,31 @@ public class Review
         this.dateUpdated = dateCreated;
     }
 
+    public String getMediaID() {
+        return mediaID;
+    }
+
+    public String getReviewID() {
+        return reviewID;
+    }
+
+    public Date getDateCreated() {
+        return dateCreated;
+    }
+
+    public Date getDateUpdated() {
+        return dateUpdated;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
 }
