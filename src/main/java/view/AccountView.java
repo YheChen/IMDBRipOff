@@ -27,54 +27,67 @@ public class AccountView extends JPanel implements ActionListener, PropertyChang
 
     public AccountView(AccountViewModel accountViewModel) {
         this.accountViewModel = accountViewModel;
+        this.accountViewModel.addPropertyChangeListener(this);
 
+        final JPanel header = new JPanel();
+        header.setMaximumSize(new Dimension(1000, 30));
+        final Font titleFont = new Font("sans", Font.BOLD, 16);
         final JLabel title = new JLabel("Account");
+        title.setFont(titleFont);
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
+        header.add(title);
 
-        final JLabel usernameInfo = new JLabel("Currently logged in: ");
-        username = new JLabel();
+        final JPanel subtitle = new JPanel();
+        subtitle.setMaximumSize(new Dimension(1000, 30));
+        final JLabel usernameInfo = new JLabel("Welcome to the review portal,");
+        subtitle.add(usernameInfo);
+        username = new JLabel("user");
+        subtitle.add(username);
 
         final JPanel buttons = new JPanel();
-        logOut = new JButton("Log Out");
-        buttons.add(logOut);
 
         changePassword = new JButton("Change Password");
+        changePassword.setAlignmentX(Component.CENTER_ALIGNMENT);
         buttons.add(changePassword);
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        logOut = new JButton("Log Out");
+        logOut.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buttons.add(logOut);
+
+        buttons.setLayout(new BoxLayout(buttons, BoxLayout.Y_AXIS));
 
         changePassword.addActionListener(
                 // This creates an anonymous subclass of ActionListener and instantiates it.
                 evt -> {
-//                    if (evt.getSource().equals(changePassword)) {
-//                        final AccountState currentState = accountViewModel.getState();
-//
-//                        this.changePasswordController.execute(
-//                                currentState.getUsername(),
-//                                currentState.getPassword()
-//                        );
-//                    }
+                    if (evt.getSource().equals(changePassword)) {
+                        final AccountState currentState = accountViewModel.getState();
+
+                        String newPassword = JOptionPane.showInputDialog(this, "Enter a new password", null);
+
+                        this.changePasswordController.execute(
+                                newPassword,
+                                currentState.getUsername()
+                        );
+                    }
                 }
         );
-
         logOut.addActionListener(
                 // This creates an anonymous subclass of ActionListener and instantiates it.
                 evt -> {
                     if (evt.getSource().equals(logOut)) {
-
                         final AccountState state = accountViewModel.getState();
-                        final String username = state.getUsername();
 
-                        logoutController.execute(username);
-                        // 1. get the state out of the loggedInViewModel. It contains the username.
-                        // 2. Execute the logout Controller.
+                        int answer = JOptionPane.showConfirmDialog(this, "Are you sure you want to log out?");
+                        if (answer == 0) {
+                            logoutController.execute(state.getUsername());
+                        }
                     }
                 }
         );
 
-        this.add(title);
-        this.add(usernameInfo);
-        this.add(username);
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.add(header);
+        this.add(subtitle);
         this.add(buttons);
     }
 
