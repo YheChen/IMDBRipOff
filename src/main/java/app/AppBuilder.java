@@ -9,8 +9,9 @@ import javax.swing.WindowConstants;
 import interface_adapter.account.AccountViewModel;
 import interface_adapter.write_review.WriteReviewController;
 import interface_adapter.write_review.WriteReviewViewModel;
-import main.data_access.InMemoryUserDataAccessObject;
+import data_access.InMemoryUserDataAccessObject;
 import entity.CommonUserFactory;
+
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.change_password.ChangePasswordController;
