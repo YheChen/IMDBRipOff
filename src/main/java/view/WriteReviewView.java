@@ -1,6 +1,6 @@
 package view;
 
-import java.awt.Component;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -13,6 +13,7 @@ import interface_adapter.change_password.LoggedInState;
 import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.logout.LogoutController;
+import interface_adapter.signup.SignupState;
 import interface_adapter.write_review.WriteReviewController;
 import interface_adapter.write_review.WriteReviewState;
 import interface_adapter.write_review.WriteReviewViewModel;
@@ -24,12 +25,14 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
 
     private final String viewName = "logged in";
     private final WriteReviewViewModel writeReviewViewModel;
+    private final Integer[] rating_choices;
     private final JLabel passwordErrorField = new JLabel();
     private ChangePasswordController changePasswordController;
     private LogoutController logoutController;
     private WriteReviewController writeReviewController;
     private final int SCREEN_WIDTH = 500;
     private final int SCREEN_HEIGHT = 800;
+    private final JComboBox<Integer> rating_dropdown;
 
     // private final JLabel username;
 
@@ -41,28 +44,26 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
 
     public WriteReviewView(WriteReviewViewModel writeReviewViewModel) {
         this.writeReviewViewModel = writeReviewViewModel;
-        this.writeReviewViewModel.addPropertyChangeListener(this);
+        writeReviewViewModel.addPropertyChangeListener(this);
 
         final JLabel title = new JLabel("Write Review");
-        final JLabel user = new JLabel("User: ");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        final JLabel media = new JLabel("Media Under Review: ");
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        final JLabel rating = new JLabel("Choose a rating: ");
 
         // Add text fields for the media reviewed, it's rating and content (text).
         final JTextField mediaSearch = new JTextField(20);
-        final JTextField rating = new JTextField(20);
         final JTextArea content = new JTextArea();
 
 
-        final LabelTextPanel mediaField = new LabelTextPanel(
-                new JLabel("Media Reviewed: "), mediaSearch);
-        final LabelTextPanel ratingField = new LabelTextPanel(
-                new JLabel("Your Rating: "), rating);
+        rating_choices = new Integer[]{1, 2, 3, 4, 5};
+
+        rating_dropdown = new JComboBox<>(rating_choices);
 
         final JPanel buttons = new JPanel();
         submitReview = new JButton("Submit Review");
         buttons.add(submitReview);
-
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         passwordInputField.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -107,16 +108,36 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
         );
 
         // Add everything to the Write Review J Panel
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(title);
-        this.add(mediaField);
-        this.add(ratingField);
-        this.add(new JLabel("Type your review here (optional)"));
+        this.add(media);
+        this.add(rating);
+        this.add(rating_dropdown);
+        this.add(new JLabel("Type your review here (optional)", JLabel.CENTER));
         this.add(content);
         this.add(buttons);
 
         // Modify the size of the J Frame
-        this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+//        this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     }
+
+//    private void addMediaListener() {
+//        mediaField.addActionListener( // This creates an anonymous subclass of ActionListener and instantiates it.
+//                evt -> {
+//
+//                    final WriteReviewState state = writeReviewViewModel.getState();
+//                    writeReviewController.execute(state.getUsername(), state.getContent(), state.getRating(),
+//                            state.getMediaID());
+//
+//
+//
+//                        // logoutController.execute(username); // Change to WriteReview Controller when necessary
+//                        // 1. get the state out of the loggedInViewModel. It contains the username.
+//                        // 2. Execute the logout Controller.
+//                    }
+//                );
+//    }
+
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
