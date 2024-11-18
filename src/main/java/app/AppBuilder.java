@@ -8,6 +8,7 @@ import javax.swing.WindowConstants;
 
 import data_access.InMemoryReviewDataAccessObject;
 import interface_adapter.account.AccountViewModel;
+import interface_adapter.browse_review.BrowseReviewViewModel;
 import interface_adapter.write_review.WriteReviewController;
 import interface_adapter.write_review.WriteReviewViewModel;
 import data_access.InMemoryUserDataAccessObject;
@@ -78,6 +79,8 @@ public class AppBuilder {
     private WriteReviewViewModel writeReviewViewModel;
     private AccountViewModel accountViewModel;
     private AccountView accountView;
+    private BrowseView browseView;
+    private BrowseReviewViewModel browseReviewViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -193,7 +196,7 @@ public class AppBuilder {
     public AppBuilder addWriteReviewUseCase() {
 
 
-        final WriteReviewPresenter writeReviewOutputBoundary = new WriteReviewPresenter(writeReviewViewModel,
+        final WriteReviewPresenter writeReviewOutputBoundary = new WriteReviewPresenter(browseReviewViewModel,
                 loggedInViewModel, viewManagerModel);
 
         final WriteReviewInputBoundary writeReviewInteractor =
@@ -214,7 +217,7 @@ public class AppBuilder {
 
         application.add(cardPanel);
 
-        viewManagerModel.setState(signupView.getViewName());
+        viewManagerModel.setState(writeReviewView.getViewName());
         viewManagerModel.firePropertyChanged();
 
         return application;
