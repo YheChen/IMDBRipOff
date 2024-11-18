@@ -23,7 +23,7 @@ public class InMemoryReviewDataAccessObject implements WriteReviewDataAccessInte
     /**
      * Saves the review.
      *
-     * @param review the review to save
+     * @param review the review to save (or update an existing review)
      */
     @Override
     public void save(Review review) {

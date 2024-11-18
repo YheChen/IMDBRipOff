@@ -1,40 +1,49 @@
 package use_case.write_review;
 
+import java.time.LocalDate;
+
 /**
  * The output data for the write review use case.
  */
 public class WriteReviewOutputData {
     private final String username;
-    private final String userID;
-    private final int rating;
     private final String content;
-    private final String mediaID;
+    private final int rating;
+    private final String media;
+    // add the date here?
+    private final LocalDate date;
+    private boolean success;
 
-    public WriteReviewOutputData(String username, String userID, int rating, String content, String mediaID){
+    public WriteReviewOutputData(String username, String content, int rating, String media, LocalDate date,
+                                 Boolean success){
         this.username = username;
-        this.userID = userID;
-        this.rating = rating;
         this.content = content;
-        this.mediaID = mediaID;
+        this.rating = rating;
+        this.media = media;
+        this.date = date;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getUserID() {
-        return userID;
-    }
-
-    public int getRating() {
-        return rating;
+    public boolean isSuccess() {
+        return success;
     }
 
     public String getContent() {
         return content;
     }
 
-    public String getMediaID() {
-        return mediaID;
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public String getMedia() {
+        return media;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }
