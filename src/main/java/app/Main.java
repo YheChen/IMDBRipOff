@@ -1,5 +1,7 @@
 package app;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import javax.swing.JFrame;
 
 /**
@@ -11,6 +13,10 @@ public class Main {
      * @param args unused arguments
      */
     public static void main(String[] args) {
+        // Load .env file into system properties
+        Dotenv.configure().systemProperties().load();
+
+        // Build application
         final AppBuilder appBuilder = new AppBuilder();
         final JFrame application = appBuilder
                 .addLoginView()
