@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import data_access.InMemoryReviewDataAccessObject;
 import interface_adapter.account.AccountViewModel;
 import interface_adapter.write_review.WriteReviewController;
 import interface_adapter.write_review.WriteReviewViewModel;
@@ -65,12 +66,13 @@ public class AppBuilder {
 
     // thought question: is the hard dependency below a problem?
     private final InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject();
+    private final InMemoryReviewDataAccessObject reviewDataAccessObject = new InMemoryReviewDataAccessObject();
 
     private SignupView signupView;
     private SignupViewModel signupViewModel;
     private LoginViewModel loginViewModel;
-//    private LoggedInViewModel loggedInViewModel;
-//    private LoggedInView loggedInView;
+    private LoggedInViewModel loggedInViewModel;
+    private LoggedInView loggedInView;
     private LoginView loginView;
     private WriteReviewView writeReviewView;
     private WriteReviewViewModel writeReviewViewModel;
@@ -188,21 +190,19 @@ public class AppBuilder {
         return this;
     }
 
-//    public AppBuilder addWriteReviewUseCase() {
-//
-//
-//        final WriteReviewPresenter writeReviewOutputBoundary = new WriteReviewPresenter(writeReviewViewModel,
-//                loggedInViewModel, viewManagerModel);
-//        final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel,
-//                loggedInViewModel, loginViewModel);
-//
-//        final WriteReviewInputBoundary writeReviewInteractor =
-//                new WriteReviewInteractor(userDataAccessObject, writeReviewOutputBoundary);
-//
-//        final WriteReviewController writeReviewController = new WriteReviewController(writeReviewInteractor);
-//        writeReviewView.setWriteReviewController(writeReviewController);
-//        return this;
-//    }
+    public AppBuilder addWriteReviewUseCase() {
+
+
+        final WriteReviewPresenter writeReviewOutputBoundary = new WriteReviewPresenter(writeReviewViewModel,
+                loggedInViewModel, viewManagerModel);
+
+        final WriteReviewInputBoundary writeReviewInteractor =
+                new WriteReviewInteractor(reviewDataAccessObject, writeReviewOutputBoundary);
+
+        final WriteReviewController writeReviewController = new WriteReviewController(writeReviewInteractor);
+        writeReviewView.setWriteReviewController(writeReviewController);
+        return this;
+    }
 
     /**
      * Creates the JFrame for the application and initially sets the SignupView to be displayed.
