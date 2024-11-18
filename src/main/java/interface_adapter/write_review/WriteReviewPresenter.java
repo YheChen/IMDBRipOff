@@ -23,7 +23,7 @@ public class WriteReviewPresenter implements WriteReviewOutputBoundary {
     }
 
     @Override
-    public void prepareSuccessView() {
+    public void prepareSuccessView(WriteReviewOutputData writeReviewOutputData) {
         // On success, switch to the logged in view.
 
         final WriteReviewState writeReviewState = writeReviewViewModel.getState();

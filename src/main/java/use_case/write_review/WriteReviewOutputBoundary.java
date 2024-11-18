@@ -4,5 +4,5 @@ public interface WriteReviewOutputBoundary {
     /**
      * Prepares the success view for the Write Review Use Case
      */
-    void prepareSuccessView();
+    void prepareSuccessView(WriteReviewOutputData writeReviewOutputData);
 }
