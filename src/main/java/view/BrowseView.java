@@ -1,7 +1,11 @@
 package view;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 
 public class BrowseView {
 
@@ -51,12 +55,26 @@ public class BrowseView {
         reviewText.setWrapStyleWord(true);
         reviewText.setEditable(false);
         reviewText.setColumns(30);
+        JLabel imageLabel = new JLabel();
+        try {
+            String imagePath = "https://xl.movieposterdb.com/08_06/2008/468569/xl_468569_fe24b125.jpg?v=2024-11-16%2017:50:15";
+            ImageIcon normalImage = new ImageIcon(new URL(imagePath));
+            ImageIcon scaledImage = new ImageIcon(normalImage.getImage()
+                    .getScaledInstance(normalImage.getIconWidth() / 5,
+                            normalImage.getIconHeight() / 5, Image.SCALE_SMOOTH));
+
+            imageLabel = new JLabel(scaledImage);
+        }
+        catch (IOException e) {
+            e.printStackTrace();}
 
         // Align components
         movieTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
         username.setAlignmentX(Component.LEFT_ALIGNMENT);
         date.setAlignmentX(Component.LEFT_ALIGNMENT);
         reviewText.setAlignmentX(Component.LEFT_ALIGNMENT);
+        imageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
 
         // Add components to review panel
         review.add(movieTitle);
@@ -65,9 +83,16 @@ public class BrowseView {
         review.add(Box.createRigidArea(new Dimension(0, 5))); // Adds space between components
         review.add(reviewText);
 
-        // Resize the panel so it works in the scrollable.
+        // Resizing elements
         review.setPreferredSize(new Dimension(500, 150));
+        imageLabel.setPreferredSize(new Dimension(169, 250));
 
-        return review;
+        // Create a main block to ensure the poster and review are flowlayout.
+        JPanel main = new JPanel();
+        main.add(imageLabel);
+        main.add(review);
+
+        return main;
+
     }
 }
