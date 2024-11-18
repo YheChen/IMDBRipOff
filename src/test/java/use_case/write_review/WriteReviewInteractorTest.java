@@ -19,6 +19,7 @@ class WriteReviewInteractorTest {
     void successTest() {
 
 
+        // Create input Data
         WriteReviewInputData writeReviewInputData = new WriteReviewInputData("Test_user_x",
                 "hello so yeah i really like this move idk why", 5,
                 "Harry Potter and the Philosopher's Stone");
@@ -32,6 +33,9 @@ class WriteReviewInteractorTest {
                 assertEquals(5, review.getRating()); // Check if the rating is correct
                 assertEquals("hello so yeah i really like this move idk why", review.getContent());
                 // Check if the review content is correct
+                assertEquals("Harry Potter and the Philosopher's Stone" ,review.getMedia());
+                // Check if the movie/media is correct lol
+                assertEquals("Test_user_x", review.getUsername());
             }
         };
     }
