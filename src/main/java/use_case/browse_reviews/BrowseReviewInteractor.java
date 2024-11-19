@@ -9,12 +9,12 @@ import use_case.login.*;
  * The Login Interactor.
  */
 public class BrowseReviewInteractor implements BrowseReviewInputBoundary {
-    private final LoginUserDataAccessInterface userDataAccessObject;
+    // private final LoginUserDataAccessInterface userDataAccessObject;
     private final BrowseReviewPresenter browseReviewPresenter;
 
-    public BrowseReviewInteractor(LoginUserDataAccessInterface userDataAccessInterface,
+    public BrowseReviewInteractor(//LoginUserDataAccessInterface userDataAccessInterface,
                                  BrowseReviewPresenter browseReviewPresenter) {
-        this.userDataAccessObject = userDataAccessInterface;
+        //this.userDataAccessObject = userDataAccessInterface;
         this.browseReviewPresenter = browseReviewPresenter;
     }
 //     execute method might not be needed for interactor because no output

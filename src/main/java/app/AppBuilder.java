@@ -8,6 +8,8 @@ import javax.swing.WindowConstants;
 
 import data_access.InMemoryReviewDataAccessObject;
 import interface_adapter.account.AccountViewModel;
+import interface_adapter.browse_review.BrowseReviewController;
+import interface_adapter.browse_review.BrowseReviewPresenter;
 import interface_adapter.browse_review.BrowseReviewViewModel;
 import interface_adapter.write_review.WriteReviewController;
 import interface_adapter.write_review.WriteReviewViewModel;
@@ -28,6 +30,8 @@ import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
 import entity.CommonUserFactory;
+import use_case.browse_reviews.BrowseReviewInputBoundary;
+import use_case.browse_reviews.BrowseReviewInteractor;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
@@ -218,6 +222,17 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addBrowseReviewUseCase() {
+        final BrowseReviewPresenter browseReviewOutputBoundary = new BrowseReviewPresenter(browseReviewViewModel,
+                writeReviewViewModel, accountViewModel, viewManagerModel);
+        final BrowseReviewInputBoundary browseReviewInteractor =
+                new BrowseReviewInteractor(browseReviewOutputBoundary);
+
+        final BrowseReviewController browseReviewController = new BrowseReviewController(browseReviewInteractor);
+        browseView.setBrowseController(browseReviewController);
+        return this;
+    }
+
     /**
      * Creates the JFrame for the application and initially sets the SignupView to be displayed.
      * @return the application
@@ -228,7 +243,7 @@ public class AppBuilder {
 
         application.add(cardPanel);
 
-        viewManagerModel.setState(writeReviewView.getViewName());
+        viewManagerModel.setState(browseView.getViewName());
         viewManagerModel.firePropertyChanged();
 
         return application;

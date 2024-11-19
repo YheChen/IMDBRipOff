@@ -2,6 +2,7 @@ package view;
 
 import interface_adapter.browse_review.BrowseReviewViewModel;
 import interface_adapter.browse_review.BrowseReviewController;
+import interface_adapter.signup.SignupController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -182,4 +183,7 @@ public class BrowseView {
         return viewName;
     }
 
+    public void setBrowseController(BrowseReviewController controller) {
+        this.browseReviewController = controller;
+    }
 }

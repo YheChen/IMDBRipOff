@@ -29,6 +29,7 @@ public class Main {
                 .addLogoutUseCase()
                 .addChangePasswordUseCase()
                 .addWriteReviewUseCase()
+                .addBrowseReviewUseCase()
                 .build();
 
         application.pack();
