@@ -81,8 +81,6 @@ public class AppBuilder {
     private WriteReviewViewModel writeReviewViewModel;
     private AccountViewModel accountViewModel;
     private AccountView accountView;
-    private BrowseView browseView;
-    private BrowseReviewViewModel browseReviewViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
