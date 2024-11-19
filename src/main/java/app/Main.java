@@ -23,6 +23,7 @@ public class Main {
                 .addSignupView()
                 .addAccountView()
                 .addWriteReviewView()
+                .addBrowseView()
                 .addSignupUseCase()
                 .addLoginUseCase()
                 .addLogoutUseCase()

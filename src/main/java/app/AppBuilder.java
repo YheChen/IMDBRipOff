@@ -8,6 +8,7 @@ import javax.swing.WindowConstants;
 
 import data_access.InMemoryReviewDataAccessObject;
 import interface_adapter.account.AccountViewModel;
+import interface_adapter.browse_review.BrowseReviewViewModel;
 import interface_adapter.write_review.WriteReviewController;
 import interface_adapter.write_review.WriteReviewViewModel;
 import data_access.InMemoryUserDataAccessObject;
@@ -74,6 +75,8 @@ public class AppBuilder {
     private LoggedInViewModel loggedInViewModel;
     private LoggedInView loggedInView;
     private LoginView loginView;
+    private BrowseView browseView;
+    private BrowseReviewViewModel browseReviewViewModel;
     private WriteReviewView writeReviewView;
     private WriteReviewViewModel writeReviewViewModel;
     private AccountViewModel accountViewModel;
@@ -124,6 +127,17 @@ public class AppBuilder {
         writeReviewViewModel = new WriteReviewViewModel();
         writeReviewView = new WriteReviewView(writeReviewViewModel);
         cardPanel.add(writeReviewView, writeReviewView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the BrowseReview View to the application.
+     * @return this builder
+     */
+    public AppBuilder addBrowseView() {
+        browseReviewViewModel = new BrowseReviewViewModel();
+        browseView = new BrowseView(browseReviewViewModel);
+        //cardPanel.add(browseView, browseView.getViewName());
         return this;
     }
 
