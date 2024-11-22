@@ -4,5 +4,11 @@ public interface BrowseReviewOutputBoundary {
     /**
      * Prepares the success view for the Write Review Use Case
      */
-    void prepareSuccessView();
+    void prepareAccountView();
+
+    //void prepareWriteReviewView();
+
+    void switchToWriteView();
+
+    void switchToAccountView();
 }

@@ -141,7 +141,7 @@ public class AppBuilder {
     public AppBuilder addBrowseView() {
         browseReviewViewModel = new BrowseReviewViewModel();
         browseView = new BrowseView(browseReviewViewModel);
-        //cardPanel.add(browseView, browseView.getViewName());
+        // cardPanel.add(browseView, browseView.getViewName());
         return this;
     }
 
