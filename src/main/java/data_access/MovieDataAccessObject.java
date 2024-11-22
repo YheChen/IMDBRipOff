@@ -27,11 +27,6 @@ public class MovieDataAccessObject {
         return parseMovies(jsonResponse);
     }
 
-    public String getRawJsonResponse(String query) throws Exception {
-        String url = buildUrl(query);
-        return fetchResponse(url);
-    }
-
     private String fetchResponse(String url) throws Exception {
         Request request = new Request.Builder()
                 .url(url)
