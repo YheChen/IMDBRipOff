@@ -13,7 +13,7 @@ import java.net.URL;
 
 public class BrowseView {
 
-    private final String viewName = "Browse Reviews";
+    private final String viewName = "browse reviews";
     private final JButton toBrowse;
     private final JButton toReview;
     private final JButton toAccount;
