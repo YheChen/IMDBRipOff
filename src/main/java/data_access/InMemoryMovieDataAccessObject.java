@@ -11,11 +11,11 @@ import java.util.Map;
  * In-memory implementation of the DAO for storing media item data.
  * This implementation does NOT persist data between runs of the program.
  */
-public class InMemoryMediaItemDataAccessObject {
+public class InMemoryMovieDataAccessObject {
 
     private final Map<String, List<Movie>> moviesByQuery;
 
-    public InMemoryMediaItemDataAccessObject() {
+    public InMemoryMovieDataAccessObject () {
         this.moviesByQuery = new HashMap<>();
         seedData(); // Populate with mock data
     }
