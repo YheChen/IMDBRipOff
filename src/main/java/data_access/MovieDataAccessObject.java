@@ -63,8 +63,9 @@ public class MovieDataAccessObject {
             String title = movieJson.optString("title", "Unknown Title");
             String overview = movieJson.optString("overview", "");
             String releaseDate = movieJson.optString("release_date", "");
+            int movieID = movieJson.getInt("id");
 
-            Movie movie = new Movie(title, overview, releaseDate);
+            Movie movie = new Movie(title, overview, releaseDate, movieID);
             movies.add(movie);
         }
         return movies;
@@ -82,6 +83,7 @@ public class MovieDataAccessObject {
                 System.out.println("Title: " + movie.getTitle());
                 System.out.println("Overview: " + movie.getOverview());
                 System.out.println("Release Date: " + movie.getReleaseDate());
+                System.out.println("id: " + movie.getMovieID());
                 System.out.println();
             }
 
