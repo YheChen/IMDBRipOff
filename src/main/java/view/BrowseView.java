@@ -1,5 +1,8 @@
 package view;
 
+import data_access.InMemoryMediaItemDataAccessObject;
+import data_access.InMemoryReviewDataAccessObject;
+import entity.Review;
 import interface_adapter.browse_review.BrowseReviewViewModel;
 import interface_adapter.browse_review.BrowseReviewController;
 import interface_adapter.signup.SignupController;
@@ -10,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class BrowseView {
 
@@ -47,11 +51,16 @@ public class BrowseView {
         topBar.setAlignmentX(Component.CENTER_ALIGNMENT);
         main.add(topBar);
 
-        // Adding reviews to main
-        main.add(createReviewPanel("Movie Title 2", "Username 2", "Date Uploaded 2",
-                "Review body text 2"));
-        main.add(createReviewPanel("Movie Title 3", "Username 3", "Date Uploaded 3", "Review body text 3"));
+        // For testing purposes
+        InMemoryReviewDataAccessObject IMRDAO = new InMemoryReviewDataAccessObject();
+        IMRDAO.seedData();
 
+        String[] ids = {"671", "672", "120", "121"};
+        // Adding reviews to main
+        for (int i = 0; i < 4; i++){
+            Review review = IMRDAO.getReview(ids[i]);
+            main.add(createReviewPanel(MovieNameFromID(review.getMediaID())), review.getUserID(), review.getDateUpdated(), review.getContent());
+        }
 
         // Scroll pane
         JScrollPane scroll = new JScrollPane(main);

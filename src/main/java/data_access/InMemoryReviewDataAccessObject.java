@@ -9,6 +9,7 @@ import java.util.Map;
 public class InMemoryReviewDataAccessObject implements WriteReviewDataAccessInterface {
 
     private final Map<String, Review> reviews = new HashMap<>();
+
     /**
      * Checks if the given review exists.
      *
@@ -19,6 +20,7 @@ public class InMemoryReviewDataAccessObject implements WriteReviewDataAccessInte
     public boolean existsByID(String id) {
         return reviews.containsKey(id);
     }
+
 
     /**
      * Saves the review.
@@ -47,17 +49,19 @@ public class InMemoryReviewDataAccessObject implements WriteReviewDataAccessInte
      * @param id the id of the review to delete
      * @return review
      */
-    public Review getReview(String id) { return reviews.get(id); }
+    public Review getReview(String id) {
+        return reviews.get(id);
+    }
+
 
     /**
      * Populates testing data for the DataAccessObject
      */
-    private void seedData() {
+    public void seedData() {
         LocalDate currentDate = LocalDate.now();
         reviews.put("671", new Review("Rowan", "671", "This is the body of the review for 'Harry Potter and the Philosophers Stone'", 3, currentDate));
         reviews.put("672", new Review("Rowan", "672", "This is the body of the review for 'Harry Potter and the Chamber of Secrets'", 4, currentDate));
         reviews.put("120", new Review("Rowan", "120", "This is the body of the review for 'The Lord of the Rings: The Fellowship of the Ring'", 5, currentDate));
         reviews.put("121", new Review("Rowan", "121", "This is the body of the review for 'The Lord of the Rings: The Two Towers'", 2, currentDate));
     }
-
 }
