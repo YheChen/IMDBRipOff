@@ -2,8 +2,10 @@ package data_access;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import io.github.cdimascio.dotenv.Dotenv;
+import org.bson.Document;
 
 public class MongoDBClient implements AutoCloseable {
     private final MongoClient client;
@@ -14,6 +16,10 @@ public class MongoDBClient implements AutoCloseable {
         this.client = MongoClients.create(connectionString);
         this.database = client.getDatabase("imdbripoff");
         System.out.println("DB connection succeeded");
+    }
+
+    public MongoCollection<Document> getCollection(String name) {
+        return this.database.getCollection(name);
     }
 
     public static void main(String[] args) {
