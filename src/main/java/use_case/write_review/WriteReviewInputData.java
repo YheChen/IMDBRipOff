@@ -6,16 +6,16 @@ import java.time.LocalDate;
  * The Input Data for the Write Review Case.
  */
 public class WriteReviewInputData {
-    private final String username;
+    private final String user_id;
     private final String content;
     private final int rating;
     private final String media;
     // add the date here?
     private final LocalDate date;
 
-    public WriteReviewInputData(String username, String content, int rating, String media) {
+    public WriteReviewInputData(String user_id, String content, int rating, String media) {
 
-        this.username = username;
+        this.user_id = user_id;
         this.content = content;
         this.rating = rating;
         this.media = media;
@@ -23,8 +23,8 @@ public class WriteReviewInputData {
 
     }
 
-    String getUsername() {
-        return username;
+    String getUserID() {
+        return user_id;
     }
 
     String getContent() {return content;}
