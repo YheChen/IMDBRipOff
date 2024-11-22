@@ -4,11 +4,13 @@ public class Movie {
     private final String title;
     private final String overview;
     private final String releaseDate;
+    private final int movieID;
 
-    public Movie(String title, String overview, String releaseDate) {
+    public Movie(String title, String overview, String releaseDate, int movieID) {
         this.title = title;
         this.overview = overview;
         this.releaseDate = releaseDate;
+        this.movieID = movieID;
     }
 
     public String getTitle() {
@@ -21,5 +23,9 @@ public class Movie {
 
     public String getReleaseDate() {
         return releaseDate;
+    }
+
+    public int getMovieID() {
+        return movieID;
     }
 }

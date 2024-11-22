@@ -26,66 +26,60 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
     private final String viewName = "write review";
     private final WriteReviewViewModel writeReviewViewModel;
     private final Integer[] rating_choices;
-    private final JLabel passwordErrorField = new JLabel();
-    private ChangePasswordController changePasswordController;
-    private LogoutController logoutController;
     private WriteReviewController writeReviewController;
-    private final int SCREEN_WIDTH = 500;
-    private final int SCREEN_HEIGHT = 800;
     private final JComboBox<Integer> rating_dropdown;
 
     // private final JLabel username;
 
     // private final JButton logOut;
-
-    private final JTextField passwordInputField = new JTextField(15);
     // private final JButton changePassword;
     private final JButton submitReview;
 
     public WriteReviewView(WriteReviewViewModel writeReviewViewModel) {
         this.writeReviewViewModel = writeReviewViewModel;
-        writeReviewViewModel.addPropertyChangeListener(this);
+        this.writeReviewViewModel.addPropertyChangeListener(this);
 
-        final JLabel title = new JLabel("Write Review");
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        final JPanel media_panel = new JPanel();
+        final JPanel rating_panel = new JPanel();
+        final JPanel optional_panel = new JPanel();
         final JLabel media = new JLabel("Media Under Review: ");
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
         final JLabel rating = new JLabel("Choose a rating: ");
+        final JLabel optional = new JLabel("Type your review here (optional)");
+        media_panel.add(media);
+        rating_panel.add(rating);
+        optional_panel.add(optional);
 
         // Add text fields for the media reviewed, it's rating and content (text).
-        final JTextField mediaSearch = new JTextField(20);
         final JTextArea content = new JTextArea();
 
-
         rating_choices = new Integer[]{1, 2, 3, 4, 5};
-
         rating_dropdown = new JComboBox<>(rating_choices);
 
         final JPanel buttons = new JPanel();
         submitReview = new JButton("Submit Review");
         buttons.add(submitReview);
 
-        passwordInputField.getDocument().addDocumentListener(new DocumentListener() {
-
-            private void documentListenerHelper() {
-                final WriteReviewState currentState = writeReviewViewModel.getState();
-            }
-
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                documentListenerHelper();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                documentListenerHelper();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                documentListenerHelper();
-            }
-        });
+//        passwordInputField.getDocument().addDocumentListener(new DocumentListener() {
+//
+//            private void documentListenerHelper() {
+//                final WriteReviewState currentState = writeReviewViewModel.getState();
+//            }
+//
+//            @Override
+//            public void insertUpdate(DocumentEvent e) {
+//                documentListenerHelper();
+//            }
+//
+//            @Override
+//            public void removeUpdate(DocumentEvent e) {
+//                documentListenerHelper();
+//            }
+//
+//            @Override
+//            public void changedUpdate(DocumentEvent e) {
+//                documentListenerHelper();
+//            }
+//        });
 
 
         // New Code to handle what happens when the user wants to create a new review
@@ -109,14 +103,12 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
 
         // Add everything to the Write Review J Panel
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.add(title);
-        this.add(media);
-        this.add(rating);
+        this.add(media_panel);
+        this.add(rating_panel);
         this.add(rating_dropdown);
-        this.add(new JLabel("Type your review here (optional)", JLabel.CENTER));
+        this.add(optional_panel);
         this.add(content);
         this.add(buttons);
-
         // Modify the size of the J Frame
 //        this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     }
@@ -156,9 +148,9 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
         return viewName;
     }
 
-    public void setChangePasswordController(ChangePasswordController changePasswordController) {
-        this.changePasswordController = changePasswordController;
-    }
+//    public void setChangePasswordController(ChangePasswordController changePasswordController) {
+//        this.changePasswordController = changePasswordController;
+//    }
 
     public void setWriteReviewController(WriteReviewController writeReviewController) {
         this.writeReviewController = writeReviewController;
