@@ -238,12 +238,11 @@ public class AppBuilder {
      * @return the application
      */
     public JFrame build() {
-        final JFrame application = new JFrame("Login Example");
+        final JFrame application = new JFrame("Movie Reviewer 1000");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         application.add(cardPanel);
-
-        viewManagerModel.setState(browseView.getViewName());
+        viewManagerModel.setState(writeReviewViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
 
         return application;
