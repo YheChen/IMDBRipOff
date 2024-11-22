@@ -38,4 +38,9 @@ public class DBReviewDataAccessObject implements WriteReviewDataAccessInterface 
             db.getCollection(COLLECTION).insertOne(document);
         }
     }
+
+
+//    public Review getReview(String id) {
+//
+//    }
 }
