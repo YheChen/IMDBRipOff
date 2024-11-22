@@ -6,7 +6,7 @@ import java.time.LocalDate;
  * The output data for the write review use case.
  */
 public class WriteReviewOutputData {
-    private final String username;
+    private final String user_id;
     private final String content;
     private final int rating;
     private final String media;
@@ -14,9 +14,9 @@ public class WriteReviewOutputData {
     private final LocalDate date;
     private boolean success;
 
-    public WriteReviewOutputData(String username, String content, int rating, String media, LocalDate date,
+    public WriteReviewOutputData(String user_id, String content, int rating, String media, LocalDate date,
                                  Boolean success){
-        this.username = username;
+        this.user_id = user_id;
         this.content = content;
         this.rating = rating;
         this.media = media;
@@ -43,7 +43,7 @@ public class WriteReviewOutputData {
         return media;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserID() {
+        return user_id;
     }
 }
