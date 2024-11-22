@@ -8,5 +8,9 @@ public interface BrowseReviewInputBoundary {
     /**
      * Executes the write review use case.
      */
-    void execute(BrowseReviewInputData writeReviewInputData);
+//    void execute(BrowseReviewInputData writeReviewInputData);
+
+    void switchToWriteView();
+
+    void switchToAccountView();
 }

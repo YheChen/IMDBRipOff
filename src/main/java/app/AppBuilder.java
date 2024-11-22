@@ -8,6 +8,8 @@ import javax.swing.WindowConstants;
 
 import data_access.InMemoryReviewDataAccessObject;
 import interface_adapter.account.AccountViewModel;
+import interface_adapter.browse_review.BrowseReviewController;
+import interface_adapter.browse_review.BrowseReviewPresenter;
 import interface_adapter.browse_review.BrowseReviewViewModel;
 import interface_adapter.write_review.WriteReviewController;
 import interface_adapter.write_review.WriteReviewViewModel;
@@ -28,6 +30,8 @@ import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
 import entity.CommonUserFactory;
+import use_case.browse_reviews.BrowseReviewInputBoundary;
+import use_case.browse_reviews.BrowseReviewInteractor;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
@@ -75,12 +79,12 @@ public class AppBuilder {
     private LoggedInViewModel loggedInViewModel;
     private LoggedInView loggedInView;
     private LoginView loginView;
+    private BrowseView browseView;
+    private BrowseReviewViewModel browseReviewViewModel;
     private WriteReviewView writeReviewView;
     private WriteReviewViewModel writeReviewViewModel;
     private AccountViewModel accountViewModel;
     private AccountView accountView;
-    private BrowseView browseView;
-    private BrowseReviewViewModel browseReviewViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -127,6 +131,17 @@ public class AppBuilder {
         writeReviewViewModel = new WriteReviewViewModel();
         writeReviewView = new WriteReviewView(writeReviewViewModel);
         cardPanel.add(writeReviewView, writeReviewView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the BrowseReview View to the application.
+     * @return this builder
+     */
+    public AppBuilder addBrowseView() {
+        browseReviewViewModel = new BrowseReviewViewModel();
+        browseView = new BrowseView(browseReviewViewModel);
+        //cardPanel.add(browseView, browseView.getViewName());
         return this;
     }
 
@@ -207,6 +222,17 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addBrowseReviewUseCase() {
+        final BrowseReviewPresenter browseReviewOutputBoundary = new BrowseReviewPresenter(browseReviewViewModel,
+                writeReviewViewModel, accountViewModel, viewManagerModel);
+        final BrowseReviewInputBoundary browseReviewInteractor =
+                new BrowseReviewInteractor(browseReviewOutputBoundary);
+
+        final BrowseReviewController browseReviewController = new BrowseReviewController(browseReviewInteractor);
+        browseView.setBrowseController(browseReviewController);
+        return this;
+    }
+
     /**
      * Creates the JFrame for the application and initially sets the SignupView to be displayed.
      * @return the application
@@ -216,7 +242,6 @@ public class AppBuilder {
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         application.add(cardPanel);
-
         viewManagerModel.setState(writeReviewViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
 
