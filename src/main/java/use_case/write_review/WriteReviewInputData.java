@@ -23,7 +23,7 @@ public class WriteReviewInputData {
 
     }
 
-    String getUsername() {
+    String getUserID() {
         return user_id;
     }
 
