@@ -12,10 +12,10 @@ public class WriteReviewPresenter implements WriteReviewOutputBoundary {
     private final LoggedInViewModel loggedInViewModel;
     private final ViewManagerModel viewManagerModel;
 
-    public WriteReviewPresenter(BrowseReviewViewModel writeReviewViewModel,
+    public WriteReviewPresenter(BrowseReviewViewModel browseReviewViewModel,
                           LoggedInViewModel loggedInViewModel,
                           ViewManagerModel viewManagerModel) {
-        this.browseReviewViewModel =  writeReviewViewModel;
+        this.browseReviewViewModel = browseReviewViewModel;
         this.loggedInViewModel = loggedInViewModel;
         this.viewManagerModel = viewManagerModel;
     }
