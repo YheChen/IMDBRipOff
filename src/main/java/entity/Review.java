@@ -4,21 +4,25 @@ import java.time.LocalDate;
 public class Review
 {
     String reviewID;
-    String username;
+    String userID;
     String mediaID;
     String content;
     int rating;
     LocalDate dateCreated;
     LocalDate dateUpdated;
 
-    public Review(String username, String mediaID, String content, int rating, LocalDate dateCreated) {
+    public Review(String userID, String mediaID, String content, int rating, LocalDate dateCreated) {
         this.reviewID = generateReviewID();
-        this.username = username;
+        this.userID = userID;
         this.mediaID = mediaID;
         this.content = content;
         this.rating = rating;
         this.dateCreated = dateCreated;
         this.dateUpdated = dateCreated;
+    }
+
+    public String getUserID() {
+        return userID;
     }
 
     public String getMediaID() {
@@ -43,10 +47,6 @@ public class Review
 
     public String getContent() {
         return content;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     private String generateReviewID(){

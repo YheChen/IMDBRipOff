@@ -21,6 +21,7 @@ public class WriteReviewInteractor implements WriteReviewInputBoundary {
 
     @Override
     public void execute(WriteReviewInputData writeReviewInputData) {
+        //FIXME: should pass id to Review object instead of username
         final Review review = new Review(writeReviewInputData.getUsername(),
                 writeReviewInputData.getMedia(), writeReviewInputData.getContent(), writeReviewInputData.getRating(),
                 writeReviewInputData.getDate());
