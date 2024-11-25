@@ -1,5 +1,5 @@
 package entity;
-import java.time.LocalDate;
+import java.util.Date;
 
 public class Review
 {
@@ -8,10 +8,10 @@ public class Review
     String mediaID;
     String content;
     int rating;
-    LocalDate dateCreated;
-    LocalDate dateUpdated;
+    Date dateCreated;
+    Date dateUpdated;
 
-    public Review(String userID, String mediaID, String content, int rating, LocalDate dateCreated) {
+    public Review(String userID, String mediaID, String content, int rating, Date dateCreated) {
         this.reviewID = generateReviewID();
         this.userID = userID;
         this.mediaID = mediaID;
@@ -21,7 +21,7 @@ public class Review
         this.dateUpdated = dateCreated;
     }
 
-    public Review(String reviewID, String userID, String mediaID, String content, int rating, LocalDate dateCreated) {
+    public Review(String reviewID, String userID, String mediaID, String content, int rating, Date dateCreated) {
         this.reviewID = reviewID;
         this.userID = userID;
         this.mediaID = mediaID;
@@ -43,11 +43,11 @@ public class Review
         return reviewID;
     }
 
-    public LocalDate getDateCreated() {
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public LocalDate getDateUpdated() {
+    public Date getDateUpdated() {
         return dateUpdated;
     }
 
