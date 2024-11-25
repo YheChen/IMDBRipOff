@@ -1,15 +1,16 @@
 package data_access;
 import entity.Review;
+import entity.User;
+import use_case.browse_reviews.BrowseReviewDataAccessInterface;
 import use_case.write_review.WriteReviewDataAccessInterface;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InMemoryReviewDataAccessObject implements WriteReviewDataAccessInterface {
+public class InMemoryReviewDataAccessObject implements BrowseReviewDataAccessInterface, WriteReviewDataAccessInterface {
 
     private final Map<String, Review> reviews = new HashMap<>();
-
     /**
      * Checks if the given review exists.
      *
@@ -21,6 +22,15 @@ public class InMemoryReviewDataAccessObject implements WriteReviewDataAccessInte
         return reviews.containsKey(id);
     }
 
+    @Override
+    public Review get(String id) {
+        return reviews.get(id);
+    }
+
+    @Override
+    public int count() {
+        return 0;
+    }
 
     /**
      * Saves the review.
@@ -41,18 +51,6 @@ public class InMemoryReviewDataAccessObject implements WriteReviewDataAccessInte
     public void delete(String id) {
         reviews.remove(id);
     }
-
-
-    /**
-     * Returns the review with the specified ID
-     *
-     * @param id the id of the review to delete
-     * @return review
-     */
-    public Review getReview(String id) {
-        return reviews.get(id);
-    }
-
 
     /**
      * Populates testing data for the DataAccessObject
