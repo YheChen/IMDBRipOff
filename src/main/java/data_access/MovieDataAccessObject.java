@@ -7,6 +7,8 @@ import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +19,8 @@ public class MovieDataAccessObject {
 
     public MovieDataAccessObject() {
         this.client = new OkHttpClient();
-        // Replace this with your actual API key or load it from an environment variable
-        this.apiKey = System.getProperty("TMDB_API_KEY");
+        Dotenv dotenv = Dotenv.configure().load();
+        this.apiKey = dotenv.get("TMDB_API_KEY");
     }
 
     public List<Movie> searchMovies(String query) throws Exception {
@@ -66,13 +68,73 @@ public class MovieDataAccessObject {
         return movies;
     }
 
+    private String buildUrl2(String query) {
+        return "https://api.themoviedb.org/3/movie/" + query + "/alternative_titles?country=US";
+    }
+
+    public String MovieNameFromID(String query) throws Exception {
+        String url = buildUrl2(query);
+        String jsonResponse = fetchResponse(url);
+        return findName(jsonResponse);
+    }
+
+    private String findName(String jsonResponse) {
+        JSONObject json = new JSONObject(jsonResponse);
+        JSONArray titles = json.optJSONArray("titles");
+
+        if (titles != null) {
+            for (int i = 0; i < titles.length(); i++) {
+                JSONObject titleObject = titles.getJSONObject(i);
+                String type = titleObject.optString("type", null);
+                if ("".equals(type)) {
+                    return titleObject.optString("title", "Unknown Title");
+                }
+            }
+        }
+        return "No matching title found.";
+    }
+
+    public String buildUrl3(String query) {
+        return "https://api.themoviedb.org/3/movie/" + query + "/images?language=en";
+    }
+
+    public String MoviePosterFromID(String query) throws Exception {
+        String url = buildUrl3(query);
+        String jsonResponse = fetchResponse(url);
+        return findPoster(jsonResponse);
+    }
+
+    private String findPoster(String jsonResponse) {
+        JSONObject jsonObject = new JSONObject(jsonResponse);
+        JSONArray posters = jsonObject.optJSONArray("posters");
+
+        if (posters != null && posters.length() > 0) {
+            // Get the first poster's file path
+            JSONObject firstPoster = posters.getJSONObject(0);
+            String filePath = firstPoster.optString("file_path", "");
+            if (!filePath.isEmpty()) {
+                // TMDB base URL for images
+                String baseUrl = "https://image.tmdb.org/t/p/w500"; // Adjust size (w500, w300, etc.) as needed
+                return baseUrl + filePath;
+            }
+        }
+
+        return "No poster available.";
+    }
+
     // Main method for quick testing
     public static void main(String[] args) {
         try {
             MovieDataAccessObject dao = new MovieDataAccessObject();
             String query = "Harry Potter"; // Replace with your search term
             List<Movie> movies = dao.searchMovies(query);
+            String movieName = dao.MovieNameFromID("120");
+            MovieDataAccessObject ddao = new MovieDataAccessObject();
 
+            // Fetch poster for a movie by ID
+            String moviePoster = ddao.MoviePosterFromID("120"); // Replace "120" with a valid movie ID
+            System.out.println("Movie Poster URL: " + moviePoster);
+            System.out.println("Movie name: " + movieName);
             // Print the movies
             for (Movie movie : movies) {
                 System.out.println("Title: " + movie.getTitle());

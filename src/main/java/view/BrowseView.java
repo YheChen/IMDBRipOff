@@ -1,7 +1,7 @@
 package view;
 
+import data_access.InMemoryMovieDataAccessObject;
 import data_access.InMemoryReviewDataAccessObject;
-import data_access.MovieNameFromidDAO;
 import entity.Review;
 import interface_adapter.browse_review.BrowseReviewViewModel;
 import interface_adapter.browse_review.BrowseReviewController;
@@ -29,6 +29,7 @@ public class BrowseView {
     private BrowseReviewController browseReviewController;
 
     //public static void main(String[] args) throws Exception {
+
 
 //        final JPanel topBar = new JPanel();
 //        JButton toBrowse = new JButton("Browse Reviews"); // not implemented yet
@@ -79,7 +80,8 @@ public class BrowseView {
 //        f.setVisible(true);
 //    }
 
-    public BrowseView(BrowseReviewViewModel browseReviewViewModel) throws Exception {
+    public BrowseView(BrowseReviewViewModel browseReviewViewModel){
+
         final JPanel topBar = new JPanel();
         toBrowse = new JButton("Browse Reviews"); // not implemented yet
         topBar.add(toBrowse);
