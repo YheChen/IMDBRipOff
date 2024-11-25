@@ -17,7 +17,7 @@ public class MovieDataAccessObject {
 
     public MovieDataAccessObject() {
         this.client = new OkHttpClient();
-        // Replace this with your actual API key or load it from an environment variable
+
         this.apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjOGI0NmI0ZmM3NzFjMjM0Y2MxM2QzMGI4MTQyZTJjZSIsIm5iZiI6MTczMTcwNDU3My4wODY2MTE3LCJzdWIiOiI2NzM3YjU3MTI5NTRkMjY0NzYyNWM1YTkiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.ku73LNJs5eaka-bpHVgBPq2clCBliOEc6z4NzdynpJw";
     }
 
@@ -66,13 +66,40 @@ public class MovieDataAccessObject {
         return movies;
     }
 
+    private String buildUrl2(String query) {
+        return "https://api.themoviedb.org/3/movie/" + query + "/alternative_titles?country=US";
+    }
+
+    public String MovieNameFromID(String query) throws Exception {
+        String url = buildUrl2(query);
+        String jsonResponse = fetchResponse(url);
+        return findName(jsonResponse);
+    }
+
+    private String findName(String jsonResponse) {
+        JSONObject json = new JSONObject(jsonResponse);
+        JSONArray titles = json.optJSONArray("titles");
+
+        if (titles != null) {
+            for (int i = 0; i < titles.length(); i++) {
+                JSONObject titleObject = titles.getJSONObject(i);
+                String type = titleObject.optString("type", null);
+                if ("".equals(type)) {
+                    return titleObject.optString("title", "Unknown Title");
+                }
+            }
+        }
+        return "No matching title found.";
+    }
+
     // Main method for quick testing
     public static void main(String[] args) {
         try {
             MovieDataAccessObject dao = new MovieDataAccessObject();
             String query = "Harry Potter"; // Replace with your search term
             List<Movie> movies = dao.searchMovies(query);
-
+            String movieName = dao.MovieNameFromID("120");
+            System.out.println("Movie name: " + movieName);
             // Print the movies
             for (Movie movie : movies) {
                 System.out.println("Title: " + movie.getTitle());
