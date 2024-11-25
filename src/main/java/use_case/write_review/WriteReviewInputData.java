@@ -37,7 +37,7 @@ public class WriteReviewInputData {
         return media;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 }
