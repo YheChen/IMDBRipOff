@@ -138,7 +138,7 @@ public class AppBuilder {
      * Adds the BrowseReview View to the application.
      * @return this builder
      */
-    public AppBuilder addBrowseView() {
+    public AppBuilder addBrowseView() throws Exception {
         browseReviewViewModel = new BrowseReviewViewModel();
         browseView = new BrowseView(browseReviewViewModel);
         // cardPanel.add(browseView, browseView.getViewName());
