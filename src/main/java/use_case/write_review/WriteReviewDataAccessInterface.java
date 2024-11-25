@@ -15,4 +15,10 @@ public interface WriteReviewDataAccessInterface {
      * @param review the review to save
      */
     void save(Review review);
+
+    /**
+     * Get review by id
+     * @param id
+     */
+    Review get(String id);
 }
