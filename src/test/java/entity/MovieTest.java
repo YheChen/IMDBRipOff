@@ -8,10 +8,6 @@ import entity.User;
 import entity.UserFactory;
 import entity.Review;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
-import use_case.login.LoginUserDataAccessInterface;
-
-import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -1,6 +1,6 @@
 package use_case.write_review;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * The Input Data for the Write Review Case.
@@ -11,7 +11,7 @@ public class WriteReviewInputData {
     private final int rating;
     private final String media;
     // add the date here?
-    private final LocalDate date;
+    private final Date date;
 
     public WriteReviewInputData(String user_id, String content, int rating, String media) {
 
@@ -19,7 +19,7 @@ public class WriteReviewInputData {
         this.content = content;
         this.rating = rating;
         this.media = media;
-        this.date = LocalDate.now();
+        this.date = new Date();
 
     }
 

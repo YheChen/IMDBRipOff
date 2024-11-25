@@ -8,7 +8,7 @@ import entity.User;
 import entity.UserFactory;
 import entity.Review;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
+import java.util.Date;
 import use_case.login.LoginUserDataAccessInterface;
 
 import java.time.LocalDateTime;
@@ -22,7 +22,7 @@ public class ReviewTest {
         String userID = "bl76544";
         String mediaID = "bl5434";
         String content = "This movie was the best movie I've ever watched!";
-        LocalDate dateCreated = LocalDate.now();
+        Date dateCreated = new Date();
 
         // Checks that the Review class functions as expected
         Review review = new Review(userID, mediaID, content, rating, dateCreated);

@@ -11,8 +11,7 @@ import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginUserDataAccessInterface;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,7 +27,7 @@ class WriteReviewInteractorTest {
                 "Harry Potter and the Philosopher's Stone");
         InMemoryReviewDataAccessObject reviewMemObj = new InMemoryReviewDataAccessObject();
         Review review = new Review("94xdj", "4o3me",
-                "hello so yeah i really like this move idk why", 5, LocalDate.now());
+                "hello so yeah i really like this move idk why", 5, new Date());
         reviewMemObj.save(review);
 
         WriteReviewDataAccessInterface userRepository = new InMemoryReviewDataAccessObject();

@@ -5,7 +5,6 @@ import entity.User;
 import org.bson.Document;
 import use_case.write_review.WriteReviewDataAccessInterface;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 import static com.mongodb.client.model.Filters.eq;
