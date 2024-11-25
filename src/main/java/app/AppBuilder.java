@@ -141,7 +141,7 @@ public class AppBuilder {
     public AppBuilder addBrowseView() {
         browseReviewViewModel = new BrowseReviewViewModel();
         browseView = new BrowseView(browseReviewViewModel);
-        //cardPanel.add(browseView, browseView.getViewName());
+        // cardPanel.add(browseView, browseView.getViewName());
         return this;
     }
 
@@ -242,7 +242,7 @@ public class AppBuilder {
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         application.add(cardPanel);
-        viewManagerModel.setState(writeReviewViewModel.getViewName());
+        viewManagerModel.setState(browseReviewViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
 
         return application;
