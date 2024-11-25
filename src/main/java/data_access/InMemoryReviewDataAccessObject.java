@@ -1,12 +1,13 @@
 package data_access;
 import entity.Review;
 import entity.User;
+import use_case.browse_reviews.BrowseReviewDataAccessInterface;
 import use_case.write_review.WriteReviewDataAccessInterface;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class InMemoryReviewDataAccessObject implements WriteReviewDataAccessInterface {
+public class InMemoryReviewDataAccessObject implements BrowseReviewDataAccessInterface, WriteReviewDataAccessInterface {
 
     private final Map<String, Review> reviews = new HashMap<>();
     /**
@@ -18,6 +19,16 @@ public class InMemoryReviewDataAccessObject implements WriteReviewDataAccessInte
     @Override
     public boolean existsByID(String id) {
         return reviews.containsKey(id);
+    }
+
+    @Override
+    public Review get(String id) {
+        return null;
+    }
+
+    @Override
+    public int count() {
+        return 0;
     }
 
     /**
