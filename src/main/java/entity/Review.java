@@ -21,6 +21,16 @@ public class Review
         this.dateUpdated = dateCreated;
     }
 
+    public Review(String reviewID, String userID, String mediaID, String content, int rating, LocalDate dateCreated) {
+        this.reviewID = reviewID;
+        this.userID = userID;
+        this.mediaID = mediaID;
+        this.content = content;
+        this.rating = rating;
+        this.dateCreated = dateCreated;
+        this.dateUpdated = dateCreated;
+    }
+
     public String getUserID() {
         return userID;
     }

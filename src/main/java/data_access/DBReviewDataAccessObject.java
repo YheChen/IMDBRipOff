@@ -1,8 +1,12 @@
 package data_access;
 
 import entity.Review;
+import entity.User;
 import org.bson.Document;
 import use_case.write_review.WriteReviewDataAccessInterface;
+
+import java.time.LocalDate;
+import java.util.Date;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -39,8 +43,19 @@ public class DBReviewDataAccessObject implements WriteReviewDataAccessInterface 
         }
     }
 
-
-//    public Review getReview(String id) {
-//
-//    }
+    @Override
+    public Review get(String id) {
+        try (MongoDBClient db = new MongoDBClient()) {
+            Document document = db.getCollection(COLLECTION).find(eq(ID_FIELD, id)).first();
+            if (document != null) {
+                String userId = document.getString(USER_ID_FIELD);
+                String mediaId = document.getString(MEDIA_ID_FIELD);
+                String content = document.getString(CONTENT_FIELD);
+                int rating = document.getInteger(RATING_FIELD);
+                Date dateCreated = document.getDate(CREATED_FIELD);
+                return new Review(id, userId, mediaId, content, rating, dateCreated);
+            }
+        }
+        return null;
+    }
 }

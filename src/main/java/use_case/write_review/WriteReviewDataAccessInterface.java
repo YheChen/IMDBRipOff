@@ -16,12 +16,9 @@ public interface WriteReviewDataAccessInterface {
      */
     void save(Review review);
 
-
     /**
-     * Returns the review with the specified ID
-     *
-     * @param id the id of the review to delete
-     * @return review
+     * Get review by id
+     * @param id
      */
-    //Review getReview(String id);
+    Review get(String id);
 }
