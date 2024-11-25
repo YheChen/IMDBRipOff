@@ -5,9 +5,12 @@ import org.bson.Document;
 import use_case.browse_reviews.BrowseReviewDataAccessInterface;
 import use_case.write_review.WriteReviewDataAccessInterface;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Collection;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Sorts.descending;
 
 public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface, WriteReviewDataAccessInterface {
     private static final String COLLECTION = "reviews";
@@ -18,6 +21,19 @@ public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface
     private static final String RATING_FIELD = "rating";
     private static final String CREATED_FIELD = "created";
     private static final String UPDATED_FIELD = "updated";
+
+    private Review documentToReview(Document document) {
+        if (document != null) {
+            String id = document.getString(ID_FIELD);
+            String userId = document.getString(USER_ID_FIELD);
+            String mediaId = document.getString(MEDIA_ID_FIELD);
+            String content = document.getString(CONTENT_FIELD);
+            int rating = document.getInteger(RATING_FIELD);
+            Date dateCreated = document.getDate(CREATED_FIELD);
+            return new Review(id, userId, mediaId, content, rating, dateCreated);
+        }
+        return null;
+    }
 
     @Override
     public boolean existsByID(String id) {
@@ -31,21 +47,29 @@ public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface
     public Review get(String id) {
         try (MongoDBClient db = new MongoDBClient()) {
             Document document = db.getCollection(COLLECTION).find(eq(ID_FIELD, id)).first();
-            if (document != null) {
-                String userId = document.getString(USER_ID_FIELD);
-                String mediaId = document.getString(MEDIA_ID_FIELD);
-                String content = document.getString(CONTENT_FIELD);
-                int rating = document.getInteger(RATING_FIELD);
-                Date dateCreated = document.getDate(CREATED_FIELD);
-                return new Review(id, userId, mediaId, content, rating, dateCreated);
-            }
+            return documentToReview(document);
         }
-        return null;
     }
 
     @Override
-    public int count() {
-        return 0;
+    public Collection<Review> getAll() {
+        try (MongoDBClient db = new MongoDBClient()) {
+            ArrayList<Review> reviews = new ArrayList<>();
+            db.getCollection(COLLECTION).find(descending(UPDATED_FIELD)).limit(100).forEach(document -> {
+                Review review = documentToReview(document);
+                if (review != null) {
+                    reviews.add(review);
+                }
+            });
+            return reviews;
+        }
+    }
+
+    @Override
+    public long count() {
+        try (MongoDBClient db = new MongoDBClient()) {
+            return db.getCollection(COLLECTION).countDocuments();
+        }
     }
 
     @Override

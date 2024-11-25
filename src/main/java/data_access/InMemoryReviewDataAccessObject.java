@@ -6,6 +6,7 @@ import use_case.write_review.WriteReviewDataAccessInterface;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Collection;
 import java.util.Map;
 
 public class InMemoryReviewDataAccessObject implements BrowseReviewDataAccessInterface, WriteReviewDataAccessInterface {
@@ -28,8 +29,13 @@ public class InMemoryReviewDataAccessObject implements BrowseReviewDataAccessInt
     }
 
     @Override
-    public int count() {
-        return 0;
+    public Collection<Review> getAll() {
+        return reviews.values();
+    }
+
+    @Override
+    public long count() {
+        return reviews.size();
     }
 
     /**
