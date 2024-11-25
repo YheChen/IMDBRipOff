@@ -10,10 +10,10 @@ import use_case.login.*;
  */
 public class BrowseReviewInteractor implements BrowseReviewInputBoundary {
     // private final LoginUserDataAccessInterface userDataAccessObject;
-    private final BrowseReviewPresenter browseReviewPresenter;
+    private final BrowseReviewOutputBoundary browseReviewPresenter;
 
     public BrowseReviewInteractor(//LoginUserDataAccessInterface userDataAccessInterface,
-                                 BrowseReviewPresenter browseReviewPresenter) {
+                                  BrowseReviewOutputBoundary browseReviewPresenter) {
         //this.userDataAccessObject = userDataAccessInterface;
         this.browseReviewPresenter = browseReviewPresenter;
     }

@@ -1,6 +1,7 @@
 package interface_adapter.browse_review;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.account.AccountState;
 import interface_adapter.account.AccountViewModel;
 import interface_adapter.change_password.LoggedInState;
 import interface_adapter.change_password.LoggedInViewModel;
@@ -29,14 +30,14 @@ public class BrowseReviewPresenter implements BrowseReviewOutputBoundary {
     }
 
     @Override
-    public void prepareSuccessView() {
-        // On success, switch to the logged in view.
+    public void prepareAccountView() {
+        // On success, switch to the account view.
 
-        final BrowseReviewState browseReviewState = browseReviewViewModel.getState();
-        this.browseReviewViewModel.setState(browseReviewState);
-        this.writeReviewViewModel.firePropertyChanged();
+        final AccountState accountState = accountViewModel.getState();
+        this.accountViewModel.setState(accountState);
+        this.accountViewModel.firePropertyChanged();
 
-        this.viewManagerModel.setState(writeReviewViewModel.getViewName());
+        this.viewManagerModel.setState(accountViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
     }
 

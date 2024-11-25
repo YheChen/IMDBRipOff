@@ -23,7 +23,7 @@ import interface_adapter.write_review.WriteReviewViewModel;
  */
 public class WriteReviewView extends JPanel implements PropertyChangeListener {
 
-    private final String viewName = "Write Review";
+    private final String viewName = "write review";
     private final WriteReviewViewModel writeReviewViewModel;
     private final Integer[] rating_choices;
     private WriteReviewController writeReviewController;
