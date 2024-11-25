@@ -16,6 +16,17 @@ public class User
         this.reviewHistory = new ArrayList<String>();
     }
 
+    public User(String userId, String username, String password) {
+        this.userID = userId;
+        this.username = username;
+        this.password = password;
+        this.reviewHistory = new ArrayList<String>();
+    }
+
+    public String getId() {
+        return userID;
+    }
+
     public String getUsername() {
         return username;
     }

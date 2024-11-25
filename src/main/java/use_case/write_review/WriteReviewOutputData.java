@@ -1,22 +1,22 @@
 package use_case.write_review;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * The output data for the write review use case.
  */
 public class WriteReviewOutputData {
-    private final String username;
+    private final String user_id;
     private final String content;
     private final int rating;
     private final String media;
     // add the date here?
-    private final LocalDate date;
+    private final Date date;
     private boolean success;
 
-    public WriteReviewOutputData(String username, String content, int rating, String media, LocalDate date,
+    public WriteReviewOutputData(String user_id, String content, int rating, String media, Date date,
                                  Boolean success){
-        this.username = username;
+        this.user_id = user_id;
         this.content = content;
         this.rating = rating;
         this.media = media;
@@ -31,7 +31,7 @@ public class WriteReviewOutputData {
         return content;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -43,7 +43,7 @@ public class WriteReviewOutputData {
         return media;
     }
 
-    public String getUsername() {
-        return username;
+    public String getUserID() {
+        return user_id;
     }
 }
