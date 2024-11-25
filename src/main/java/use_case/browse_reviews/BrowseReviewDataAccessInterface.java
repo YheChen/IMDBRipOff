@@ -2,6 +2,8 @@ package use_case.browse_reviews;
 
 import entity.Review;
 
+import java.util.Collection;
+
 public interface BrowseReviewDataAccessInterface {
     /**
      * Checks if the given review exists.
@@ -17,7 +19,12 @@ public interface BrowseReviewDataAccessInterface {
     Review get(String id);
 
     /**
+     * Get all reviews
+     */
+    Collection<Review> getAll();
+
+    /**
      * Gets the total count of reviews
      */
-    int count();
+    long count();
 }
