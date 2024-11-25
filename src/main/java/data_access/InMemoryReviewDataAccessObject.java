@@ -4,6 +4,7 @@ import entity.User;
 import use_case.browse_reviews.BrowseReviewDataAccessInterface;
 import use_case.write_review.WriteReviewDataAccessInterface;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public class InMemoryReviewDataAccessObject implements BrowseReviewDataAccessInt
 
     @Override
     public Review get(String id) {
-        return null;
+        return reviews.get(id);
     }
 
     @Override
@@ -51,5 +52,14 @@ public class InMemoryReviewDataAccessObject implements BrowseReviewDataAccessInt
         reviews.remove(id);
     }
 
-
+    /**
+     * Populates testing data for the DataAccessObject
+     */
+    public void seedData() {
+        Date currentDate = new Date();
+        reviews.put("671", new Review("Rowan", "671", "This is the body of the review for 'Harry Potter and the Philosophers Stone'", 3, currentDate));
+        reviews.put("672", new Review("Rowan", "672", "This is the body of the review for 'Harry Potter and the Chamber of Secrets'", 4, currentDate));
+        reviews.put("120", new Review("Rowan", "120", "This is the body of the review for 'The Lord of the Rings: The Fellowship of the Ring'", 5, currentDate));
+        reviews.put("121", new Review("Rowan", "121", "This is the body of the review for 'The Lord of the Rings: The Two Towers'", 2, currentDate));
+    }
 }
