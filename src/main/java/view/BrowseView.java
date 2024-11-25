@@ -1,7 +1,7 @@
 package view;
 
-import data_access.InMemoryMediaItemDataAccessObject;
 import data_access.InMemoryReviewDataAccessObject;
+import data_access.MovieNameFromidDAO;
 import entity.Review;
 import interface_adapter.browse_review.BrowseReviewViewModel;
 import interface_adapter.browse_review.BrowseReviewController;
@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class BrowseView {
@@ -23,7 +24,7 @@ public class BrowseView {
     private final JButton toAccount;
     private BrowseReviewController browseReviewController;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         final JPanel topBar = new JPanel();
         JButton toBrowse = new JButton("Browse Reviews"); // not implemented yet
@@ -55,12 +56,17 @@ public class BrowseView {
         InMemoryReviewDataAccessObject IMRDAO = new InMemoryReviewDataAccessObject();
         IMRDAO.seedData();
 
-        String[] ids = {"671", "672", "120", "121"};
-        // Adding reviews to main
-        for (int i = 0; i < 4; i++){
-            Review review = IMRDAO.getReview(ids[i]);
-            main.add(createReviewPanel(MovieNameFromID(review.getMediaID())), review.getUserID(), review.getDateUpdated(), review.getContent());
-        }
+        MovieNameFromidDAO MNFDAO = new MovieNameFromidDAO();
+
+//          ArrayList<Review> reviews = IMRDAO.getall();
+//          int numReviews = reviews.size();
+//          for (int i; i < numReviews; i++){
+//              Review current = reviews.get(i);
+//              main.add(createReviewPanel(MNFDAO.MovieNameFromID(current
+//                              .getMediaID()), current.getUserID(), current
+//                      .getDateUpdated().format(DateTimeFormatter
+//                              .ofPattern("dd/MM/yyyy")), current.getContent()));
+//          }
 
         // Scroll pane
         JScrollPane scroll = new JScrollPane(main);
