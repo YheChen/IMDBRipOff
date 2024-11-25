@@ -55,7 +55,7 @@ public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface
     public Collection<Review> getAll() {
         try (MongoDBClient db = new MongoDBClient()) {
             ArrayList<Review> reviews = new ArrayList<>();
-            db.getCollection(COLLECTION).find(descending(UPDATED_FIELD)).limit(100).forEach(document -> {
+            db.getCollection(COLLECTION).find().sort(descending(UPDATED_FIELD)).limit(100).forEach(document -> {
                 Review review = documentToReview(document);
                 if (review != null) {
                     reviews.add(review);
