@@ -30,6 +30,7 @@ public class Main {
                 .addChangePasswordUseCase()
                 .addWriteReviewUseCase()
                 .addBrowseReviewUseCase()
+                .addButtonUseCase()
                 .build();
 
         application.pack();

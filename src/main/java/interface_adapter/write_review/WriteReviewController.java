@@ -28,4 +28,16 @@ public class WriteReviewController {
 
         writeReviewUseCaseInteractor.execute(writeReviewInputData);
     }
+
+    public void switchToWriteView() {
+        writeReviewUseCaseInteractor.switchToWriteView();
+    }
+
+    public void switchToAccountView() {
+        writeReviewUseCaseInteractor.switchToAccountView();
+    }
+
+    public void switchToBrowseView() {
+        writeReviewUseCaseInteractor.switchToBrowseView();
+    }
 }

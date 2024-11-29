@@ -1,14 +1,15 @@
-package use_case.write_review;
+package use_case.account;
 
 /**
  * Input Boundary for actions which are related to logging in.
  */
-public interface WriteReviewInputBoundary {
+public interface AccountInputBoundary {
 
     /**
      * Executes the write review use case.
      */
-    void execute(WriteReviewInputData writeReviewInputData);
+//    void execute(BrowseReviewInputData writeReviewInputData);
+
     void switchToWriteView();
 
     void switchToAccountView();

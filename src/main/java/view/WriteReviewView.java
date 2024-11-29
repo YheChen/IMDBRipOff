@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -29,6 +31,10 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
     private WriteReviewController writeReviewController;
     private final JComboBox<Integer> rating_dropdown;
 
+    private final JButton toBrowse;
+    private final JButton toReview;
+    private final JButton toAccount;
+
     // private final JLabel username;
 
     // private final JButton logOut;
@@ -36,6 +42,42 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
     private final JButton submitReview;
 
     public WriteReviewView(WriteReviewViewModel writeReviewViewModel) {
+        final JPanel topBar = new JPanel();
+        toBrowse = new JButton("Browse Reviews"); // not implemented yet
+        topBar.add(toBrowse);
+        toReview = new JButton("Write Review");
+        topBar.add(toReview);
+        JLabel searchLabel = new JLabel("Search:");
+        topBar.add(searchLabel);
+        JTextField searchBar = new JTextField(22);
+        topBar.add(searchBar);
+        toAccount = new JButton("Your Account");
+        topBar.add(toAccount);
+
+        toReview.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        writeReviewController.switchToWriteView();
+                    }
+                }
+        );
+
+        toAccount.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        writeReviewController.switchToAccountView();
+                    }
+                }
+        );
+
+        toBrowse.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        writeReviewController.switchToBrowseView();
+                    }
+                }
+        );
+        this.add(topBar);
         this.writeReviewViewModel = writeReviewViewModel;
         this.writeReviewViewModel.addPropertyChangeListener(this);
 

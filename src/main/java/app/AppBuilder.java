@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import data_access.InMemoryReviewDataAccessObject;
+import interface_adapter.account.AccountController;
+import interface_adapter.account.AccountPresenter;
 import interface_adapter.account.AccountViewModel;
 import interface_adapter.browse_review.BrowseReviewController;
 import interface_adapter.browse_review.BrowseReviewPresenter;
@@ -30,6 +32,8 @@ import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
 import entity.CommonUserFactory;
+import use_case.account.AccountInputBoundary;
+import use_case.account.AccountInteractor;
 import use_case.browse_reviews.BrowseReviewInputBoundary;
 import use_case.browse_reviews.BrowseReviewInteractor;
 import use_case.change_password.ChangePasswordInputBoundary;
@@ -214,7 +218,7 @@ public class AppBuilder {
 
 
         final WriteReviewPresenter writeReviewOutputBoundary = new WriteReviewPresenter(browseReviewViewModel,
-                loggedInViewModel, viewManagerModel);
+                loggedInViewModel, accountViewModel, writeReviewViewModel, viewManagerModel);
 
         final WriteReviewInputBoundary writeReviewInteractor =
                 new WriteReviewInteractor(reviewDataAccessObject, writeReviewOutputBoundary);
@@ -235,6 +239,17 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addButtonUseCase() {
+        final AccountPresenter accountOutputBoundary = new AccountPresenter(browseReviewViewModel,
+                writeReviewViewModel, accountViewModel, viewManagerModel);
+        final AccountInputBoundary accountInteractor =
+                new AccountInteractor(accountOutputBoundary);
+
+        final AccountController accountController = new AccountController(accountInteractor);
+        accountView.setAccountController(accountController);
+        return this;
+    }
+
     /**
      * Creates the JFrame for the application and initially sets the BrowseView to be displayed.
      * @return the application
@@ -244,7 +259,7 @@ public class AppBuilder {
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         application.add(cardPanel);
-        viewManagerModel.setState(browseReviewViewModel.getViewName());
+        viewManagerModel.setState(accountViewModel.getViewName());
         System.out.println(browseReviewViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
 
