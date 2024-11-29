@@ -24,6 +24,7 @@ import java.util.Date;
 public class BrowseView extends JPanel{
 
     private final String viewName = "browse reviews";
+    private final JComboBox<String> sort;
     private final JButton toBrowse;
     private final JButton toReview;
     private final JButton toAccount;
@@ -133,6 +134,14 @@ public class BrowseView extends JPanel{
         topBar.setAlignmentX(Component.CENTER_ALIGNMENT);
         main.add(topBar);
 
+        final JPanel sort_panel = new JPanel();
+        final JLabel sort_media = new JLabel("Sort: ");
+        sort_panel.add(sort_media);
+        String[] filter_choices = new String[]{"Alphabetical", "Your Reviews", "Most Recent"};
+        sort = new JComboBox<>(filter_choices);
+        main.add(sort_panel);
+        main.add(sort);
+
         // Adding reviews (change into loop later)
         InMemoryReviewDataAccessObject IMRDAO = new InMemoryReviewDataAccessObject();
         IMRDAO.seedData();
@@ -158,7 +167,7 @@ public class BrowseView extends JPanel{
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         f.add(scroll, BorderLayout.CENTER);
-//        f.setVisible(true);
+        f.setVisible(true);
 
 
     }
