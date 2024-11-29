@@ -63,9 +63,9 @@ public class InMemoryReviewDataAccessObject implements BrowseReviewDataAccessInt
      */
     public void seedData() {
         Date currentDate = new Date();
-        reviews.put("671", new Review("Rowan", "671", "This is the body of the review for 'Harry Potter and the Philosophers Stone'", 3, currentDate));
-        reviews.put("672", new Review("Rowan", "672", "This is the body of the review for 'Harry Potter and the Chamber of Secrets'", 4, currentDate));
-        reviews.put("120", new Review("Rowan", "120", "This is the body of the review for 'The Lord of the Rings: The Fellowship of the Ring'", 5, currentDate));
-        reviews.put("121", new Review("Rowan", "121", "This is the body of the review for 'The Lord of the Rings: The Two Towers'", 2, currentDate));
+        reviews.put("671", new Review("User1", "671", "This is the body of the review for 'Harry Potter and the Philosophers Stone'", 3, currentDate));
+        reviews.put("672", new Review("User2", "672", "This is the body of the review for 'Harry Potter and the Chamber of Secrets'", 4, currentDate));
+        reviews.put("120", new Review("User3", "120", "This is the body of the review for 'The Lord of the Rings: The Fellowship of the Ring'", 5, currentDate));
+        reviews.put("121", new Review("User4", "121", "This is the body of the review for 'The Lord of the Rings: The Two Towers'", 2, currentDate));
     }
 }
