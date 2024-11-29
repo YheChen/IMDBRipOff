@@ -9,6 +9,7 @@ import use_case.signup.SignupUserDataAccessInterface;
 /**
  * The Signup Interactor.
  */
+// Code Review
 public class WriteReviewInteractor implements WriteReviewInputBoundary {
     private final WriteReviewDataAccessInterface reviewDataAccessObject;
     private final WriteReviewOutputBoundary userPresenter;
