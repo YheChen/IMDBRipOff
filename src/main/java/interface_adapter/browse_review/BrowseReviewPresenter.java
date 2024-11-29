@@ -43,11 +43,19 @@ public class BrowseReviewPresenter implements BrowseReviewOutputBoundary {
 
     public void switchToWriteView() {
         viewManagerModel.setState(writeReviewViewModel.getViewName());
+        System.out.println(writeReviewViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
 
     public void switchToAccountView() {
         viewManagerModel.setState(accountViewModel.getViewName());
+        System.out.println(accountViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
+    }
+
+    public void switchToBrowseView() {
+        viewManagerModel.setState(browseReviewViewModel.getViewName());
+        System.out.println(browseReviewViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
 }

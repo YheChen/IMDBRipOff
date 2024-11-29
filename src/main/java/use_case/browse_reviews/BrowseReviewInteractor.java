@@ -44,4 +44,8 @@ public class BrowseReviewInteractor implements BrowseReviewInputBoundary {
         browseReviewPresenter.switchToAccountView();
     }
 
+    public void switchToBrowseView() {
+        browseReviewPresenter.switchToBrowseView();
+    }
+
 }

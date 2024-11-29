@@ -25,6 +25,10 @@ public class BrowseReviewController {
         browseReviewUseCaseInteractor.switchToAccountView();
     }
 
+    public void switchToBrowseView() {
+        browseReviewUseCaseInteractor.switchToBrowseView();
+    }
+
     /**
      * Executes the Write Review Use Case.
      * @param username the username of the user logging in

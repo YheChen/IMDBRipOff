@@ -11,4 +11,6 @@ public interface BrowseReviewOutputBoundary {
     void switchToWriteView();
 
     void switchToAccountView();
+
+    void switchToBrowseView();
 }

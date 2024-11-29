@@ -16,7 +16,7 @@ import java.beans.PropertyChangeListener;
  * The view that displays options for a logged-in user
  */
 public class AccountView extends JPanel implements ActionListener, PropertyChangeListener {
-    private final String viewName = "account view";
+    private final String viewName = "account";
     private final AccountViewModel accountViewModel;
     private ChangePasswordController changePasswordController;
     private LogoutController logoutController;

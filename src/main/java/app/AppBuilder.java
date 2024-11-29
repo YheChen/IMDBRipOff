@@ -130,6 +130,7 @@ public class AppBuilder {
     public AppBuilder addWriteReviewView() {
         writeReviewViewModel = new WriteReviewViewModel();
         writeReviewView = new WriteReviewView(writeReviewViewModel);
+        System.out.println(writeReviewView.getViewName());
         cardPanel.add(writeReviewView, writeReviewView.getViewName());
         return this;
     }
@@ -141,7 +142,8 @@ public class AppBuilder {
     public AppBuilder addBrowseView() throws Exception {
         browseReviewViewModel = new BrowseReviewViewModel();
         browseView = new BrowseView(browseReviewViewModel);
-        // cardPanel.add(browseView, browseView.getViewName());
+        //System.out.println(browseView.getViewName());
+        cardPanel.add(browseView, browseView.getViewName());
         return this;
     }
 
@@ -234,7 +236,7 @@ public class AppBuilder {
     }
 
     /**
-     * Creates the JFrame for the application and initially sets the SignupView to be displayed.
+     * Creates the JFrame for the application and initially sets the BrowseView to be displayed.
      * @return the application
      */
     public JFrame build() {
@@ -243,6 +245,7 @@ public class AppBuilder {
 
         application.add(cardPanel);
         viewManagerModel.setState(browseReviewViewModel.getViewName());
+        System.out.println(browseReviewViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
 
         return application;

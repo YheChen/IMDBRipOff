@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-public class BrowseView {
+public class BrowseView extends JPanel{
 
     private final String viewName = "browse reviews";
     private final JButton toBrowse;
@@ -111,6 +111,14 @@ public class BrowseView {
                 }
         );
 
+        toBrowse.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        browseReviewController.switchToBrowseView();
+                    }
+                }
+        );
+
         // Set up frame
         JFrame f = new JFrame("Review Portal");
         f.setSize(800, 500);
@@ -132,11 +140,16 @@ public class BrowseView {
         MovieDataAccessObject MNFDAO = new MovieDataAccessObject();
 
         Collection<Review> reviews = IMRDAO.getAll();
-        int numReviews = reviews.size();
-        for (Review review: reviews){;
-            main.add(createReviewPanel(MNFDAO.MovieNameFromID(review
-                    .getMediaID()), review.getUserID(), review
-                    .getDateUpdated(), review.getContent(), "https://xl.movieposterdb.com/08_06/2008/468569/xl_468569_fe24b125.jpg?v=2024-11-16%2017:50:15"));
+        for (Review review: reviews){
+            main.add(createReviewPanel(
+                    MNFDAO.MovieNameFromID(review.getMediaID()),
+                    review.getUserID(),
+                    review.getDateUpdated(),
+                    review.getContent(),
+                    MNFDAO.MoviePosterFromID(review.getMediaID()),
+                    review.getRating()
+                    )
+            );
         }
 
         // Scroll pane
@@ -145,21 +158,21 @@ public class BrowseView {
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
         f.add(scroll, BorderLayout.CENTER);
-        f.setVisible(true);
+//        f.setVisible(true);
 
 
     }
 
 
     // Method to create a review panel
-    private static JPanel createReviewPanel(String movieTitleText, String usernameText, Date date, String reviewTextContent, String imageURL) {
+    private static JPanel createReviewPanel(String movieTitleText, String usernameText, Date date, String reviewTextContent, String imageURL, int score) {
         JPanel reviewBody = new JPanel();
         reviewBody.setLayout(new BoxLayout(reviewBody, BoxLayout.Y_AXIS));
         reviewBody.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Adds padding around the reviewBody
 
         JLabel movieTitle = new JLabel(movieTitleText);
         movieTitle.setFont(new Font("Arial", Font.BOLD, 14));
-        JLabel username = new JLabel(usernameText);
+        JLabel username = new JLabel("User: " + usernameText);
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
         JLabel dateLabel = new JLabel(df.format(date));
 
@@ -172,8 +185,8 @@ public class BrowseView {
         try {
             ImageIcon normalImage = new ImageIcon(new URL(imageURL));
             ImageIcon scaledImage = new ImageIcon(normalImage.getImage()
-                    .getScaledInstance(normalImage.getIconWidth() / 5,
-                            normalImage.getIconHeight() / 5, Image.SCALE_SMOOTH));
+                    .getScaledInstance(normalImage.getIconWidth() / 4,
+                            normalImage.getIconHeight() / 4, Image.SCALE_SMOOTH));
 
             imageLabel = new JLabel(scaledImage);
         }
@@ -199,6 +212,17 @@ public class BrowseView {
         reviewBody.setPreferredSize(new Dimension(500, 150));
         imageLabel.setPreferredSize(new Dimension(169, 250));
 
+
+        // List score by number of stars
+        for (int i = 0; i < score; i++){
+
+        }
+
+        // Space for both poster and score
+        JPanel image = new JPanel();
+        image.setLayout(new BoxLayout(image, BoxLayout.Y_AXIS));
+
+
         // Create a review block to ensure the poster and reviewBody are flowlayout.
         JPanel review = new JPanel();
         review.add(imageLabel);
@@ -207,6 +231,10 @@ public class BrowseView {
         return review;
 
     }
+
+//    private drawStar(){
+//
+//    }
 
     public String getViewName() {
         return viewName;

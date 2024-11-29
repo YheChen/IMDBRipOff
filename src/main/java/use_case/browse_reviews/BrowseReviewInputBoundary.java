@@ -13,4 +13,6 @@ public interface BrowseReviewInputBoundary {
     void switchToWriteView();
 
     void switchToAccountView();
+
+    void switchToBrowseView();
 }
