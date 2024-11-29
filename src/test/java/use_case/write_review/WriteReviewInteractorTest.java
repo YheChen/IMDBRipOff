@@ -37,13 +37,13 @@ class WriteReviewInteractorTest {
         WriteReviewOutputBoundary successPresenter = new WriteReviewOutputBoundary() {
             @Override
             public void prepareSuccessView(WriteReviewOutputData writeReviewOutputData) {
-                assertEquals(5, reviewMemObj.getReview(review.getReviewID()).getRating()); // Check if the rating is correct
+                assertEquals(5, reviewMemObj.get(review.getReviewID()).getRating()); // Check if the rating is correct
                 assertEquals("hello so yeah i really like this move idk why",
-                        reviewMemObj.getReview(review.getReviewID()).getContent());
+                        reviewMemObj.get(review.getReviewID()).getContent());
                 // Check if the review content is correct
-                assertEquals("Harry Potter and the Philosopher's Stone" ,review.getMedia());
+                assertEquals("Harry Potter and the Philosopher's Stone" ,review.get());
                 // Check if the movie/media is correct lol
-                assertEquals("30ENX3", review.getUserID());
+                assertEquals("30ENX3", review.get());
             }
         };
     }
