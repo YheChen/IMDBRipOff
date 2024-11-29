@@ -28,22 +28,25 @@ class WriteReviewInteractorTest {
         InMemoryReviewDataAccessObject reviewMemObj = new InMemoryReviewDataAccessObject();
         Review review = new Review("94xdj", "4o3me",
                 "hello so yeah i really like this move idk why", 5, new Date());
-        reviewMemObj.save(review);
-
-        WriteReviewDataAccessInterface userRepository = new InMemoryReviewDataAccessObject();
+       // reviewMemObj.save(review);
 
         // This creates a successPresenter that tests whether the test case is as we expect.
         WriteReviewOutputBoundary successPresenter = new WriteReviewOutputBoundary() {
             @Override
             public void prepareSuccessView(WriteReviewOutputData writeReviewOutputData) {
-                assertEquals(5, reviewMemObj.getReview(review.getReviewID()).getRating()); // Check if the rating is correct
+                assertEquals(5, reviewMemObj.get(review.getReviewID()).getRating()); // Check if the rating is correct
                 assertEquals("hello so yeah i really like this move idk why",
-                        reviewMemObj.getReview(review.getReviewID()).getContent());
+                        reviewMemObj.get(review.getReviewID()).getContent());
                 // Check if the review content is correct
-                assertEquals("Harry Potter and the Philosopher's Stone",
-                        reviewMemObj.getReview(review.getMediaID()).getContent());
+                assertEquals("4o3me",
+                        reviewMemObj.get(review.getReviewID()).getMediaID());
                 // Check if the movie/media is correct lo
             }
         };
+
+        WriteReviewInputBoundary interactor = new WriteReviewInteractor(reviewMemObj, successPresenter);
+        interactor.execute(writeReviewInputData);
+
+
     }
 }
