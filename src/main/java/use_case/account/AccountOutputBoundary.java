@@ -1,10 +1,12 @@
-package use_case.write_review;
+package use_case.account;
 
-public interface WriteReviewOutputBoundary {
+public interface AccountOutputBoundary {
     /**
      * Prepares the success view for the Write Review Use Case
      */
-    void prepareSuccessView(WriteReviewOutputData writeReviewOutputData);
+    void prepareAccountView();
+
+    //void prepareWriteReviewView();
 
     void switchToWriteView();
 

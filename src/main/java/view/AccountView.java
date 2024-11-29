@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.account.AccountController;
 import interface_adapter.account.AccountState;
 import interface_adapter.account.AccountViewModel;
 import interface_adapter.change_password.ChangePasswordController;
@@ -20,12 +21,53 @@ public class AccountView extends JPanel implements ActionListener, PropertyChang
     private final AccountViewModel accountViewModel;
     private ChangePasswordController changePasswordController;
     private LogoutController logoutController;
+    private AccountController accountController;
 
     private final JLabel username;
     private final JButton logOut;
     private final JButton changePassword;
 
+    private final JButton toBrowse;
+    private final JButton toReview;
+    private final JButton toAccount;
+
     public AccountView(AccountViewModel accountViewModel) {
+        final JPanel topBar = new JPanel();
+        toBrowse = new JButton("Browse Reviews"); // not implemented yet
+        topBar.add(toBrowse);
+        toReview = new JButton("Write Review");
+        topBar.add(toReview);
+        JLabel searchLabel = new JLabel("Search:");
+        topBar.add(searchLabel);
+        JTextField searchBar = new JTextField(22);
+        topBar.add(searchBar);
+        toAccount = new JButton("Your Account");
+        topBar.add(toAccount);
+
+        toReview.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        accountController.switchToWriteView();
+                    }
+                }
+        );
+
+        toAccount.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        accountController.switchToAccountView();
+                    }
+                }
+        );
+
+        toBrowse.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent evt) {
+                        accountController.switchToBrowseView();
+                    }
+                }
+        );
+
         this.accountViewModel = accountViewModel;
         this.accountViewModel.addPropertyChangeListener(this);
 
@@ -86,6 +128,7 @@ public class AccountView extends JPanel implements ActionListener, PropertyChang
         );
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.add(topBar);
         this.add(header);
         this.add(subtitle);
         this.add(buttons);
@@ -118,5 +161,9 @@ public class AccountView extends JPanel implements ActionListener, PropertyChang
 
     public void setLogoutController(LogoutController logoutController) {
         this.logoutController = logoutController;
+    }
+
+    public void setAccountController(AccountController accountController) {
+        this.accountController = accountController;
     }
 }

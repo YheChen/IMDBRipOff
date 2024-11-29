@@ -1,46 +1,48 @@
-package interface_adapter.write_review;
+package interface_adapter.account;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.account.AccountState;
 import interface_adapter.account.AccountViewModel;
 import interface_adapter.browse_review.BrowseReviewViewModel;
+import interface_adapter.change_password.LoggedInState;
 import interface_adapter.change_password.LoggedInViewModel;
-import interface_adapter.browse_review.BrowseReviewState;
+import interface_adapter.login.LoginState;
+import interface_adapter.login.LoginViewModel;
+import interface_adapter.write_review.WriteReviewViewModel;
+import use_case.account.AccountOutputBoundary;
+import use_case.browse_reviews.BrowseReviewOutputBoundary;
+import use_case.login.LoginOutputData;
 import use_case.write_review.WriteReviewOutputData;
 import use_case.write_review.WriteReviewOutputBoundary;
 
-public class WriteReviewPresenter implements WriteReviewOutputBoundary {
+public class AccountPresenter implements AccountOutputBoundary {
     private final BrowseReviewViewModel browseReviewViewModel;
-    private final LoggedInViewModel loggedInViewModel;
-    private final AccountViewModel accountViewModel;
     private final WriteReviewViewModel writeReviewViewModel;
+    private final AccountViewModel accountViewModel;
     private final ViewManagerModel viewManagerModel;
 
-    public WriteReviewPresenter(BrowseReviewViewModel browseReviewViewModel,
-                          LoggedInViewModel loggedInViewModel,
-                          AccountViewModel accountViewModel,
-                                WriteReviewViewModel writeReviewViewModel,
-                          ViewManagerModel viewManagerModel) {
-        this.browseReviewViewModel = browseReviewViewModel;
-        this.loggedInViewModel = loggedInViewModel;
-        this.accountViewModel = accountViewModel;
+    public AccountPresenter(BrowseReviewViewModel browseReviewViewModel,
+                                 WriteReviewViewModel writeReviewViewModel,
+                                 AccountViewModel accountViewModel,
+                                 ViewManagerModel viewManagerModel) {
+        this.browseReviewViewModel =  browseReviewViewModel;
         this.writeReviewViewModel = writeReviewViewModel;
+        this.accountViewModel = accountViewModel;
         this.viewManagerModel = viewManagerModel;
     }
 
     @Override
-    public void prepareSuccessView(WriteReviewOutputData writeReviewOutputData) {
-        // On success, switch to the logged in view.
+    public void prepareAccountView() {
+        // On success, switch to the account view.
 
+        final AccountState accountState = accountViewModel.getState();
+        this.accountViewModel.setState(accountState);
+        this.accountViewModel.firePropertyChanged();
 
-        final BrowseReviewState browseReviewState = browseReviewViewModel.getState();
-        this.browseReviewViewModel.setState(browseReviewState);
-        this.loggedInViewModel.firePropertyChanged();
-
-        this.viewManagerModel.setState(browseReviewViewModel.getViewName());
+        this.viewManagerModel.setState(accountViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
     }
 
-    @Override
     public void switchToWriteView() {
         viewManagerModel.setState(writeReviewViewModel.getViewName());
         System.out.println(writeReviewViewModel.getViewName());
