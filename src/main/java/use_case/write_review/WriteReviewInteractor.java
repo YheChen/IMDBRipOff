@@ -5,7 +5,7 @@ import entity.Review;
 import use_case.signup.SignupOutputData;
 import use_case.signup.SignupUserDataAccessInterface;
 
-// Pull request for pull review
+// Pull request for code review
 /**
  * The Signup Interactor.
  */
