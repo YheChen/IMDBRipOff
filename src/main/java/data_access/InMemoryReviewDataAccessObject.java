@@ -34,6 +34,11 @@ public class InMemoryReviewDataAccessObject implements BrowseReviewDataAccessInt
     }
 
     @Override
+    public Collection<Review> getAllSorted(String orderBy) {
+        return reviews.values();
+    }
+
+    @Override
     public long count() {
         return reviews.size();
     }
