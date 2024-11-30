@@ -199,7 +199,8 @@ public class BrowseView extends JPanel{
         reviewText.setWrapStyleWord(true);
         reviewText.setEditable(false);
         reviewText.setColumns(30);
-        JLabel imageLabel = new JLabel();
+        JLabel reviewScore = new JLabel("Score: " + score, SwingConstants.CENTER);
+        JLabel imageLabel = new JLabel("", SwingConstants.CENTER);
         try {
             ImageIcon normalImage = new ImageIcon(new URL(imageURL));
             ImageIcon scaledImage = new ImageIcon(normalImage.getImage()
@@ -210,6 +211,13 @@ public class BrowseView extends JPanel{
         }
         catch (IOException e) {
             e.printStackTrace();}
+
+        JPanel imageScore = new JPanel();
+        imageScore.setLayout(new BoxLayout(imageScore, BoxLayout.Y_AXIS));
+
+        imageScore.add(imageLabel);
+        imageScore.add(reviewScore);
+
 
         // Align components
         movieTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -232,9 +240,9 @@ public class BrowseView extends JPanel{
 
 
         // List score by number of stars
-        for (int i = 0; i < score; i++){
-
-        }
+//        for (int i = 0; i < score; i++){
+//
+//        }
 
         // Space for both poster and score
         JPanel image = new JPanel();
@@ -243,7 +251,7 @@ public class BrowseView extends JPanel{
 
         // Create a review block to ensure the poster and reviewBody are flowlayout.
         JPanel review = new JPanel();
-        review.add(imageLabel);
+        review.add(imageScore);
         review.add(reviewBody);
 
         return review;
