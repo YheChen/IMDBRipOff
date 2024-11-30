@@ -6,9 +6,9 @@ package use_case.browse_reviews;
 public interface BrowseReviewInputBoundary {
 
     /**
-     * Executes the write review use case.
+     * Executes the browse review use case
      */
-//    void execute(BrowseReviewInputData writeReviewInputData);
+    void execute(BrowseReviewInputData browseReviewInputData);
 
     void switchToWriteView();
 

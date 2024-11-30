@@ -17,6 +17,14 @@ public class BrowseReviewInteractor implements BrowseReviewInputBoundary {
         //this.userDataAccessObject = userDataAccessInterface;
         this.browseReviewPresenter = browseReviewPresenter;
     }
+
+    @Override
+    public void execute(BrowseReviewInputData browseReviewInputData) {
+        String orderBy = browseReviewInputData.getOrderBy();
+        String searchText = browseReviewInputData.getSearchText();
+        final BrowseReviewOutputData outputData = new BrowseReviewOutputData(orderBy, searchText);
+        browseReviewPresenter.prepareBrowseView(outputData);
+    }
 //     execute method might not be needed for interactor because no output
 
 //    @Override

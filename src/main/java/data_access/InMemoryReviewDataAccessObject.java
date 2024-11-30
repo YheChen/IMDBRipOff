@@ -34,7 +34,7 @@ public class InMemoryReviewDataAccessObject implements BrowseReviewDataAccessInt
     }
 
     @Override
-    public Collection<Review> getAllSorted(String orderBy) {
+    public Collection<Review> getAllSorted(String orderBy, String searchText) {
         List<Review> reviews = new ArrayList<>(getAll());
         reviews.sort((r1, r2) -> {
             switch (orderBy) {

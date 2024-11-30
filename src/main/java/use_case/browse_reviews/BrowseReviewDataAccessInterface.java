@@ -26,7 +26,7 @@ public interface BrowseReviewDataAccessInterface {
     /**
      * Get all reviews, sorted by a parameter
      */
-    Collection<Review> getAllSorted(String orderBy);
+    Collection<Review> getAllSorted(String orderBy, String searchText);
 
     /**
      * Gets the total count of reviews
