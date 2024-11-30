@@ -199,7 +199,7 @@ public class BrowseView extends JPanel{
         reviewText.setWrapStyleWord(true);
         reviewText.setEditable(false);
         reviewText.setColumns(30);
-        JLabel reviewScore = new JLabel("Score: " + score, SwingConstants.CENTER);
+        JLabel reviewScore = new JLabel("★".repeat(score) + "☆".repeat(5 - score), SwingConstants.CENTER);
         JLabel imageLabel = new JLabel("", SwingConstants.CENTER);
         try {
             ImageIcon normalImage = new ImageIcon(new URL(imageURL));
