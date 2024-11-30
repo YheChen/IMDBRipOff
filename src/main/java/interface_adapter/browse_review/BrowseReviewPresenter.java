@@ -9,6 +9,7 @@ import interface_adapter.login.LoginState;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.write_review.WriteReviewViewModel;
 import use_case.browse_reviews.BrowseReviewOutputBoundary;
+import use_case.browse_reviews.BrowseReviewOutputData;
 import use_case.login.LoginOutputData;
 import use_case.write_review.WriteReviewOutputData;
 import use_case.write_review.WriteReviewOutputBoundary;
@@ -21,25 +22,33 @@ public class BrowseReviewPresenter implements BrowseReviewOutputBoundary {
 
     public BrowseReviewPresenter(BrowseReviewViewModel browseReviewViewModel,
                                  WriteReviewViewModel writeReviewViewModel,
-                                AccountViewModel accountViewModel,
-                                ViewManagerModel viewManagerModel) {
+                                 AccountViewModel accountViewModel,
+                                 ViewManagerModel viewManagerModel) {
         this.browseReviewViewModel =  browseReviewViewModel;
         this.writeReviewViewModel = writeReviewViewModel;
         this.accountViewModel = accountViewModel;
         this.viewManagerModel = viewManagerModel;
     }
 
-//    @Override
-//    public void prepareAccountView() {
-//        // On success, switch to the account view.
-//
-//        final AccountState accountState = accountViewModel.getState();
-//        this.accountViewModel.setState(accountState);
-//        this.accountViewModel.firePropertyChanged();
-//
-//        this.viewManagerModel.setState(accountViewModel.getViewName());
+    @Override
+    public void prepareBrowseView(BrowseReviewOutputData response) {
+        // On success, switch to the account view.
+        System.out.println("prepareBrowseView");
+        final BrowseReviewState browseReviewState = browseReviewViewModel.getState();
+        String orderBy = response.getOrderBy();
+        if (orderBy != null) {
+            browseReviewState.setOrderBy(response.getOrderBy());
+        }
+        String searchText = response.getSearchText();
+        if (searchText != null) {
+            browseReviewState.setSearchText(response.getSearchText());
+        }
+        this.browseReviewViewModel.setState(browseReviewState);
+        this.browseReviewViewModel.firePropertyChanged();
+
+//        this.viewManagerModel.setState(browseReviewViewModel.getViewName());
 //        this.viewManagerModel.firePropertyChanged();
-//    }
+    }
 
     public void switchToWriteView() {
         viewManagerModel.setState(writeReviewViewModel.getViewName());

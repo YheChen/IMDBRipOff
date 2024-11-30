@@ -1,6 +1,7 @@
 package interface_adapter.browse_review;
 
 import use_case.browse_reviews.BrowseReviewInputBoundary;
+import use_case.browse_reviews.BrowseReviewInputData;
 
 
 /**
@@ -26,10 +27,12 @@ public class BrowseReviewController {
         browseReviewUseCaseInteractor.switchToBrowseView();
     }
 
-    /**
-     * Executes the Write Review Use Case.
-     * @param username the username of the user logging in
-     */
+    public void execute(String orderBy, String searchText) {
+        final BrowseReviewInputData browseReviewInputData = new BrowseReviewInputData(orderBy, searchText);
+
+        browseReviewUseCaseInteractor.execute(browseReviewInputData);
+    }
+
 //    public void execute(String username) {
 //        final BrowseReviewInputData browseReviewInputData = new BrowseReviewInputData(username);
 //

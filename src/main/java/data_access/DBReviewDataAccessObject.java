@@ -55,11 +55,11 @@ public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface
 
     @Override
     public Collection<Review> getAll() {
-        return getAllSorted("recent");
+        return getAllSorted("recent", null);
     }
 
     @Override
-    public Collection<Review> getAllSorted(String orderBy) {
+    public Collection<Review> getAllSorted(String orderBy, String searchText) {
         Bson sortBy;
         switch (orderBy) {
             case "recent":
