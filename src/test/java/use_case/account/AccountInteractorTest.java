@@ -1,4 +1,4 @@
-package use_case.browse_reviews;
+package use_case.account;
 
 import interface_adapter.ViewManagerModel;
 import interface_adapter.account.AccountViewModel;
@@ -14,11 +14,11 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BrowseReviewInteractorTest {
+public class AccountInteractorTest {
 
     @Test
     void successTest() {
-        BrowseReviewOutputBoundary successPresenter = new BrowseReviewOutputBoundary() {
+        AccountOutputBoundary successPresenter = new AccountOutputBoundary() {
             @Override
             public void switchToWriteView() {
             }
@@ -33,7 +33,7 @@ public class BrowseReviewInteractorTest {
             }
         };
 
-        BrowseReviewInputBoundary boundary = new BrowseReviewInteractor(successPresenter);
+        AccountInputBoundary boundary = new AccountInteractor(successPresenter);
 
         // Tests changes in state
         boundary.switchToAccountView();

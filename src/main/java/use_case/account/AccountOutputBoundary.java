@@ -4,7 +4,7 @@ public interface AccountOutputBoundary {
     /**
      * Prepares the success view for the Write Review Use Case
      */
-    void prepareAccountView();
+//    void prepareAccountView();
 
     //void prepareWriteReviewView();
 
