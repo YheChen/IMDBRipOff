@@ -29,17 +29,17 @@ public class BrowseReviewPresenter implements BrowseReviewOutputBoundary {
         this.viewManagerModel = viewManagerModel;
     }
 
-    @Override
-    public void prepareAccountView() {
-        // On success, switch to the account view.
-
-        final AccountState accountState = accountViewModel.getState();
-        this.accountViewModel.setState(accountState);
-        this.accountViewModel.firePropertyChanged();
-
-        this.viewManagerModel.setState(accountViewModel.getViewName());
-        this.viewManagerModel.firePropertyChanged();
-    }
+//    @Override
+//    public void prepareAccountView() {
+//        // On success, switch to the account view.
+//
+//        final AccountState accountState = accountViewModel.getState();
+//        this.accountViewModel.setState(accountState);
+//        this.accountViewModel.firePropertyChanged();
+//
+//        this.viewManagerModel.setState(accountViewModel.getViewName());
+//        this.viewManagerModel.firePropertyChanged();
+//    }
 
     public void switchToWriteView() {
         viewManagerModel.setState(writeReviewViewModel.getViewName());

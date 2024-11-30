@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
@@ -29,58 +30,7 @@ public class BrowseView extends JPanel{
     private final JButton toBrowse;
     private final JButton toReview;
     private final JButton toAccount;
-
-    //public static void main(String[] args) throws Exception {
-
-
-//        final JPanel topBar = new JPanel();
-//        JButton toBrowse = new JButton("Browse Reviews"); // not implemented yet
-//        topBar.add(toBrowse);
-//        JButton toReview = new JButton("Write Review");
-//        topBar.add(toReview);
-//        JLabel searchLabel = new JLabel("Search:");
-//        topBar.add(searchLabel);
-//        JTextField searchBar = new JTextField(22);
-//        topBar.add(searchBar);
-//        JButton toAccount = new JButton("Your Account");
-//        topBar.add(toAccount);
-
-        // Set up frame
-//        JFrame f = new JFrame("Review Portal");
-//        f.setSize(800, 500);
-//        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        f.setLayout(new BorderLayout());
-
-        // main panel setup
-//        JPanel main = new JPanel();
-//        main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
-
-        // Adding topBar to main
-//        topBar.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        main.add(topBar);
-
-//        // For testing purposes
-//        InMemoryReviewDataAccessObject IMRDAO = new InMemoryReviewDataAccessObject();
-//        IMRDAO.seedData();
-//
-//        MovieNameFromidDAO MNFDAO = new MovieNameFromidDAO();
-//
-//          Collection<Review> reviews = IMRDAO.getAll();
-//          int numReviews = reviews.size();
-//          for (Review review: reviews){;
-//              main.add(createReviewPanel(MNFDAO.MovieNameFromID(review
-//                              .getMediaID()), review.getUserID(), review
-//                      .getDateUpdated(), review.getContent(), "https://xl.movieposterdb.com/08_06/2008/468569/xl_468569_fe24b125.jpg?v=2024-11-16%2017:50:15"));
-//          }
-//
-//        // Scroll pane
-//        JScrollPane scroll = new JScrollPane(main);
-//        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//
-//        f.add(scroll, BorderLayout.CENTER);
-//        f.setVisible(true);
-//    }
+    private final JPanel reviewsPanel;
 
     public BrowseView(BrowseReviewViewModel browseReviewViewModel) throws Exception {
         this.setLayout(new BorderLayout());
@@ -117,12 +67,17 @@ public class BrowseView extends JPanel{
         final JLabel sort_label = new JLabel("Sort: ");
         sort_panel.add(sort_label);
 
-        String[] filter_choices = new String[]{"Alphabetical", "Your Reviews", "Most Recent"};
+        String[] filter_choices = new String[]{"Recent", "Highest Score", "Lowest Score"};
         sort = new JComboBox<>(filter_choices);
         main.add(sort_panel);
         main.add(sort);
 
-        populateReviews(main);
+        reviewsPanel = new JPanel();
+        reviewsPanel.setLayout(new BoxLayout(reviewsPanel, BoxLayout.Y_AXIS));
+        main.add(reviewsPanel);
+
+        populateReviews("recent");
+
         // Scroll pane
         JScrollPane scroll = new JScrollPane(main);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -161,16 +116,37 @@ public class BrowseView extends JPanel{
                 browseReviewController.switchToAccountView();
             }
         });
+
+        sort.addItemListener(item -> {
+            if (item.getStateChange() == ItemEvent.SELECTED) {
+                try {
+                    switch ((String)item.getItem()) {
+                        case "Most Recent":
+                            populateReviews("recent");
+                            break;
+                        case "Highest Score":
+                            populateReviews("highScore");
+                            break;
+                        case "Lowest Score":
+                            populateReviews("lowScore");
+                            break;
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
-    private void populateReviews(JPanel mainPanel) throws Exception {
+    private void populateReviews(String orderBy) throws Exception {
         InMemoryReviewDataAccessObject reviewDAO = new InMemoryReviewDataAccessObject();
         reviewDAO.seedData();
         MovieDataAccessObject movieDAO = new MovieDataAccessObject();
 
-        Collection<Review> reviews = reviewDAO.getAll();
+        reviewsPanel.removeAll();
+        Collection<Review> reviews = reviewDAO.getAllSorted(orderBy);
         for (Review review : reviews) {
-            mainPanel.add(createReviewPanel(
+            reviewsPanel.add(createReviewPanel(
                     movieDAO.MovieNameFromID(review.getMediaID()),
                     review.getUserID(),
                     review.getDateUpdated(),
@@ -179,6 +155,8 @@ public class BrowseView extends JPanel{
                     review.getRating()
             ));
         }
+        reviewsPanel.revalidate();
+        reviewsPanel.repaint();
     }
 
 
@@ -199,7 +177,7 @@ public class BrowseView extends JPanel{
         reviewText.setWrapStyleWord(true);
         reviewText.setEditable(false);
         reviewText.setColumns(30);
-        JLabel reviewScore = new JLabel("Score: " + score, SwingConstants.CENTER);
+        JLabel reviewScore = new JLabel("★".repeat(score) + "☆".repeat(5 - score), SwingConstants.CENTER);
         JLabel imageLabel = new JLabel("", SwingConstants.CENTER);
         try {
             ImageIcon normalImage = new ImageIcon(new URL(imageURL));

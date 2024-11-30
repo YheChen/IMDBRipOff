@@ -1,10 +1,6 @@
 package interface_adapter.account;
 
 import use_case.account.AccountInputBoundary;
-import use_case.browse_reviews.BrowseReviewInputBoundary;
-import use_case.browse_reviews.BrowseReviewInputData;
-import use_case.login.LoginInputBoundary;
-import use_case.login.LoginInputData;
 
 
 /**
