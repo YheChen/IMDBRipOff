@@ -33,6 +33,7 @@ public class AccountView extends JPanel implements ActionListener, PropertyChang
 
     public AccountView(AccountViewModel accountViewModel) {
         final JPanel topBar = new JPanel();
+        topBar.setMaximumSize(new Dimension(1000, 50));
         toBrowse = new JButton("Browse Reviews"); // not implemented yet
         topBar.add(toBrowse);
         toReview = new JButton("Write Review");
