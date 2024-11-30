@@ -47,10 +47,10 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
         topBar.add(toBrowse);
         toReview = new JButton("Write Review");
         topBar.add(toReview);
-        JLabel searchLabel = new JLabel("Search:");
-        topBar.add(searchLabel);
-        JTextField searchBar = new JTextField(22);
-        topBar.add(searchBar);
+//        JLabel searchLabel = new JLabel("Search:");
+//        topBar.add(searchLabel);
+//        JTextField searchBar = new JTextField(22);
+//        topBar.add(searchBar);
         toAccount = new JButton("Your Account");
         topBar.add(toAccount);
 

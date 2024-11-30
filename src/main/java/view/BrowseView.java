@@ -38,6 +38,7 @@ public class BrowseView extends JPanel{
         this.setLayout(new BorderLayout());
 
         final JPanel topBar = new JPanel();
+        topBar.setMaximumSize(new Dimension(1000, 50));
         toBrowse = new JButton("Browse Reviews"); // not implemented yet
         toReview = new JButton("Write Review");
         toAccount = new JButton("Your Account");
@@ -66,13 +67,15 @@ public class BrowseView extends JPanel{
         main.add(topBar);
 
         final JPanel sort_panel = new JPanel();
+        sort_panel.setMaximumSize(new Dimension(1000, 50));
         final JLabel sort_label = new JLabel("Sort: ");
         sort_panel.add(sort_label);
 
         String[] filter_choices = new String[]{"Recent", "Highest Score", "Lowest Score"};
         sort = new JComboBox<>(filter_choices);
+        sort_panel.add(sort);
+
         main.add(sort_panel);
-        main.add(sort);
 
         reviewsPanel = new JPanel();
         reviewsPanel.setLayout(new BoxLayout(reviewsPanel, BoxLayout.Y_AXIS));
@@ -137,6 +140,7 @@ public class BrowseView extends JPanel{
 
         searchBar.addActionListener(evt -> {
             String searchText = searchBar.getText();
+            browseReviewController.execute(null, searchText);
 //            sort.setSelectedItem("Recent");
 //            populateReviews("recent", searchText);
         });
@@ -145,7 +149,7 @@ public class BrowseView extends JPanel{
             if (item.getStateChange() == ItemEvent.SELECTED) {
                 try {
                     switch ((String)item.getItem()) {
-                        case "Most Recent":
+                        case "Recent":
                             browseReviewController.execute("recent", null);
                             break;
                         case "Highest Score":
