@@ -32,58 +32,6 @@ public class BrowseView extends JPanel{
     private final JButton toAccount;
     private final JPanel reviewsPanel;
 
-    //public static void main(String[] args) throws Exception {
-
-
-//        final JPanel topBar = new JPanel();
-//        JButton toBrowse = new JButton("Browse Reviews"); // not implemented yet
-//        topBar.add(toBrowse);
-//        JButton toReview = new JButton("Write Review");
-//        topBar.add(toReview);
-//        JLabel searchLabel = new JLabel("Search:");
-//        topBar.add(searchLabel);
-//        JTextField searchBar = new JTextField(22);
-//        topBar.add(searchBar);
-//        JButton toAccount = new JButton("Your Account");
-//        topBar.add(toAccount);
-
-        // Set up frame
-//        JFrame f = new JFrame("Review Portal");
-//        f.setSize(800, 500);
-//        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        f.setLayout(new BorderLayout());
-
-        // main panel setup
-//        JPanel main = new JPanel();
-//        main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
-
-        // Adding topBar to main
-//        topBar.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        main.add(topBar);
-
-//        // For testing purposes
-//        InMemoryReviewDataAccessObject IMRDAO = new InMemoryReviewDataAccessObject();
-//        IMRDAO.seedData();
-//
-//        MovieNameFromidDAO MNFDAO = new MovieNameFromidDAO();
-//
-//          Collection<Review> reviews = IMRDAO.getAll();
-//          int numReviews = reviews.size();
-//          for (Review review: reviews){;
-//              main.add(createReviewPanel(MNFDAO.MovieNameFromID(review
-//                              .getMediaID()), review.getUserID(), review
-//                      .getDateUpdated(), review.getContent(), "https://xl.movieposterdb.com/08_06/2008/468569/xl_468569_fe24b125.jpg?v=2024-11-16%2017:50:15"));
-//          }
-//
-//        // Scroll pane
-//        JScrollPane scroll = new JScrollPane(main);
-//        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//
-//        f.add(scroll, BorderLayout.CENTER);
-//        f.setVisible(true);
-//    }
-
     public BrowseView(BrowseReviewViewModel browseReviewViewModel) throws Exception {
         this.setLayout(new BorderLayout());
 

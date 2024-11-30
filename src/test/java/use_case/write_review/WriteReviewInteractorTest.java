@@ -7,6 +7,9 @@ import entity.User;
 import entity.UserFactory;
 import entity.Review;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.account.AccountViewModel;
+import interface_adapter.browse_review.BrowseReviewViewModel;
+import interface_adapter.write_review.WriteReviewViewModel;
 import org.junit.jupiter.api.Test;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
@@ -31,6 +34,7 @@ class WriteReviewInteractorTest {
                 "hello so yeah i really like this move idk why", 5, new Date());
         reviewMemObj.save(review);
 
+
         // This creates a successPresenter that tests whether the test case is as we expect.
         WriteReviewOutputBoundary successPresenter = new WriteReviewOutputBoundary() {
             @Override
@@ -42,28 +46,51 @@ class WriteReviewInteractorTest {
                 assertEquals("4o3me",
                         reviewMemObj.get(review.getReviewID()).getMediaID());
                 // Check if the movie/media is correct lo
+                assertEquals("hello so yeah i really like this move idk why", writeReviewOutputData.getContent());
+                assertEquals(5, writeReviewOutputData.getRating());
+                assertEquals("Harry Potter and the Philosopher's Stone", writeReviewOutputData.getMedia());
+                assertEquals("30ENX3", writeReviewOutputData.getUserID());
+                assertEquals(new Date().toString(), writeReviewOutputData.getDate().toString());
             }
 
             @Override
             public void switchToWriteView() {
-                ViewManagerModel viewManagerModel = new ViewManagerModel();
-                assertEquals(viewManagerModel.getViewName(), "write reviews");
-            }
+                         }
 
             @Override
             public void switchToAccountView() {
-                ViewManagerModel viewManagerModel = new ViewManagerModel();
-                assertEquals(viewManagerModel.getViewName(), "account");
+
             }
 
             @Override
             public void switchToBrowseView() {
-                ViewManagerModel viewManagerModel = new ViewManagerModel();
-                assertEquals(viewManagerModel.getViewName(), "browse reviews");
             }
         };
 
-        WriteReviewInputBoundary interactor = new WriteReviewInteractor(reviewMemObj, successPresenter);
-        interactor.execute(writeReviewInputData);
+
+        WriteReviewInputBoundary boundary = new WriteReviewInteractor(reviewMemObj, successPresenter);
+
+        // Tests changes in state
+        boundary.execute(writeReviewInputData);
+        boundary.switchToAccountView();
+        AccountViewModel accountViewModel = new AccountViewModel();
+        assertEquals( "account", accountViewModel.getViewName());
+
+        boundary.switchToBrowseView();
+        BrowseReviewViewModel browseReviewViewModel = new BrowseReviewViewModel();
+        assertEquals( "browse reviews", browseReviewViewModel.getViewName());
+
+        boundary.switchToWriteView();
+        WriteReviewViewModel writeReviewViewModel = new WriteReviewViewModel();
+        assertEquals( "write review", writeReviewViewModel.getViewName());
+
+
+
+//        boundary.switchToBrowseView();
+//        assertEquals("browse reviews", viewManagerModel.getViewName());
+//
+//        boundary.switchToWriteView();
+//        assertEquals("write reviews", viewManagerModel.getViewName());
+
     }
 }
