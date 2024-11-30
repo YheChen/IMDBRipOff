@@ -2,6 +2,7 @@ package data_access;
 
 import entity.Review;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import use_case.browse_reviews.BrowseReviewDataAccessInterface;
 import use_case.write_review.WriteReviewDataAccessInterface;
 
@@ -11,6 +12,7 @@ import java.util.Collection;
 
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Sorts.descending;
+import static com.mongodb.client.model.Sorts.ascending;
 
 public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface, WriteReviewDataAccessInterface {
     private static final String COLLECTION = "reviews";
@@ -53,9 +55,30 @@ public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface
 
     @Override
     public Collection<Review> getAll() {
+        return getAllSorted("recent");
+    }
+
+    @Override
+    public Collection<Review> getAllSorted(String orderBy) {
+        Bson sortBy;
+        switch (orderBy) {
+            case "recent":
+                sortBy = descending(UPDATED_FIELD);
+                break;
+            case "highScore":
+                sortBy = descending(RATING_FIELD);
+                break;
+            case "lowScore":
+                sortBy = ascending(RATING_FIELD);
+                break;
+            default:
+                sortBy = ascending(ID_FIELD);
+                break;
+        }
+
         try (MongoDBClient db = new MongoDBClient()) {
             ArrayList<Review> reviews = new ArrayList<>();
-            db.getCollection(COLLECTION).find().sort(descending(UPDATED_FIELD)).limit(100).forEach(document -> {
+            db.getCollection(COLLECTION).find().sort(sortBy).limit(100).forEach(document -> {
                 Review review = documentToReview(document);
                 if (review != null) {
                     reviews.add(review);

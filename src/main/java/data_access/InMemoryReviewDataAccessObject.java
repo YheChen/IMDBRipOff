@@ -4,10 +4,10 @@ import entity.User;
 import use_case.browse_reviews.BrowseReviewDataAccessInterface;
 import use_case.write_review.WriteReviewDataAccessInterface;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
+
+import static com.mongodb.client.model.Sorts.ascending;
+import static com.mongodb.client.model.Sorts.descending;
 
 public class InMemoryReviewDataAccessObject implements BrowseReviewDataAccessInterface, WriteReviewDataAccessInterface {
 
@@ -31,6 +31,26 @@ public class InMemoryReviewDataAccessObject implements BrowseReviewDataAccessInt
     @Override
     public Collection<Review> getAll() {
         return reviews.values();
+    }
+
+    @Override
+    public Collection<Review> getAllSorted(String orderBy) {
+        List<Review> reviews = new ArrayList<>(getAll());
+        reviews.sort((r1, r2) -> {
+            switch (orderBy) {
+                case "recent":
+                    return r1.getDateUpdated().compareTo(r2.getDateUpdated());
+                case "highScore":
+                case "lowScore":
+                    return Integer.compare(r1.getRating(), r2.getRating());
+                default:
+                    return r1.getReviewID().compareTo(r2.getReviewID());
+            }
+        });
+        if (orderBy.equals("recent") || orderBy.equals("highScore")) {
+            Collections.reverse(reviews);
+        }
+        return reviews;
     }
 
     @Override
