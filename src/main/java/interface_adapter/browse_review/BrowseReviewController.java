@@ -1,9 +1,6 @@
 package interface_adapter.browse_review;
 
 import use_case.browse_reviews.BrowseReviewInputBoundary;
-import use_case.browse_reviews.BrowseReviewInputData;
-import use_case.login.LoginInputBoundary;
-import use_case.login.LoginInputData;
 
 
 /**
