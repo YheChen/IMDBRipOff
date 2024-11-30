@@ -30,6 +30,7 @@ public class UserTest {
         assertEquals("jo7rt", current_user.getId());
         assertEquals("Jonathan", new_user.getUsername());
         assertEquals("redacted", new_user.getPassword());
-        assertNotEquals("jo7rt", new_user.getId());
+        assertNotEquals("jo7rt", new_user.getId()); // Check that the ID for the new user is randomized
+        // and different from the current user's
     }
 }
