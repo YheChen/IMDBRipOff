@@ -24,7 +24,6 @@ public class MovieSearchData implements MovieSearchDataInterface {
         if (query == null || query.trim().isEmpty()) {
             throw new IllegalArgumentException("Query cannot be null or empty.");
         }
-
         try {
             return movieDataAccessObject.searchMovies(query);
         } catch (Exception e) {

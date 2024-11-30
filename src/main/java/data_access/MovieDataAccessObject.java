@@ -132,9 +132,10 @@ public class MovieDataAccessObject {
             MovieDataAccessObject ddao = new MovieDataAccessObject();
 
             // Fetch poster for a movie by ID
-            String moviePoster = ddao.MoviePosterFromID("120"); // Replace "120" with a valid movie ID
+            String moviePoster = ddao.MoviePosterFromID("672"); // Replace "120" with a valid movie ID
             System.out.println("Movie Poster URL: " + moviePoster);
             System.out.println("Movie name: " + movieName);
+
             // Print the movies
             for (Movie movie : movies) {
                 System.out.println("Title: " + movie.getTitle());

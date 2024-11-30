@@ -65,7 +65,5 @@ class WriteReviewInteractorTest {
 
         WriteReviewInputBoundary interactor = new WriteReviewInteractor(reviewMemObj, successPresenter);
         interactor.execute(writeReviewInputData);
-
-
     }
 }
