@@ -19,6 +19,11 @@ public class BrowseReviewInteractorTest {
     @Test
     void successTest() {
         BrowseReviewOutputBoundary successPresenter = new BrowseReviewOutputBoundary() {
+
+            @Override
+            public void prepareBrowseView(BrowseReviewOutputData reponse) {
+            }
+
             @Override
             public void switchToWriteView() {
             }
