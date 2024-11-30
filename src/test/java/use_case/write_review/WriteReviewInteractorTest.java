@@ -6,6 +6,7 @@ import entity.CommonUserFactory;
 import entity.User;
 import entity.UserFactory;
 import entity.Review;
+import interface_adapter.ViewManagerModel;
 import org.junit.jupiter.api.Test;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
@@ -28,7 +29,7 @@ class WriteReviewInteractorTest {
         InMemoryReviewDataAccessObject reviewMemObj = new InMemoryReviewDataAccessObject();
         Review review = new Review("94xdj", "4o3me",
                 "hello so yeah i really like this move idk why", 5, new Date());
-       // reviewMemObj.save(review);
+        reviewMemObj.save(review);
 
         // This creates a successPresenter that tests whether the test case is as we expect.
         WriteReviewOutputBoundary successPresenter = new WriteReviewOutputBoundary() {
@@ -41,6 +42,24 @@ class WriteReviewInteractorTest {
                 assertEquals("4o3me",
                         reviewMemObj.get(review.getReviewID()).getMediaID());
                 // Check if the movie/media is correct lo
+            }
+
+            @Override
+            public void switchToWriteView() {
+                ViewManagerModel viewManagerModel = new ViewManagerModel();
+                assertEquals(viewManagerModel.getViewName(), "write reviews");
+            }
+
+            @Override
+            public void switchToAccountView() {
+                ViewManagerModel viewManagerModel = new ViewManagerModel();
+                assertEquals(viewManagerModel.getViewName(), "account");
+            }
+
+            @Override
+            public void switchToBrowseView() {
+                ViewManagerModel viewManagerModel = new ViewManagerModel();
+                assertEquals(viewManagerModel.getViewName(), "browse reviews");
             }
         };
 
