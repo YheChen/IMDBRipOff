@@ -7,6 +7,25 @@ public class BrowseReviewState {
     private final String content = "";
     private final String mediaID = "";
 
+    private String orderBy = "recent";
+    private String searchText = null;
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
+
+    public String getSearchText() {
+        return searchText;
+    }
+
+    public void setSearchText(String searchText) {
+        this.searchText = searchText;
+    }
+
     public String getUsername() {
         return username;
     }

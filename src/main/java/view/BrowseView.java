@@ -4,6 +4,7 @@ import data_access.InMemoryMovieDataAccessObject;
 import data_access.InMemoryReviewDataAccessObject;
 import data_access.MovieDataAccessObject;
 import entity.Review;
+import interface_adapter.browse_review.BrowseReviewState;
 import interface_adapter.browse_review.BrowseReviewViewModel;
 import interface_adapter.browse_review.BrowseReviewController;
 import interface_adapter.signup.SignupController;
@@ -26,6 +27,7 @@ public class BrowseView extends JPanel{
 
     private final String viewName = "browse reviews";
     private BrowseReviewController browseReviewController;
+    private final JTextField searchBar;
     private final JComboBox<String> sort;
     private final JButton toBrowse;
     private final JButton toReview;
@@ -41,7 +43,7 @@ public class BrowseView extends JPanel{
         toAccount = new JButton("Your Account");
 
         JLabel searchLabel = new JLabel("Search:");
-        JTextField searchBar = new JTextField(22);
+        searchBar = new JTextField(22);
 
         topBar.add(toBrowse);
         topBar.add(toReview);
@@ -76,7 +78,23 @@ public class BrowseView extends JPanel{
         reviewsPanel.setLayout(new BoxLayout(reviewsPanel, BoxLayout.Y_AXIS));
         main.add(reviewsPanel);
 
-        populateReviews("recent");
+
+        // Get state
+        browseReviewViewModel.addPropertyChangeListener(evt -> {
+            BrowseReviewState state = browseReviewViewModel.getState();
+            try {
+                setState(state);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+        BrowseReviewState state = browseReviewViewModel.getState();
+        try {
+            setState(state);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
 
         // Scroll pane
         JScrollPane scroll = new JScrollPane(main);
@@ -117,18 +135,24 @@ public class BrowseView extends JPanel{
             }
         });
 
+        searchBar.addActionListener(evt -> {
+            String searchText = searchBar.getText();
+//            sort.setSelectedItem("Recent");
+//            populateReviews("recent", searchText);
+        });
+
         sort.addItemListener(item -> {
             if (item.getStateChange() == ItemEvent.SELECTED) {
                 try {
                     switch ((String)item.getItem()) {
                         case "Most Recent":
-                            populateReviews("recent");
+                            browseReviewController.execute("recent", null);
                             break;
                         case "Highest Score":
-                            populateReviews("highScore");
+                            browseReviewController.execute("highScore", null);
                             break;
                         case "Lowest Score":
-                            populateReviews("lowScore");
+                            browseReviewController.execute("lowScore", null);
                             break;
                     }
                 } catch (Exception e) {
@@ -138,13 +162,30 @@ public class BrowseView extends JPanel{
         });
     }
 
-    private void populateReviews(String orderBy) throws Exception {
+    private void setState(BrowseReviewState state) throws Exception {
+        String orderBy = state.getOrderBy();
+        switch (orderBy) {
+            case "recent":
+                sort.setSelectedItem("Recent");
+                break;
+            case "highScore":
+                sort.setSelectedItem("Highest Score");
+                break;
+            case "lowScore":
+                sort.setSelectedItem("Lowest Score");
+                break;
+        }
+        String searchText = state.getSearchText();
+        populateReviews(orderBy, searchText);
+    }
+
+    private void populateReviews(String orderBy, String searchText) throws Exception {
         InMemoryReviewDataAccessObject reviewDAO = new InMemoryReviewDataAccessObject();
         reviewDAO.seedData();
         MovieDataAccessObject movieDAO = new MovieDataAccessObject();
 
         reviewsPanel.removeAll();
-        Collection<Review> reviews = reviewDAO.getAllSorted(orderBy);
+        Collection<Review> reviews = reviewDAO.getAllSorted(orderBy, searchText);
         for (Review review : reviews) {
             reviewsPanel.add(createReviewPanel(
                     movieDAO.MovieNameFromID(review.getMediaID()),
