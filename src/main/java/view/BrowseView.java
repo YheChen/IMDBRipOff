@@ -128,7 +128,7 @@ public class BrowseView extends JPanel{
         reviewsPanel.setLayout(new BoxLayout(reviewsPanel, BoxLayout.Y_AXIS));
         main.add(reviewsPanel);
 
-        populateReviews("lowScore");
+        populateReviews("recent");
 
         // Scroll pane
         JScrollPane scroll = new JScrollPane(main);
