@@ -1,56 +1,60 @@
 package use_case.browse_reviews;
 
-import interface_adapter.ViewManagerModel;
-import interface_adapter.account.AccountViewModel;
-import interface_adapter.browse_review.BrowseReviewViewModel;
-import interface_adapter.write_review.WriteReviewViewModel;
 import org.junit.jupiter.api.Test;
-import use_case.write_review.WriteReviewInputBoundary;
-import use_case.write_review.WriteReviewInteractor;
-import use_case.write_review.WriteReviewOutputBoundary;
-import use_case.write_review.WriteReviewOutputData;
-
-import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BrowseReviewInteractorTest {
 
     @Test
-    void successTest() {
-        BrowseReviewOutputBoundary successPresenter = new BrowseReviewOutputBoundary() {
+    void testExecute() {
+        // Arrange: Mock Output Boundary
+        MockBrowseReviewOutputBoundary mockOutputBoundary = new MockBrowseReviewOutputBoundary();
+        BrowseReviewInteractor interactor = new BrowseReviewInteractor(mockOutputBoundary);
 
-            @Override
-            public void prepareBrowseView(BrowseReviewOutputData reponse) {
-            }
+        // Input Data
+        String orderBy = "date";
+        String searchText = "Harry Potter";
+        BrowseReviewInputData inputData = new BrowseReviewInputData(orderBy, searchText);
 
-            @Override
-            public void switchToWriteView() {
-            }
+        // Act: Execute the interactor
+        interactor.execute(inputData);
 
-            @Override
-            public void switchToAccountView() {
+        // Assert: Verify that the output data matches the input
+        BrowseReviewOutputData outputData = mockOutputBoundary.getOutputData();
+        assertEquals(orderBy, outputData.getOrderBy());
+        assertEquals(searchText, outputData.getSearchText());
+    }
 
-            }
+    /**
+     * A mock implementation of `BrowseReviewOutputBoundary`.
+     * Captures the output data for verification.
+     */
+    private static class MockBrowseReviewOutputBoundary implements BrowseReviewOutputBoundary {
+        private BrowseReviewOutputData outputData;
 
-            @Override
-            public void switchToBrowseView() {
-            }
-        };
+        @Override
+        public void prepareBrowseView(BrowseReviewOutputData outputData) {
+            this.outputData = outputData;
+        }
 
-        BrowseReviewInputBoundary boundary = new BrowseReviewInteractor(successPresenter);
+        @Override
+        public void switchToWriteView() {
+            // Not used in this test
+        }
 
-        // Tests changes in state
-        boundary.switchToAccountView();
-        AccountViewModel accountViewModel = new AccountViewModel();
-        assertEquals("account", accountViewModel.getViewName());
+        @Override
+        public void switchToAccountView() {
+            // Not used in this test
+        }
 
-        boundary.switchToBrowseView();
-        BrowseReviewViewModel browseReviewViewModel = new BrowseReviewViewModel();
-        assertEquals("browse reviews", browseReviewViewModel.getViewName());
+        @Override
+        public void switchToBrowseView() {
+            // Not used in this test
+        }
 
-        boundary.switchToWriteView();
-        WriteReviewViewModel writeReviewViewModel = new WriteReviewViewModel();
-        assertEquals("write review", writeReviewViewModel.getViewName());
+        public BrowseReviewOutputData getOutputData() {
+            return outputData;
+        }
     }
 }
