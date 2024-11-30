@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
@@ -29,6 +30,7 @@ public class BrowseView extends JPanel{
     private final JButton toBrowse;
     private final JButton toReview;
     private final JButton toAccount;
+    private final JPanel reviewsPanel;
 
     //public static void main(String[] args) throws Exception {
 
@@ -117,12 +119,17 @@ public class BrowseView extends JPanel{
         final JLabel sort_label = new JLabel("Sort: ");
         sort_panel.add(sort_label);
 
-        String[] filter_choices = new String[]{"Alphabetical", "Your Reviews", "Most Recent"};
+        String[] filter_choices = new String[]{"Recent", "Highest Score", "Lowest Score"};
         sort = new JComboBox<>(filter_choices);
         main.add(sort_panel);
         main.add(sort);
 
-        populateReviews(main);
+        reviewsPanel = new JPanel();
+        reviewsPanel.setLayout(new BoxLayout(reviewsPanel, BoxLayout.Y_AXIS));
+        main.add(reviewsPanel);
+
+        populateReviews("lowScore");
+
         // Scroll pane
         JScrollPane scroll = new JScrollPane(main);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -161,16 +168,37 @@ public class BrowseView extends JPanel{
                 browseReviewController.switchToAccountView();
             }
         });
+
+        sort.addItemListener(item -> {
+            if (item.getStateChange() == ItemEvent.SELECTED) {
+                try {
+                    switch ((String)item.getItem()) {
+                        case "Most Recent":
+                            populateReviews("recent");
+                            break;
+                        case "Highest Score":
+                            populateReviews("highScore");
+                            break;
+                        case "Lowest Score":
+                            populateReviews("lowScore");
+                            break;
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
     }
 
-    private void populateReviews(JPanel mainPanel) throws Exception {
+    private void populateReviews(String orderBy) throws Exception {
         InMemoryReviewDataAccessObject reviewDAO = new InMemoryReviewDataAccessObject();
         reviewDAO.seedData();
         MovieDataAccessObject movieDAO = new MovieDataAccessObject();
 
-        Collection<Review> reviews = reviewDAO.getAll();
+        reviewsPanel.removeAll();
+        Collection<Review> reviews = reviewDAO.getAllSorted(orderBy);
         for (Review review : reviews) {
-            mainPanel.add(createReviewPanel(
+            reviewsPanel.add(createReviewPanel(
                     movieDAO.MovieNameFromID(review.getMediaID()),
                     review.getUserID(),
                     review.getDateUpdated(),
@@ -179,6 +207,8 @@ public class BrowseView extends JPanel{
                     review.getRating()
             ));
         }
+        reviewsPanel.revalidate();
+        reviewsPanel.repaint();
     }
 
 
