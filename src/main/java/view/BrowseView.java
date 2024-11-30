@@ -24,11 +24,11 @@ import java.util.Date;
 public class BrowseView extends JPanel{
 
     private final String viewName = "browse reviews";
+    private BrowseReviewController browseReviewController;
     private final JComboBox<String> sort;
     private final JButton toBrowse;
     private final JButton toReview;
     private final JButton toAccount;
-    private BrowseReviewController browseReviewController;
 
     //public static void main(String[] args) throws Exception {
 
@@ -83,42 +83,21 @@ public class BrowseView extends JPanel{
 //    }
 
     public BrowseView(BrowseReviewViewModel browseReviewViewModel) throws Exception {
+        this.setLayout(new BorderLayout());
 
         final JPanel topBar = new JPanel();
         toBrowse = new JButton("Browse Reviews"); // not implemented yet
-        topBar.add(toBrowse);
         toReview = new JButton("Write Review");
-        topBar.add(toReview);
-        JLabel searchLabel = new JLabel("Search:");
-        topBar.add(searchLabel);
-        JTextField searchBar = new JTextField(22);
-        topBar.add(searchBar);
         toAccount = new JButton("Your Account");
+
+        JLabel searchLabel = new JLabel("Search:");
+        JTextField searchBar = new JTextField(22);
+
+        topBar.add(toBrowse);
+        topBar.add(toReview);
+        topBar.add(searchLabel);
+        topBar.add(searchBar);
         topBar.add(toAccount);
-
-        toReview.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        browseReviewController.switchToWriteView();
-                    }
-                }
-        );
-
-        toAccount.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        browseReviewController.switchToAccountView();
-                    }
-                }
-        );
-
-        toBrowse.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        browseReviewController.switchToBrowseView();
-                    }
-                }
-        );
 
         // Set up frame
         JFrame f = new JFrame("Review Portal");
@@ -135,41 +114,71 @@ public class BrowseView extends JPanel{
         main.add(topBar);
 
         final JPanel sort_panel = new JPanel();
-        final JLabel sort_media = new JLabel("Sort: ");
-        sort_panel.add(sort_media);
+        final JLabel sort_label = new JLabel("Sort: ");
+        sort_panel.add(sort_label);
+
         String[] filter_choices = new String[]{"Alphabetical", "Your Reviews", "Most Recent"};
         sort = new JComboBox<>(filter_choices);
         main.add(sort_panel);
         main.add(sort);
 
-        // Adding reviews (change into loop later)
-        InMemoryReviewDataAccessObject IMRDAO = new InMemoryReviewDataAccessObject();
-        IMRDAO.seedData();
-
-        MovieDataAccessObject MNFDAO = new MovieDataAccessObject();
-
-        Collection<Review> reviews = IMRDAO.getAll();
-        for (Review review: reviews){
-            main.add(createReviewPanel(
-                    MNFDAO.MovieNameFromID(review.getMediaID()),
-                    review.getUserID(),
-                    review.getDateUpdated(),
-                    review.getContent(),
-                    MNFDAO.MoviePosterFromID(review.getMediaID()),
-                    review.getRating()
-                    )
-            );
-        }
-
+        populateReviews(main);
         // Scroll pane
         JScrollPane scroll = new JScrollPane(main);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        f.add(scroll, BorderLayout.CENTER);
-        f.setVisible(true);
+        this.add(scroll, BorderLayout.CENTER);
+        this.setVisible(true);
 
+        setupButtonActions();
+    }
 
+    private void setupButtonActions() {
+        toBrowse.addActionListener(evt -> {
+            if (browseReviewController == null) {
+                System.err.println("BrowseReviewController is not set.");
+            } else {
+                System.out.println("Browse Reviews button clicked.");
+                browseReviewController.switchToBrowseView();
+            }
+        });
+
+        toReview.addActionListener(evt -> {
+            if (browseReviewController == null) {
+                System.err.println("BrowseReviewController is not set.");
+            } else {
+                System.out.println("Write Review button clicked.");
+                browseReviewController.switchToWriteView();
+            }
+        });
+
+        toAccount.addActionListener(evt -> {
+            if (browseReviewController == null) {
+                System.err.println("BrowseReviewController is not set.");
+            } else {
+                System.out.println("Account button clicked.");
+                browseReviewController.switchToAccountView();
+            }
+        });
+    }
+
+    private void populateReviews(JPanel mainPanel) throws Exception {
+        InMemoryReviewDataAccessObject reviewDAO = new InMemoryReviewDataAccessObject();
+        reviewDAO.seedData();
+        MovieDataAccessObject movieDAO = new MovieDataAccessObject();
+
+        Collection<Review> reviews = reviewDAO.getAll();
+        for (Review review : reviews) {
+            mainPanel.add(createReviewPanel(
+                    movieDAO.MovieNameFromID(review.getMediaID()),
+                    review.getUserID(),
+                    review.getDateUpdated(),
+                    review.getContent(),
+                    movieDAO.MoviePosterFromID(review.getMediaID()),
+                    review.getRating()
+            ));
+        }
     }
 
 
