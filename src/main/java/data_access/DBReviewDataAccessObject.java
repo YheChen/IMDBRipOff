@@ -1,5 +1,6 @@
 package data_access;
 
+import com.mongodb.client.FindIterable;
 import entity.Review;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -13,6 +14,7 @@ import java.util.Collection;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Sorts.descending;
 import static com.mongodb.client.model.Sorts.ascending;
+import static com.mongodb.client.model.Filters.text;
 
 public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface, WriteReviewDataAccessInterface {
     private static final String COLLECTION = "reviews";
@@ -60,25 +62,31 @@ public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface
 
     @Override
     public Collection<Review> getAllSorted(String orderBy, String searchText) {
-        Bson sortBy;
-        switch (orderBy) {
-            case "recent":
-                sortBy = descending(UPDATED_FIELD);
-                break;
-            case "highScore":
-                sortBy = descending(RATING_FIELD);
-                break;
-            case "lowScore":
-                sortBy = ascending(RATING_FIELD);
-                break;
-            default:
-                sortBy = ascending(ID_FIELD);
-                break;
-        }
-
         try (MongoDBClient db = new MongoDBClient()) {
             ArrayList<Review> reviews = new ArrayList<>();
-            db.getCollection(COLLECTION).find().sort(sortBy).limit(100).forEach(document -> {
+            FindIterable<Document> query = db.getCollection(COLLECTION).find();
+            if (orderBy != null) {
+                Bson sortBy;
+                switch (orderBy) {
+                    case "recent":
+                        sortBy = descending(UPDATED_FIELD);
+                        break;
+                    case "highScore":
+                        sortBy = descending(RATING_FIELD);
+                        break;
+                    case "lowScore":
+                        sortBy = ascending(RATING_FIELD);
+                        break;
+                    default:
+                        sortBy = ascending(ID_FIELD);
+                        break;
+                }
+                query = query.sort(sortBy);
+            }
+            if (searchText != null) {
+                query = query.filter(text(searchText));
+            }
+            query.limit(100).forEach(document -> {
                 Review review = documentToReview(document);
                 if (review != null) {
                     reviews.add(review);

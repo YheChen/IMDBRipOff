@@ -36,19 +36,27 @@ public class InMemoryReviewDataAccessObject implements BrowseReviewDataAccessInt
     @Override
     public Collection<Review> getAllSorted(String orderBy, String searchText) {
         List<Review> reviews = new ArrayList<>(getAll());
-        reviews.sort((r1, r2) -> {
-            switch (orderBy) {
-                case "recent":
-                    return r1.getDateUpdated().compareTo(r2.getDateUpdated());
-                case "highScore":
-                case "lowScore":
-                    return Integer.compare(r1.getRating(), r2.getRating());
-                default:
-                    return r1.getReviewID().compareTo(r2.getReviewID());
+        if (searchText != null && !searchText.isEmpty()) {
+            reviews.removeIf(r -> {
+                boolean included = r.getContent().toLowerCase().contains(searchText.toLowerCase());
+                return !included;
+            });
+        }
+        if (orderBy != null) {
+            reviews.sort((r1, r2) -> {
+                switch (orderBy) {
+                    case "recent":
+                        return r1.getDateUpdated().compareTo(r2.getDateUpdated());
+                    case "highScore":
+                    case "lowScore":
+                        return Integer.compare(r1.getRating(), r2.getRating());
+                    default:
+                        return r1.getReviewID().compareTo(r2.getReviewID());
+                }
+            });
+            if (orderBy.equals("recent") || orderBy.equals("highScore")) {
+                Collections.reverse(reviews);
             }
-        });
-        if (orderBy.equals("recent") || orderBy.equals("highScore")) {
-            Collections.reverse(reviews);
         }
         return reviews;
     }
