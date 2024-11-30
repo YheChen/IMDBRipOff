@@ -67,6 +67,7 @@ class WriteReviewInteractorTest {
             }
         };
 
+
         WriteReviewInputBoundary boundary = new WriteReviewInteractor(reviewMemObj, successPresenter);
 
         // Tests changes in state
@@ -90,8 +91,6 @@ class WriteReviewInteractorTest {
 //
 //        boundary.switchToWriteView();
 //        assertEquals("write reviews", viewManagerModel.getViewName());
-
-
 
     }
 }
