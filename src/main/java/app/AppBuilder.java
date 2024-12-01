@@ -218,7 +218,7 @@ public class AppBuilder {
 
 
         final WriteReviewPresenter writeReviewOutputBoundary = new WriteReviewPresenter(browseReviewViewModel,
-                loggedInViewModel, accountViewModel, writeReviewViewModel, viewManagerModel);
+                accountViewModel, writeReviewViewModel, viewManagerModel);
 
         final WriteReviewInputBoundary writeReviewInteractor =
                 new WriteReviewInteractor(reviewDataAccessObject, writeReviewOutputBoundary);

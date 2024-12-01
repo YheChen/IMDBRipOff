@@ -16,10 +16,9 @@ class WriteReviewOutputDataTest {
         int rating = 5;
         String media = "Test Movie";
         Date date = new Date();
-        boolean success = true;
 
         // Act
-        WriteReviewOutputData outputData = new WriteReviewOutputData(userId, content, rating, media, date, success);
+        WriteReviewOutputData outputData = new WriteReviewOutputData(userId, content, rating, media, date);
 
         // Assert
         assertEquals(userId, outputData.getUserID());
@@ -29,7 +28,6 @@ class WriteReviewOutputDataTest {
         assertEquals(date, outputData.getDate());
     }
 
-
     @Test
     void testWriteReviewOutputDataWithNullValues() {
         // Arrange
@@ -38,10 +36,9 @@ class WriteReviewOutputDataTest {
         int rating = 0;
         String media = null;
         Date date = null;
-        boolean success = false;
 
         // Act
-        WriteReviewOutputData outputData = new WriteReviewOutputData(userId, content, rating, media, date, success);
+        WriteReviewOutputData outputData = new WriteReviewOutputData(userId, content, rating, media, date);
 
         // Assert
         assertNull(outputData.getUserID());
@@ -49,6 +46,5 @@ class WriteReviewOutputDataTest {
         assertEquals(0, outputData.getRating());
         assertNull(outputData.getMedia());
         assertNull(outputData.getDate());
-        assertFalse(outputData.isSuccess());
     }
 }
