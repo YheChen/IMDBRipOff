@@ -131,7 +131,7 @@ public class AppBuilder {
      * Adds the WriteReview View to the application.
      * @return this builder
      */
-    public AppBuilder addWriteReviewView() {
+    public AppBuilder addWriteReviewView() throws Exception {
         writeReviewViewModel = new WriteReviewViewModel();
         writeReviewView = new WriteReviewView(writeReviewViewModel);
         System.out.println(writeReviewView.getViewName());
