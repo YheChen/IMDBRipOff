@@ -1,10 +1,15 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Image;
+import data_access.DBReviewDataAccessObject;
+import data_access.MovieDataAccessObject;
+import entity.Review;
+import interface_adapter.browse_review.BrowseReviewController;
+import interface_adapter.browse_review.BrowseReviewState;
+import interface_adapter.browse_review.BrowseReviewViewModel;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.net.URL;
@@ -12,27 +17,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-
-import data_access.InMemoryReviewDataAccessObject;
-import data_access.MovieDataAccessObject;
-import entity.Review;
-import interface_adapter.browse_review.BrowseReviewController;
-import interface_adapter.browse_review.BrowseReviewState;
-import interface_adapter.browse_review.BrowseReviewViewModel;
 
 /**
  * View for browsing reviews.
@@ -209,27 +193,31 @@ public class BrowseView extends JPanel {
             throw new RuntimeException(err);
         }
     }
+    private void populateReviews(String orderBy, String searchText) throws Exception {
+        DBReviewDataAccessObject reviewDAO = new DBReviewDataAccessObject();
+        MovieDataAccessObject movieDAO = new MovieDataAccessObject();
 
-    private void populateReviews(String orderBy, String searchText) throws IOException {
-        final InMemoryReviewDataAccessObject reviewDao = new InMemoryReviewDataAccessObject();
-        reviewDao.seedData();
-        final MovieDataAccessObject movieDao = new MovieDataAccessObject();
+        try {
+            reviewsPanel.removeAll();
+            Collection<Review> reviews = reviewDAO.getAllSorted(orderBy, searchText);
 
-        reviewsPanel.removeAll();
-        final Collection<Review> reviews = reviewDao.getAllSorted(orderBy, searchText);
-        for (Review review : reviews) {
-            reviewsPanel.add(createReviewPanel(
-                    movieDao.movieNameFromID(review.getMediaID()),
-                    review.getUserID(),
-                    review.getDateUpdated(),
-                    review.getContent(),
-                    movieDao.moviePosterFromID(review.getMediaID()),
-                    review.getRating()
-            ));
-        }
-        reviewsPanel.revalidate();
-        reviewsPanel.repaint();
-    }
+            for (Review review : reviews) {
+                String movieName = movieDAO.MovieNameFromID(review.getMediaID());
+                String moviePoster = movieDAO.MoviePosterFromID(review.getMediaID());
+                reviewsPanel.add(createReviewPanel(
+                        movieName,
+                        review.getUserID(),
+                        review.getDateUpdated(),
+                        review.getContent(),
+                        moviePoster,
+                        review.getRating()
+                ));
+            }
+            reviewsPanel.revalidate();
+            reviewsPanel.repaint();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Failed to load reviews: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
 
     private static JPanel createReviewPanelBody() {
         final JPanel reviewBody = new JPanel();
