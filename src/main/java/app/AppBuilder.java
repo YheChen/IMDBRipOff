@@ -273,8 +273,8 @@ public class AppBuilder {
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         application.add(cardPanel);
-        viewManagerModel.setState(accountViewModel.getViewName());
-        System.out.println(browseReviewViewModel.getViewName());
+        viewManagerModel.setState(signupViewModel.getViewName());
+        System.out.println(signupViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
 
         return application;
