@@ -10,18 +10,15 @@ import use_case.write_review.WriteReviewOutputBoundary;
 
 public class WriteReviewPresenter implements WriteReviewOutputBoundary {
     private final BrowseReviewViewModel browseReviewViewModel;
-    private final LoggedInViewModel loggedInViewModel;
     private final AccountViewModel accountViewModel;
     private final WriteReviewViewModel writeReviewViewModel;
     private final ViewManagerModel viewManagerModel;
 
     public WriteReviewPresenter(BrowseReviewViewModel browseReviewViewModel,
-                          LoggedInViewModel loggedInViewModel,
                           AccountViewModel accountViewModel,
                                 WriteReviewViewModel writeReviewViewModel,
                           ViewManagerModel viewManagerModel) {
         this.browseReviewViewModel = browseReviewViewModel;
-        this.loggedInViewModel = loggedInViewModel;
         this.accountViewModel = accountViewModel;
         this.writeReviewViewModel = writeReviewViewModel;
         this.viewManagerModel = viewManagerModel;
@@ -34,7 +31,6 @@ public class WriteReviewPresenter implements WriteReviewOutputBoundary {
 
         final BrowseReviewState browseReviewState = browseReviewViewModel.getState();
         this.browseReviewViewModel.setState(browseReviewState);
-        this.loggedInViewModel.firePropertyChanged();
 
         this.viewManagerModel.setState(browseReviewViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
