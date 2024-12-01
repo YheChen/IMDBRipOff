@@ -122,31 +122,60 @@ public class MovieDataAccessObject {
         return "No poster available.";
     }
 
+    public List<Movie> fetchPopularMovies() throws Exception {
+        String url = "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1";
+        String jsonResponse = fetchResponse(url);
+        return parseMovies(jsonResponse);
+    }
+
+
     // Main method for quick testing
+//    public static void main(String[] args) {
+//        try {
+//            MovieDataAccessObject dao = new MovieDataAccessObject();
+//
+//            String query = "Harry Potter"; // Replace with your search term
+//            List<Movie> movies = dao.searchMovies(query);
+//            String movieName = dao.MovieNameFromID("120");
+//            MovieDataAccessObject ddao = new MovieDataAccessObject();
+//
+//            // Fetch poster for a movie by ID
+//            String moviePoster = ddao.MoviePosterFromID("672"); // Replace "120" with a valid movie ID
+//            System.out.println("Movie Poster URL: " + moviePoster);
+//            System.out.println("Movie name: " + movieName);
+//
+//            // Print the movies
+//            for (Movie movie : movies) {
+//                System.out.println("Title: " + movie.getTitle());
+//                System.out.println("Overview: " + movie.getOverview());
+//                System.out.println("Release Date: " + movie.getReleaseDate());
+//                System.out.println("id: " + movie.getMovieID());
+//                System.out.println();
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
     public static void main(String[] args) {
         try {
             MovieDataAccessObject dao = new MovieDataAccessObject();
-            String query = "Harry Potter"; // Replace with your search term
-            List<Movie> movies = dao.searchMovies(query);
-            String movieName = dao.MovieNameFromID("120");
-            MovieDataAccessObject ddao = new MovieDataAccessObject();
 
-            // Fetch poster for a movie by ID
-            String moviePoster = ddao.MoviePosterFromID("672"); // Replace "120" with a valid movie ID
-            System.out.println("Movie Poster URL: " + moviePoster);
-            System.out.println("Movie name: " + movieName);
+            // Fetch popular movies
+            List<Movie> popularMovies = dao.fetchPopularMovies();
 
-            // Print the movies
-            for (Movie movie : movies) {
+            // Print the popular movies
+            System.out.println("Popular Movies:");
+            for (Movie movie : popularMovies) {
                 System.out.println("Title: " + movie.getTitle());
                 System.out.println("Overview: " + movie.getOverview());
                 System.out.println("Release Date: " + movie.getReleaseDate());
-                System.out.println("id: " + movie.getMovieID());
+                System.out.println("ID: " + movie.getMovieID());
                 System.out.println();
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }
