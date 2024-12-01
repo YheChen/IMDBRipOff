@@ -128,7 +128,6 @@ public class MovieDataAccessObject {
         return parseMovies(jsonResponse);
     }
 
-
     // Main method for quick testing
 //    public static void main(String[] args) {
 //        try {

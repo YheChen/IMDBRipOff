@@ -106,7 +106,7 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
         rating_dropdown = new JComboBox<>(rating_choices);
 
         MovieDataAccessObject movies = new MovieDataAccessObject();
-        Collection<Movie> all_movies = movies.searchMovies("H");
+        Collection<Movie> all_movies = movies.fetchPopularMovies();
 
         System.out.println(all_movies);
 
