@@ -4,8 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -32,20 +33,17 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
     private final WriteReviewViewModel writeReviewViewModel;
     private WriteReviewController writeReviewController;
     private final JComboBox<Integer> ratingDropdown;
-    private String[] mediaChoices = new String[]{};
-    private JComboBox<String> mediaDropdown;
+    private final JTextArea content; // Made it an instance variable
+    private final JComboBox<String> mediaDropdown;
+    private final Map<String, Integer> movieMap; // Map to store title -> ID mapping
 
     private JButton toBrowse;
     private JButton toReview;
     private JButton toAccount;
-
-    // private final JLabel username;
-
-    // private final JButton logOut;
-    // private final JButton changePassword;
     private final JButton submitReview;
 
     public WriteReviewView(WriteReviewViewModel writeReviewViewModel) throws Exception {
+        this.movieMap = new HashMap<>(); // Initialize the map
         final JPanel topBar = createTopBar();
 
         this.add(topBar);
@@ -62,8 +60,9 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
         ratingPanel.add(rating);
         optionalPanel.add(optional);
 
-        // Add text fields for the media reviewed, it's rating and content (text).
-        final JTextArea content = new JTextArea();
+        // Add text fields for the media reviewed, its rating, and content (text).
+        content = new JTextArea(5, 20); // Initialize content as a JTextArea
+        optionalPanel.add(content);
 
         ratingDropdown = new JComboBox<>(RATING_CHOICES);
 
@@ -85,8 +84,6 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
         this.add(optionalPanel);
         this.add(content);
         this.add(buttons);
-        // Modify the size of the J Frame
-        // this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     }
 
     private JPanel createTopBar() {
@@ -104,13 +101,12 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
     private JComboBox<String> createMediaDropdown() throws Exception {
         final MovieDataAccessObject movies = new MovieDataAccessObject();
         final Collection<Movie> allMovies = movies.fetchPopularMovies();
-        for (Movie movie: allMovies) {
+        for (Movie movie : allMovies) {
             final String title = movie.getTitle();
-            mediaChoices = Arrays.copyOf(mediaChoices, mediaChoices.length + 1);
-            mediaChoices[mediaChoices.length - 1] = title;
+            final int id = movie.getMovieID();
+            movieMap.put(title, id); // Store the title-to-ID mapping in the map
         }
-        mediaDropdown = new JComboBox<>(mediaChoices);
-        return mediaDropdown;
+        return new JComboBox<>(movieMap.keySet().toArray(new String[0])); // Use titles for dropdown
     }
 
     private void addActionListeners() {
@@ -140,29 +136,44 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
 
         // New Code to handle what happens when the user wants to create a new review
         submitReview.addActionListener(
-                // This creates an anonymous subclass of ActionListener and instantiates it.
                 evt -> {
-                    if (evt.getSource().equals(submitReview)) {
+                    // Retrieve values from the UI
+                    final String selectedMedia = (String) mediaDropdown.getSelectedItem();
+                    final Integer selectedMovieID = movieMap.get(selectedMedia);
+                    final Integer selectedRating = (Integer) ratingDropdown.getSelectedItem();
+                    final String reviewText = content.getText();
 
-                        final WriteReviewState state = writeReviewViewModel.getState();
-                        writeReviewController.execute(state.getUsername(), state.getContent(), state.getRating(),
-                                state.getMediaID());
-                    }
+                    // Print the values to the console
+                    System.out.println("Movie Name: " + selectedMedia);
+                    System.out.println("Movie ID: " + selectedMovieID);
+                    System.out.println("Rating: " + selectedRating);
+                    System.out.println("Review Content: " + reviewText);
+
+                    // Optionally, display a confirmation dialog
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Review submitted successfully:\n"
+                                    + "Movie: " + selectedMedia + "\n"
+                                    + "Rating: " + selectedRating + "\n"
+                                    + "Content: " + reviewText
+                    );
+                    resetWriteReviewScreen();
                 }
         );
     }
 
+    private void resetWriteReviewScreen() {
+        mediaDropdown.setSelectedIndex(0);
+        ratingDropdown.setSelectedIndex(0);
+        content.setText("");
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        /* if (evt.getPropertyName().equals("state")) {
-            final LoggedInState state = (LoggedInState) evt.getNewValue();
-            // username.setText(state.getUsername());
-        }*/
         if (evt.getPropertyName().equals("password")) {
             final LoggedInState state = (LoggedInState) evt.getNewValue();
-            JOptionPane.showMessageDialog(null, "password updated for " + state.getUsername());
+            JOptionPane.showMessageDialog(null, "Password updated for " + state.getUsername());
         }
-
     }
 
     public String getViewName() {

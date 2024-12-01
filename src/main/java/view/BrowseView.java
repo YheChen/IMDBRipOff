@@ -27,6 +27,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import data_access.DBReviewDataAccessObject;
 import data_access.InMemoryReviewDataAccessObject;
 import data_access.MovieDataAccessObject;
 import entity.Review;
@@ -211,8 +212,7 @@ public class BrowseView extends JPanel {
     }
 
     private void populateReviews(String orderBy, String searchText) throws IOException {
-        final InMemoryReviewDataAccessObject reviewDao = new InMemoryReviewDataAccessObject();
-        reviewDao.seedData();
+        final DBReviewDataAccessObject reviewDao = new DBReviewDataAccessObject();
         final MovieDataAccessObject movieDao = new MovieDataAccessObject();
 
         reviewsPanel.removeAll();
