@@ -3,6 +3,7 @@ package use_case.browse_reviews;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BrowseReviewInteractorTest {
 
@@ -26,12 +27,54 @@ public class BrowseReviewInteractorTest {
         assertEquals(searchText, outputData.getSearchText());
     }
 
+    @Test
+    void testSwitchToWriteView() {
+        // Arrange
+        MockBrowseReviewOutputBoundary mockOutputBoundary = new MockBrowseReviewOutputBoundary();
+        BrowseReviewInteractor interactor = new BrowseReviewInteractor(mockOutputBoundary);
+
+        // Act
+        interactor.switchToWriteView();
+
+        // Assert
+        assertTrue(mockOutputBoundary.isSwitchedToWriteView());
+    }
+
+    @Test
+    void testSwitchToAccountView() {
+        // Arrange
+        MockBrowseReviewOutputBoundary mockOutputBoundary = new MockBrowseReviewOutputBoundary();
+        BrowseReviewInteractor interactor = new BrowseReviewInteractor(mockOutputBoundary);
+
+        // Act
+        interactor.switchToAccountView();
+
+        // Assert
+        assertTrue(mockOutputBoundary.isSwitchedToAccountView());
+    }
+
+    @Test
+    void testSwitchToBrowseView() {
+        // Arrange
+        MockBrowseReviewOutputBoundary mockOutputBoundary = new MockBrowseReviewOutputBoundary();
+        BrowseReviewInteractor interactor = new BrowseReviewInteractor(mockOutputBoundary);
+
+        // Act
+        interactor.switchToBrowseView();
+
+        // Assert
+        assertTrue(mockOutputBoundary.isSwitchedToBrowseView());
+    }
+
     /**
      * A mock implementation of `BrowseReviewOutputBoundary`.
-     * Captures the output data for verification.
+     * Captures the output data for verification and tracks view switches.
      */
     private static class MockBrowseReviewOutputBoundary implements BrowseReviewOutputBoundary {
         private BrowseReviewOutputData outputData;
+        private boolean switchedToWriteView = false;
+        private boolean switchedToAccountView = false;
+        private boolean switchedToBrowseView = false;
 
         @Override
         public void prepareBrowseView(BrowseReviewOutputData outputData) {
@@ -40,21 +83,33 @@ public class BrowseReviewInteractorTest {
 
         @Override
         public void switchToWriteView() {
-            // Not used in this test
+            switchedToWriteView = true;
         }
 
         @Override
         public void switchToAccountView() {
-            // Not used in this test
+            switchedToAccountView = true;
         }
 
         @Override
         public void switchToBrowseView() {
-            // Not used in this test
+            switchedToBrowseView = true;
         }
 
         public BrowseReviewOutputData getOutputData() {
             return outputData;
+        }
+
+        public boolean isSwitchedToWriteView() {
+            return switchedToWriteView;
+        }
+
+        public boolean isSwitchedToAccountView() {
+            return switchedToAccountView;
+        }
+
+        public boolean isSwitchedToBrowseView() {
+            return switchedToBrowseView;
         }
     }
 }
