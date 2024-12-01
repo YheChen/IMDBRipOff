@@ -12,10 +12,8 @@ public class WriteReviewOutputData {
     private final String media;
     // add the date here?
     private final Date date;
-    private boolean success;
 
-    public WriteReviewOutputData(String user_id, String content, int rating, String media, Date date,
-                                 Boolean success){
+    public WriteReviewOutputData(String user_id, String content, int rating, String media, Date date){
         this.user_id = user_id;
         this.content = content;
         this.rating = rating;
@@ -23,9 +21,6 @@ public class WriteReviewOutputData {
         this.date = date;
     }
 
-    public boolean isSuccess() {
-        return success;
-    }
 
     public String getContent() {
         return content;
