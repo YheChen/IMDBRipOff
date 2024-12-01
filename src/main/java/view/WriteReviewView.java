@@ -5,11 +5,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import data_access.DBReviewDataAccessObject;
+import data_access.MovieDataAccessObject;
+import entity.Movie;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.LoggedInState;
 import interface_adapter.change_password.LoggedInViewModel;
@@ -30,6 +36,8 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
     private final Integer[] rating_choices;
     private WriteReviewController writeReviewController;
     private final JComboBox<Integer> rating_dropdown;
+    private String[] media_choices = new String[]{};
+    private final JComboBox<String> media_dropdown;
 
     private final JButton toBrowse;
     private final JButton toReview;
@@ -41,7 +49,7 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
     // private final JButton changePassword;
     private final JButton submitReview;
 
-    public WriteReviewView(WriteReviewViewModel writeReviewViewModel) {
+    public WriteReviewView(WriteReviewViewModel writeReviewViewModel) throws Exception {
         final JPanel topBar = new JPanel();
         toBrowse = new JButton("Browse Reviews"); // not implemented yet
         topBar.add(toBrowse);
@@ -97,6 +105,20 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
         rating_choices = new Integer[]{1, 2, 3, 4, 5};
         rating_dropdown = new JComboBox<>(rating_choices);
 
+        MovieDataAccessObject movies = new MovieDataAccessObject();
+        Collection<Movie> all_movies = movies.searchMovies("H");
+
+        System.out.println(all_movies);
+
+        // Dropdown of all movies
+        for (Movie movie: all_movies) {
+            String title = movie.getTitle();
+            media_choices = Arrays.copyOf(media_choices, media_choices.length + 1);
+            media_choices[media_choices.length - 1] = title;
+        }
+
+        media_dropdown = new JComboBox<>(media_choices);
+
         final JPanel buttons = new JPanel();
         submitReview = new JButton("Submit Review");
         buttons.add(submitReview);
@@ -146,6 +168,7 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
         // Add everything to the Write Review J Panel
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(media_panel);
+        this.add(media_dropdown);
         this.add(rating_panel);
         this.add(rating_dropdown);
         this.add(optional_panel);
