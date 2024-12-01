@@ -16,7 +16,6 @@ import javax.swing.event.DocumentListener;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.LoggedInState;
 import interface_adapter.change_password.LoggedInViewModel;
-import interface_adapter.login.LoginController;
 import interface_adapter.logout.LogoutController;
 
 /**
@@ -105,11 +104,9 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                 // This creates an anonymous subclass of ActionListener and instantiates it.
                 evt -> {
                     if (evt.getSource().equals(logOut)) {
-
                         final LoggedInState state = loggedInViewModel.getState();
-                        final String username = state.getUsername();
-
-                        logoutController.execute(username);
+                        final String stateUsername = state.getUsername();
+                        logoutController.execute(stateUsername);
                         // 1. get the state out of the loggedInViewModel. It contains the username.
                         // 2. Execute the logout Controller.
                     }
@@ -121,11 +118,9 @@ public class LoggedInView extends JPanel implements PropertyChangeListener {
                 // This creates an anonymous subclass of ActionListener and instantiates it.
                 evt -> {
                     if (evt.getSource().equals(writeReview)) {
-
                         final LoggedInState state = loggedInViewModel.getState();
-                        final String username = state.getUsername();
-
-                        logoutController.execute(username); // Change to WriteReview Controller when necessary
+                        final String stateUsername = state.getUsername();
+                        logoutController.execute(stateUsername);
                         // 1. get the state out of the loggedInViewModel. It contains the username.
                         // 2. Execute the logout Controller.
                     }

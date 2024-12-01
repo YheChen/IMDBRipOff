@@ -1,9 +1,6 @@
 package use_case.write_review;
 
-import entity.User;
 import entity.Review;
-import use_case.signup.SignupOutputData;
-import use_case.signup.SignupUserDataAccessInterface;
 
 // Pull request for pull review
 /**
@@ -20,7 +17,6 @@ public class WriteReviewInteractor implements WriteReviewInputBoundary {
         this.userPresenter = userPresenter;
     }
 
-
     @Override
     public void execute(WriteReviewInputData writeReviewInputData) {
         final Review review = new Review(writeReviewInputData.getUserID(),
@@ -34,14 +30,23 @@ public class WriteReviewInteractor implements WriteReviewInputBoundary {
         userPresenter.prepareSuccessView(writeReviewOutputData);
     }
 
+    /**
+     * Switches to write view.
+     */
     public void switchToWriteView() {
         userPresenter.switchToWriteView();
     }
 
+    /**
+     * Switches to account view.
+     */
     public void switchToAccountView() {
         userPresenter.switchToAccountView();
     }
 
+    /**
+     * Switches to browse view.
+     */
     public void switchToBrowseView() {
         userPresenter.switchToBrowseView();
     }

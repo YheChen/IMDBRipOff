@@ -1,7 +1,7 @@
 package use_case.account;
 
 /**
- * Output boundary for Account view.
+ * Output boundary for Account use case.
  */
 public interface AccountOutputBoundary {
     /**

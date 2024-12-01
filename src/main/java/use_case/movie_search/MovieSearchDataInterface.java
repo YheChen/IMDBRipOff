@@ -1,7 +1,8 @@
 package use_case.movie_search;
 
-import entity.Movie;
 import java.util.List;
+
+import entity.Movie;
 
 /**
  * Interface for the Movie_Search Use Case.
