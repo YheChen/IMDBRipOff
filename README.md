@@ -88,6 +88,8 @@ explanation regarding why it was denied and if it is accepted we will thank you 
 
 ## Licensing
 
+Go to LICENSE.txt for details about licensing of this project.
+
 
 
 
