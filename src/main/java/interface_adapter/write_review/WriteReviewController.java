@@ -1,7 +1,5 @@
 package interface_adapter.write_review;
 
-import use_case.login.LoginInputBoundary;
-import use_case.login.LoginInputData;
 import use_case.write_review.WriteReviewInputBoundary;
 import use_case.write_review.WriteReviewInputData;
 
@@ -29,14 +27,23 @@ public class WriteReviewController {
         writeReviewUseCaseInteractor.execute(writeReviewInputData);
     }
 
+    /**
+     * Switches to write view.
+     */
     public void switchToWriteView() {
         writeReviewUseCaseInteractor.switchToWriteView();
     }
 
+    /**
+     * Switches to account view.
+     */
     public void switchToAccountView() {
         writeReviewUseCaseInteractor.switchToAccountView();
     }
 
+    /**
+     * Switches to browse view.
+     */
     public void switchToBrowseView() {
         writeReviewUseCaseInteractor.switchToBrowseView();
     }

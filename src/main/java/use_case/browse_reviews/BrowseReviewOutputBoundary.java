@@ -1,7 +1,7 @@
 package use_case.browse_reviews;
 
 /**
- * Output boundary for browse view.
+ * Output boundary for browse use case.
  */
 public interface BrowseReviewOutputBoundary {
     /**
