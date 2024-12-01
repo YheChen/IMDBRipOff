@@ -1,6 +1,5 @@
 package data_access;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import org.bson.Document;
 
 import com.mongodb.client.MongoClient;
