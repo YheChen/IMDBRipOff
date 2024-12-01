@@ -1,5 +1,6 @@
 package view;
 
+import data_access.DBReviewDataAccessObject;
 import data_access.InMemoryMovieDataAccessObject;
 import data_access.InMemoryReviewDataAccessObject;
 import data_access.MovieDataAccessObject;
@@ -184,24 +185,31 @@ public class BrowseView extends JPanel{
     }
 
     private void populateReviews(String orderBy, String searchText) throws Exception {
-        InMemoryReviewDataAccessObject reviewDAO = new InMemoryReviewDataAccessObject();
-        reviewDAO.seedData();
+        DBReviewDataAccessObject reviewDAO = new DBReviewDataAccessObject();
         MovieDataAccessObject movieDAO = new MovieDataAccessObject();
 
-        reviewsPanel.removeAll();
-        Collection<Review> reviews = reviewDAO.getAllSorted(orderBy, searchText);
-        for (Review review : reviews) {
-            reviewsPanel.add(createReviewPanel(
-                    movieDAO.MovieNameFromID(review.getMediaID()),
-                    review.getUserID(),
-                    review.getDateUpdated(),
-                    review.getContent(),
-                    movieDAO.MoviePosterFromID(review.getMediaID()),
-                    review.getRating()
-            ));
+        try {
+            reviewsPanel.removeAll();
+            Collection<Review> reviews = reviewDAO.getAllSorted(orderBy, searchText);
+
+            for (Review review : reviews) {
+                String movieName = movieDAO.MovieNameFromID(review.getMediaID());
+                String moviePoster = movieDAO.MoviePosterFromID(review.getMediaID());
+                reviewsPanel.add(createReviewPanel(
+                        movieName,
+                        review.getUserID(),
+                        review.getDateUpdated(),
+                        review.getContent(),
+                        moviePoster,
+                        review.getRating()
+                ));
+            }
+            reviewsPanel.revalidate();
+            reviewsPanel.repaint();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Failed to load reviews: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-        reviewsPanel.revalidate();
-        reviewsPanel.repaint();
     }
 
 
