@@ -1,17 +1,17 @@
 package data_access;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import entity.Movie;
+import io.github.cdimascio.dotenv.Dotenv;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
-import entity.Movie;
-import io.github.cdimascio.dotenv.Dotenv;
 
 /**
  * DAO for movies in API.
@@ -39,7 +39,7 @@ public class MovieDataAccessObject {
         return parseMovies(jsonResponse);
     }
 
-    private String fetchResponse(String url) throws Exception {
+    private String fetchResponse(String url) throws IOException {
         final Request request = new Request.Builder()
                 .url(url)
                 .get()
@@ -88,9 +88,9 @@ public class MovieDataAccessObject {
      * Fetches the name of a movie by id.
      * @param query the query to search by
      * @return a movie name
-     * @throws Exception throws an exception if the api call fails
+     * @throws IOException throws an exception if the api call fails
      */
-    public String movieNameFromID(String query) throws Exception {
+    public String movieNameFromID(String query) throws IOException {
         final String url = buildUrl2(query);
         final String jsonResponse = fetchResponse(url);
         return findName(jsonResponse);
@@ -131,9 +131,9 @@ public class MovieDataAccessObject {
      * Gets the movie poster image from a query.
      * @param query the query
      * @return the movie poster image url
-     * @throws Exception throws an exception if the api call fails
+     * @throws IOException throws an exception if the api call fails
      */
-    public String moviePosterFromID(String query) throws Exception {
+    public String moviePosterFromID(String query) throws IOException {
         final String url = buildUrl3(query);
         final String jsonResponse = fetchResponse(url);
         return findPoster(jsonResponse);
