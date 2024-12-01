@@ -1,17 +1,21 @@
 package data_access;
 
-import entity.Movie;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import io.github.cdimascio.dotenv.Dotenv;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import entity.Movie;
+import io.github.cdimascio.dotenv.Dotenv;
+
+/**
+ * DAO for movies in API.
+ */
 public class MovieDataAccessObject {
 
     private final OkHttpClient client;
@@ -19,18 +23,24 @@ public class MovieDataAccessObject {
 
     public MovieDataAccessObject() {
         this.client = new OkHttpClient();
-        Dotenv dotenv = Dotenv.configure().load();
+        final Dotenv dotenv = Dotenv.configure().load();
         this.apiKey = dotenv.get("TMDB_API_KEY");
     }
 
+    /**
+     * Search for movies by a query.
+     * @param query the query to search by
+     * @return a list of movies
+     * @throws Exception throws an exception if the api call fails
+     */
     public List<Movie> searchMovies(String query) throws Exception {
-        String url = buildUrl(query);
-        String jsonResponse = fetchResponse(url);
+        final String url = buildUrl(query);
+        final String jsonResponse = fetchResponse(url);
         return parseMovies(jsonResponse);
     }
 
     private String fetchResponse(String url) throws Exception {
-        Request request = new Request.Builder()
+        final Request request = new Request.Builder()
                 .url(url)
                 .get()
                 .addHeader("accept", "application/json")
@@ -46,23 +56,25 @@ public class MovieDataAccessObject {
     }
 
     private String buildUrl(String query) {
-        return "https://api.themoviedb.org/3/search/movie?query=" + query + "&include_adult=false&language=en-US&page=1";
+        return "https://api.themoviedb.org/3/search/movie?query="
+                + query
+                + "&include_adult=false&language=en-US&page=1";
     }
 
     private List<Movie> parseMovies(String jsonResponse) {
-        List<Movie> movies = new ArrayList<>();
-        JSONObject jsonObject = new JSONObject(jsonResponse);
-        JSONArray results = jsonObject.getJSONArray("results");
+        final List<Movie> movies = new ArrayList<>();
+        final JSONObject jsonObject = new JSONObject(jsonResponse);
+        final JSONArray results = jsonObject.getJSONArray("results");
 
         for (int i = 0; i < results.length(); i++) {
-            JSONObject movieJson = results.getJSONObject(i);
+            final JSONObject movieJson = results.getJSONObject(i);
 
-            String title = movieJson.optString("title", "Unknown Title");
-            String overview = movieJson.optString("overview", "");
-            String releaseDate = movieJson.optString("release_date", "");
-            int movieID = movieJson.getInt("id");
+            final String title = movieJson.optString("title", "Unknown Title");
+            final String overview = movieJson.optString("overview", "");
+            final String releaseDate = movieJson.optString("release_date", "");
+            final int movieID = movieJson.getInt("id");
 
-            Movie movie = new Movie(title, overview, releaseDate, movieID);
+            final Movie movie = new Movie(title, overview, releaseDate, movieID);
             movies.add(movie);
         }
         return movies;
@@ -72,62 +84,98 @@ public class MovieDataAccessObject {
         return "https://api.themoviedb.org/3/movie/" + query + "/alternative_titles?country=US";
     }
 
-    public String MovieNameFromID(String query) throws Exception {
-        String url = buildUrl2(query);
-        String jsonResponse = fetchResponse(url);
+    /**
+     * Fetches the name of a movie by id.
+     * @param query the query to search by
+     * @return a movie name
+     * @throws Exception throws an exception if the api call fails
+     */
+    public String movieNameFromID(String query) throws Exception {
+        final String url = buildUrl2(query);
+        final String jsonResponse = fetchResponse(url);
         return findName(jsonResponse);
     }
 
+    /**
+     * Extracts movie name from api json response.
+     * @param jsonResponse the raw json response
+     * @return the name of the movie
+     */
     private String findName(String jsonResponse) {
-        JSONObject json = new JSONObject(jsonResponse);
-        JSONArray titles = json.optJSONArray("titles");
+        final JSONObject json = new JSONObject(jsonResponse);
+        final JSONArray titles = json.optJSONArray("titles");
 
+        String name = "No matching title found.";
         if (titles != null) {
             for (int i = 0; i < titles.length(); i++) {
-                JSONObject titleObject = titles.getJSONObject(i);
-                String type = titleObject.optString("type", null);
+                final JSONObject titleObject = titles.getJSONObject(i);
+                final String type = titleObject.optString("type", null);
                 if ("".equals(type)) {
-                    return titleObject.optString("title", "Unknown Title");
+                    name = titleObject.optString("title", "Unknown Title");
                 }
             }
         }
-        return "No matching title found.";
+        return name;
     }
 
+    /**
+     * Builds an api call url with a query.
+     * @param query the query
+     * @return the url to call
+     */
     public String buildUrl3(String query) {
         return "https://api.themoviedb.org/3/movie/" + query + "/images?language=en";
     }
 
-    public String MoviePosterFromID(String query) throws Exception {
-        String url = buildUrl3(query);
-        String jsonResponse = fetchResponse(url);
+    /**
+     * Gets the movie poster image from a query.
+     * @param query the query
+     * @return the movie poster image url
+     * @throws Exception throws an exception if the api call fails
+     */
+    public String moviePosterFromID(String query) throws Exception {
+        final String url = buildUrl3(query);
+        final String jsonResponse = fetchResponse(url);
         return findPoster(jsonResponse);
     }
 
+    /**
+     * Extracts movie poster from raw json response.
+     * @param jsonResponse the raw json response
+     * @return the movie poster url
+     */
     private String findPoster(String jsonResponse) {
-        JSONObject jsonObject = new JSONObject(jsonResponse);
-        JSONArray posters = jsonObject.optJSONArray("posters");
+        final JSONObject jsonObject = new JSONObject(jsonResponse);
+        final JSONArray posters = jsonObject.optJSONArray("posters");
 
+        String result = "No poster available";
         if (posters != null && posters.length() > 0) {
             // Get the first poster's file path
-            JSONObject firstPoster = posters.getJSONObject(0);
-            String filePath = firstPoster.optString("file_path", "");
+            final JSONObject firstPoster = posters.getJSONObject(0);
+            final String filePath = firstPoster.optString("file_path", "");
             if (!filePath.isEmpty()) {
                 // TMDB base URL for images
-                String baseUrl = "https://image.tmdb.org/t/p/w500"; // Adjust size (w500, w300, etc.) as needed
-                return baseUrl + filePath;
+                // Adjust size (w500, w300, etc.) as needed
+                final String baseUrl = "https://image.tmdb.org/t/p/w500";
+                result = baseUrl + filePath;
             }
         }
 
-        return "No poster available.";
+        return result;
     }
 
+    /**
+     * Fetches a list of popular movies.
+     * @return a list of movies
+     * @throws Exception throws in an exception if the api call fails
+     */
     public List<Movie> fetchPopularMovies() throws Exception {
-        String url = "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1";
-        String jsonResponse = fetchResponse(url);
+        final String url = "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1";
+        final String jsonResponse = fetchResponse(url);
         return parseMovies(jsonResponse);
     }
 
+    /* public static void main(String[] args) {
     // Main method for quick testing
 //    public static void main(String[] args) {
 //        try {
@@ -175,6 +223,5 @@ public class MovieDataAccessObject {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
+    }*/
 }

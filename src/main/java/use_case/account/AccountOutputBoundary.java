@@ -1,16 +1,21 @@
 package use_case.account;
 
+/**
+ * Output boundary for Account view.
+ */
 public interface AccountOutputBoundary {
     /**
-     * Prepares the success view for the Write Review Use Case
+     * Switches to write view.
      */
-//    void prepareAccountView();
-
-    //void prepareWriteReviewView();
-
     void switchToWriteView();
 
+    /**
+     * Switches to account view.
+     */
     void switchToAccountView();
 
+    /**
+     * Switches to browse view.
+     */
     void switchToBrowseView();
 }
