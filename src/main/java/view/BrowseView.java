@@ -1,25 +1,19 @@
 package view;
 
-import data_access.InMemoryMovieDataAccessObject;
 import data_access.InMemoryReviewDataAccessObject;
 import data_access.MovieDataAccessObject;
 import entity.Review;
 import interface_adapter.browse_review.BrowseReviewState;
 import interface_adapter.browse_review.BrowseReviewViewModel;
 import interface_adapter.browse_review.BrowseReviewController;
-import interface_adapter.signup.SignupController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -192,11 +186,11 @@ public class BrowseView extends JPanel{
         Collection<Review> reviews = reviewDAO.getAllSorted(orderBy, searchText);
         for (Review review : reviews) {
             reviewsPanel.add(createReviewPanel(
-                    movieDAO.MovieNameFromID(review.getMediaID()),
+                    movieDAO.movieNameFromID(review.getMediaID()),
                     review.getUserID(),
                     review.getDateUpdated(),
                     review.getContent(),
-                    movieDAO.MoviePosterFromID(review.getMediaID()),
+                    movieDAO.moviePosterFromID(review.getMediaID()),
                     review.getRating()
             ));
         }
