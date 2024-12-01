@@ -1,7 +1,7 @@
 package interface_adapter.account;
 
 /**
- * State for the account view
+ * State for account view.
  */
 public class AccountState {
     private String username = "";
@@ -15,10 +15,18 @@ public class AccountState {
 
     }
 
+    /**
+     * Gets username for the active account.
+     * @return username
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Sets username for the active account.
+     * @param username the new username
+     */
     public void setUsername(String username) {
         this.username = username;
     }

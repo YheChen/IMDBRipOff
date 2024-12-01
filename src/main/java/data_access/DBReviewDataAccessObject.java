@@ -1,21 +1,22 @@
 package data_access;
 
-import com.mongodb.client.FindIterable;
-import entity.Review;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
+
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Sorts;
+import entity.Review;
 import use_case.browse_reviews.BrowseReviewDataAccessInterface;
 import use_case.write_review.WriteReviewDataAccessInterface;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Collection;
-
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Sorts.descending;
-import static com.mongodb.client.model.Sorts.ascending;
-import static com.mongodb.client.model.Filters.text;
-
+/**
+ * DAO for Reviews in the database.
+ */
 public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface, WriteReviewDataAccessInterface {
     private static final String COLLECTION = "reviews";
     private static final String ID_FIELD = "_id";
@@ -26,23 +27,31 @@ public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface
     private static final String CREATED_FIELD = "created";
     private static final String UPDATED_FIELD = "updated";
 
+    private static final int QUERY_LIMIT = 100;
+
+    /**
+     * Converts a bson Document into a review object.
+     * @param document the document to convert
+     * @return a review
+     */
     private Review documentToReview(Document document) {
+        Review review = null;
         if (document != null) {
-            String id = document.getString(ID_FIELD);
-            String userId = document.getString(USER_ID_FIELD);
-            String mediaId = document.getString(MEDIA_ID_FIELD);
-            String content = document.getString(CONTENT_FIELD);
-            int rating = document.getInteger(RATING_FIELD);
-            Date dateCreated = document.getDate(CREATED_FIELD);
-            return new Review(id, userId, mediaId, content, rating, dateCreated);
+            final String id = document.getString(ID_FIELD);
+            final String userId = document.getString(USER_ID_FIELD);
+            final String mediaId = document.getString(MEDIA_ID_FIELD);
+            final String content = document.getString(CONTENT_FIELD);
+            final int rating = document.getInteger(RATING_FIELD);
+            final Date dateCreated = document.getDate(CREATED_FIELD);
+            review = new Review(id, userId, mediaId, content, rating, dateCreated);
         }
-        return null;
+        return review;
     }
 
     @Override
     public boolean existsByID(String id) {
         try (MongoDBClient db = new MongoDBClient()) {
-            Document document = db.getCollection(COLLECTION).find(eq(ID_FIELD, id)).first();
+            final Document document = db.getCollection(COLLECTION).find(Filters.eq(ID_FIELD, id)).first();
             return document != null;
         }
     }
@@ -50,7 +59,7 @@ public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface
     @Override
     public Review get(String id) {
         try (MongoDBClient db = new MongoDBClient()) {
-            Document document = db.getCollection(COLLECTION).find(eq(ID_FIELD, id)).first();
+            final Document document = db.getCollection(COLLECTION).find(Filters.eq(ID_FIELD, id)).first();
             return documentToReview(document);
         }
     }
@@ -63,31 +72,31 @@ public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface
     @Override
     public Collection<Review> getAllSorted(String orderBy, String searchText) {
         try (MongoDBClient db = new MongoDBClient()) {
-            ArrayList<Review> reviews = new ArrayList<>();
+            final ArrayList<Review> reviews = new ArrayList<>();
             FindIterable<Document> query = db.getCollection(COLLECTION).find();
             if (orderBy != null) {
-                Bson sortBy;
+                final Bson sortBy;
                 switch (orderBy) {
                     case "recent":
-                        sortBy = descending(UPDATED_FIELD);
+                        sortBy = Sorts.descending(UPDATED_FIELD);
                         break;
                     case "highScore":
-                        sortBy = descending(RATING_FIELD);
+                        sortBy = Sorts.descending(RATING_FIELD);
                         break;
                     case "lowScore":
-                        sortBy = ascending(RATING_FIELD);
+                        sortBy = Sorts.ascending(RATING_FIELD);
                         break;
                     default:
-                        sortBy = ascending(ID_FIELD);
+                        sortBy = Sorts.ascending(ID_FIELD);
                         break;
                 }
                 query = query.sort(sortBy);
             }
             if (searchText != null) {
-                query = query.filter(text(searchText));
+                query = query.filter(Filters.text(searchText));
             }
-            query.limit(100).forEach(document -> {
-                Review review = documentToReview(document);
+            query.limit(QUERY_LIMIT).forEach(document -> {
+                final Review review = documentToReview(document);
                 if (review != null) {
                     reviews.add(review);
                 }
@@ -106,7 +115,7 @@ public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface
     @Override
     public void save(Review review) {
         try (MongoDBClient db = new MongoDBClient()) {
-            Document document = new Document()
+            final Document document = new Document()
                     .append(ID_FIELD, review.getReviewID())
                     .append(USER_ID_FIELD, review.getUserID())
                     .append(MEDIA_ID_FIELD, review.getMediaID())

@@ -19,13 +19,4 @@ public class BrowseReviewInputData {
     String getSearchText() {
         return searchText;
     }
-//    private final String username;
-
-//    public BrowseReviewInputData(String username) {
-//        this.username = username;
-//    }
-
-//    String getUsername() {
-//        return username;
-//    }
 }
