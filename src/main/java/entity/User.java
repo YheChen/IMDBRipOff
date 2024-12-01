@@ -1,15 +1,20 @@
 package entity;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class User
-{
-    String userID;
-    String username;
-    String password;
-    List<String> reviewHistory; // this might change
+/**
+ * A user entity.
+ */
+public class User {
+    private static final int USERID_LENGTH = 5;
 
-    public User(String username, String password){
+    private String userID;
+    private String username;
+    private String password;
+    private List<String> reviewHistory;
+
+    public User(String username, String password) {
         this.userID = generateUserID();
         this.username = username;
         this.password = password;
@@ -35,25 +40,23 @@ public class User
         return password;
     }
 
-    private String generateUserID(){
-        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    private String generateUserID() {
+        final String alphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 + "0123456789"
                 + "abcdefghijklmnopqrstuvxyz";
 
-        // create StringBuffer size of AlphaNumericString
-        final int USERID_LENGTH = 5;
-        StringBuilder sb = new StringBuilder(USERID_LENGTH);
+        // create StringBuffer size of alphaNumericString
+        final StringBuilder sb = new StringBuilder(USERID_LENGTH);
 
         for (int i = 0; i < USERID_LENGTH; i++) {
 
             // generate a random number between
-            // 0 to AlphaNumericString variable length
-            int index
-                    = (int)(AlphaNumericString.length()
-                    * Math.random());
+            // 0 to alphaNumericString variable length
+            final int index = (int)
+                    (alphaNumericString.length() * Math.random());
 
             // add Character one by one in end of sb
-            sb.append(AlphaNumericString
+            sb.append(alphaNumericString
                     .charAt(index));
         }
 

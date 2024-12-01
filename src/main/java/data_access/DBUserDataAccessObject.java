@@ -1,9 +1,9 @@
 package data_access;
 
-import static com.mongodb.client.model.Filters.eq;
-
-import com.mongodb.client.model.Updates;
 import org.bson.Document;
+
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import entity.User;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
@@ -11,8 +11,7 @@ import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 /**
- * In-memory implementation of the DAO for storing user data. This implementation does
- * NOT persist data between runs of the program.
+ * DAO for Users in database.
  */
 public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
@@ -28,7 +27,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     @Override
     public boolean existsByName(String username) {
         try (MongoDBClient db = new MongoDBClient()) {
-            Document document = db.getCollection(COLLECTION).find(eq(USERNAME_FIELD, username)).first();
+            final Document document = db.getCollection(COLLECTION).find(Filters.eq(USERNAME_FIELD, username)).first();
             return document != null;
         }
     }
@@ -36,7 +35,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     @Override
     public void save(User user) {
         try (MongoDBClient db = new MongoDBClient()) {
-            Document document = new Document()
+            final Document document = new Document()
                     .append(ID_FIELD, user.getId())
                     .append(USERNAME_FIELD, user.getUsername())
                     .append(PASSWORD_FIELD, user.getPassword());
@@ -46,15 +45,16 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
     @Override
     public User get(String username) {
+        User user = null;
         try (MongoDBClient db = new MongoDBClient()) {
-            Document document = db.getCollection(COLLECTION).find(eq(USERNAME_FIELD, username)).first();
+            final Document document = db.getCollection(COLLECTION).find(Filters.eq(USERNAME_FIELD, username)).first();
             if (document != null) {
-                String id = document.getString(ID_FIELD);
-                String password = document.getString(PASSWORD_FIELD);
-                return new User(id, username, password);
+                final String id = document.getString(ID_FIELD);
+                final String password = document.getString(PASSWORD_FIELD);
+                user = new User(id, username, password);
             }
         }
-        return null;
+        return user;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         // Replace the old entry with the new password
         try (MongoDBClient db = new MongoDBClient()) {
             db.getCollection(COLLECTION).updateOne(
-                    eq(ID_FIELD, user.getId()),
+                    Filters.eq(ID_FIELD, user.getId()),
                     Updates.set(PASSWORD_FIELD, user.getPassword())
             );
         }

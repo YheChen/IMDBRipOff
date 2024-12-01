@@ -7,19 +7,15 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import data_access.InMemoryReviewDataAccessObject;
+import data_access.InMemoryUserDataAccessObject;
+import entity.UserFactory;
+import interface_adapter.ViewManagerModel;
 import interface_adapter.account.AccountController;
 import interface_adapter.account.AccountPresenter;
 import interface_adapter.account.AccountViewModel;
 import interface_adapter.browse_review.BrowseReviewController;
 import interface_adapter.browse_review.BrowseReviewPresenter;
 import interface_adapter.browse_review.BrowseReviewViewModel;
-import interface_adapter.write_review.WriteReviewController;
-import interface_adapter.write_review.WriteReviewViewModel;
-import data_access.InMemoryUserDataAccessObject;
-import entity.CommonUserFactory;
-
-import entity.UserFactory;
-import interface_adapter.ViewManagerModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.LoggedInViewModel;
@@ -31,7 +27,9 @@ import interface_adapter.logout.LogoutPresenter;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
-import entity.CommonUserFactory;
+import interface_adapter.write_review.WriteReviewController;
+import interface_adapter.write_review.WriteReviewPresenter;
+import interface_adapter.write_review.WriteReviewViewModel;
 import use_case.account.AccountInputBoundary;
 import use_case.account.AccountInteractor;
 import use_case.browse_reviews.BrowseReviewInputBoundary;
@@ -50,9 +48,13 @@ import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
 import use_case.write_review.WriteReviewInputBoundary;
 import use_case.write_review.WriteReviewInteractor;
-import use_case.write_review.WriteReviewOutputBoundary;
-import interface_adapter.write_review.WriteReviewPresenter;
-import view.*;
+import view.AccountView;
+import view.BrowseView;
+import view.LoggedInView;
+import view.LoginView;
+import view.SignupView;
+import view.ViewManager;
+import view.WriteReviewView;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -130,6 +132,7 @@ public class AppBuilder {
     /**
      * Adds the WriteReview View to the application.
      * @return this builder
+     * @throws Exception throws an exception if an api call fails
      */
     public AppBuilder addWriteReviewView() throws Exception {
         writeReviewViewModel = new WriteReviewViewModel();
@@ -142,11 +145,12 @@ public class AppBuilder {
     /**
      * Adds the BrowseReview View to the application.
      * @return this builder
+     * @throws Exception throws an exception if an api call fails
      */
     public AppBuilder addBrowseView() throws Exception {
         browseReviewViewModel = new BrowseReviewViewModel();
         browseView = new BrowseView(browseReviewViewModel);
-        //System.out.println(browseView.getViewName());
+        // System.out.println(browseView.getViewName());
         cardPanel.add(browseView, browseView.getViewName());
         return this;
     }
@@ -214,9 +218,11 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the Write Review Use Case to the application.
+     * @return this builder
+     */
     public AppBuilder addWriteReviewUseCase() {
-
-
         final WriteReviewPresenter writeReviewOutputBoundary = new WriteReviewPresenter(browseReviewViewModel,
                 accountViewModel, writeReviewViewModel, viewManagerModel);
 
@@ -228,6 +234,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the Browse Review Use Case to the application.
+     * @return this builder
+     */
     public AppBuilder addBrowseReviewUseCase() {
         final BrowseReviewPresenter browseReviewOutputBoundary = new BrowseReviewPresenter(browseReviewViewModel,
                 writeReviewViewModel, accountViewModel, viewManagerModel);
@@ -239,6 +249,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds button use case to this application.
+     * @return this builder
+     */
     public AppBuilder addButtonUseCase() {
         final AccountPresenter accountOutputBoundary = new AccountPresenter(browseReviewViewModel,
                 writeReviewViewModel, accountViewModel, viewManagerModel);
@@ -259,8 +273,8 @@ public class AppBuilder {
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         application.add(cardPanel);
-        viewManagerModel.setState(accountViewModel.getViewName());
-        System.out.println(browseReviewViewModel.getViewName());
+        viewManagerModel.setState(signupViewModel.getViewName());
+        System.out.println(signupViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
 
         return application;

@@ -1,5 +1,8 @@
 package interface_adapter.write_review;
 
+/**
+ * State for write review view.
+ */
 public class WriteReviewState {
     private final String username = "";
     private final String userID = "";

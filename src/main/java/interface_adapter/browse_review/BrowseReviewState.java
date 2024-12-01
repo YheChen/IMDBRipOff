@@ -1,5 +1,8 @@
 package interface_adapter.browse_review;
 
+/**
+ * State for Browse view.
+ */
 public class BrowseReviewState {
     private final String username = "";
     private final String userID = "";
@@ -8,7 +11,7 @@ public class BrowseReviewState {
     private final String mediaID = "";
 
     private String orderBy = "recent";
-    private String searchText = null;
+    private String searchText;
 
     public String getOrderBy() {
         return orderBy;

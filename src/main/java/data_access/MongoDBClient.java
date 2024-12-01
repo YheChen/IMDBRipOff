@@ -31,14 +31,14 @@ public class MongoDBClient implements AutoCloseable {
         return this.database.getCollection(name);
     }
 
-    public static void main(String[] args) {
+    /* public static void main(String[] args) {
         Dotenv.configure().systemProperties().load();
         try (MongoDBClient db = new MongoDBClient()) {
             for (String name : db.database.listCollectionNames()) {
                 System.out.println(name);
             }
         }
-    }
+    }*/
 
     @Override
     public void close() {

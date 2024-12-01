@@ -1,107 +1,98 @@
 package view;
 
 import data_access.DBReviewDataAccessObject;
-import data_access.InMemoryMovieDataAccessObject;
-import data_access.InMemoryReviewDataAccessObject;
 import data_access.MovieDataAccessObject;
 import entity.Review;
+import interface_adapter.browse_review.BrowseReviewController;
 import interface_adapter.browse_review.BrowseReviewState;
 import interface_adapter.browse_review.BrowseReviewViewModel;
-import interface_adapter.browse_review.BrowseReviewController;
-import interface_adapter.signup.SignupController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-public class BrowseView extends JPanel{
+/**
+ * View for browsing reviews.
+ */
+public class BrowseView extends JPanel {
+    private static final String SORT_RECENT = "Recent";
+    private static final String SORT_HIGHSCORE = "Highest Score";
+    private static final String SORT_LOWSCORE = "Lowest Score";
+
+    private static final int TOPBAR_WIDTH = 1000;
+    private static final int TOPBAR_HEIGHT = 50;
+    private static final int REVIEW_PORTAL_FRAME_WIDTH = 800;
+    private static final int REVIEW_PORTAL_FRAME_HEIGHT = 500;
+    private static final int SORT_PANEL_WIDTH = 1000;
+    private static final int SORT_PANEL_HEIGHT = 50;
+    private static final int SEARCHBAR_COLUMNS = 22;
+    private static final int REVIEW_PANEL_PADDING = 10;
+    private static final int MOVIE_TITLE_FONT_SIZE = 14;
+    private static final int REVIEW_TEXT_COLUMNS = 30;
+    private static final int IMAGE_SCALE_FACTOR = 4;
+    private static final int REVIEW_BODY_BOX_WIDTH = 0;
+    private static final int REVIEW_BODY_BOX_HEIGHT = 5;
+    private static final int REVIEW_BODY_WIDTH = 500;
+    private static final int REVIEW_BODY_HEIGHT = 150;
+    private static final int IMAGE_LABEL_WIDTH = 169;
+    private static final int IMAGE_LABEL_HEIGHT = 250;
 
     private final String viewName = "browse reviews";
     private BrowseReviewController browseReviewController;
-    private final JTextField searchBar;
+    private JTextField searchBar;
     private final JComboBox<String> sort;
-    private final JButton toBrowse;
-    private final JButton toReview;
-    private final JButton toAccount;
+    private JButton toBrowse;
+    private JButton toReview;
+    private JButton toAccount;
     private final JPanel reviewsPanel;
 
     public BrowseView(BrowseReviewViewModel browseReviewViewModel) throws Exception {
         this.setLayout(new BorderLayout());
 
-        final JPanel topBar = new JPanel();
-        topBar.setMaximumSize(new Dimension(1000, 50));
-        toBrowse = new JButton("Browse Reviews"); // not implemented yet
-        toReview = new JButton("Write Review");
-        toAccount = new JButton("Your Account");
-
-        JLabel searchLabel = new JLabel("Search:");
-        searchBar = new JTextField(22);
-
-        topBar.add(toBrowse);
-        topBar.add(toReview);
-        topBar.add(searchLabel);
-        topBar.add(searchBar);
-        topBar.add(toAccount);
+        final JPanel topBar = createTopBar();
 
         // Set up frame
-        JFrame f = new JFrame("Review Portal");
-        f.setSize(800, 500);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setLayout(new BorderLayout());
+        final JFrame frame = new JFrame("Review Portal");
+        frame.setSize(REVIEW_PORTAL_FRAME_WIDTH, REVIEW_PORTAL_FRAME_HEIGHT);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
 
         // main panel setup
-        JPanel main = new JPanel();
+        final JPanel main = new JPanel();
         main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
 
         // Adding topBar to main
         topBar.setAlignmentX(Component.CENTER_ALIGNMENT);
         main.add(topBar);
 
-        final JPanel sort_panel = new JPanel();
-        sort_panel.setMaximumSize(new Dimension(1000, 50));
-        final JLabel sort_label = new JLabel("Sort: ");
-        sort_panel.add(sort_label);
+        final JPanel sortPanel = new JPanel();
+        sortPanel.setMaximumSize(new Dimension(SORT_PANEL_WIDTH, SORT_PANEL_HEIGHT));
+        final JLabel sortLabel = new JLabel("Sort: ");
+        sortPanel.add(sortLabel);
 
-        String[] filter_choices = new String[]{"Recent", "Highest Score", "Lowest Score"};
-        sort = new JComboBox<>(filter_choices);
-        sort_panel.add(sort);
+        final String[] sortChoices = new String[]{SORT_RECENT, SORT_HIGHSCORE, SORT_LOWSCORE};
+        sort = new JComboBox<>(sortChoices);
+        sortPanel.add(sort);
 
-        main.add(sort_panel);
+        main.add(sortPanel);
 
         reviewsPanel = new JPanel();
         reviewsPanel.setLayout(new BoxLayout(reviewsPanel, BoxLayout.Y_AXIS));
         main.add(reviewsPanel);
 
-
         // Get state
-        browseReviewViewModel.addPropertyChangeListener(evt -> {
-            BrowseReviewState state = browseReviewViewModel.getState();
-            try {
-                setState(state);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
-        BrowseReviewState state = browseReviewViewModel.getState();
-        try {
-            setState(state);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
+        browseReviewViewModel.addPropertyChangeListener(evt -> updateState(browseReviewViewModel));
+        updateState(browseReviewViewModel);
 
         // Scroll pane
-        JScrollPane scroll = new JScrollPane(main);
+        final JScrollPane scroll = new JScrollPane(main);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -111,79 +102,97 @@ public class BrowseView extends JPanel{
         setupButtonActions();
     }
 
+    private JPanel createTopBar() {
+        final JPanel topBar = new JPanel();
+        topBar.setMaximumSize(new Dimension(TOPBAR_WIDTH, TOPBAR_HEIGHT));
+        toBrowse = new JButton("Browse Reviews");
+        toReview = new JButton("Write Review");
+        toAccount = new JButton("Your Account");
+
+        final JLabel searchLabel = new JLabel("Search:");
+        searchBar = new JTextField(SEARCHBAR_COLUMNS);
+
+        topBar.add(toBrowse);
+        topBar.add(toReview);
+        topBar.add(searchLabel);
+        topBar.add(searchBar);
+        topBar.add(toAccount);
+
+        return topBar;
+    }
+
     private void setupButtonActions() {
         toBrowse.addActionListener(evt -> {
-            if (browseReviewController == null) {
-                System.err.println("BrowseReviewController is not set.");
-            } else {
+            if (browseReviewController != null) {
                 System.out.println("Browse Reviews button clicked.");
                 browseReviewController.switchToBrowseView();
             }
         });
 
         toReview.addActionListener(evt -> {
-            if (browseReviewController == null) {
-                System.err.println("BrowseReviewController is not set.");
-            } else {
+            if (browseReviewController != null) {
                 System.out.println("Write Review button clicked.");
                 browseReviewController.switchToWriteView();
             }
         });
 
         toAccount.addActionListener(evt -> {
-            if (browseReviewController == null) {
-                System.err.println("BrowseReviewController is not set.");
-            } else {
+            if (browseReviewController != null) {
                 System.out.println("Account button clicked.");
                 browseReviewController.switchToAccountView();
             }
         });
 
         searchBar.addActionListener(evt -> {
-            String searchText = searchBar.getText();
+            final String searchText = searchBar.getText();
             browseReviewController.execute(null, searchText);
-//            sort.setSelectedItem("Recent");
-//            populateReviews("recent", searchText);
         });
 
-        sort.addItemListener(item -> {
-            if (item.getStateChange() == ItemEvent.SELECTED) {
-                try {
-                    switch ((String)item.getItem()) {
-                        case "Recent":
-                            browseReviewController.execute("recent", null);
-                            break;
-                        case "Highest Score":
-                            browseReviewController.execute("highScore", null);
-                            break;
-                        case "Lowest Score":
-                            browseReviewController.execute("lowScore", null);
-                            break;
-                    }
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+        sort.addItemListener(this::sortItemListener);
     }
 
-    private void setState(BrowseReviewState state) throws Exception {
-        String orderBy = state.getOrderBy();
+    private void sortItemListener(ItemEvent item) {
+        if (item.getStateChange() == ItemEvent.SELECTED) {
+            switch ((String) item.getItem()) {
+                case SORT_RECENT:
+                    browseReviewController.execute("recent", null);
+                    break;
+                case SORT_HIGHSCORE:
+                    browseReviewController.execute("highScore", null);
+                    break;
+                case SORT_LOWSCORE:
+                    browseReviewController.execute("lowScore", null);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void updateState(BrowseReviewViewModel browseReviewViewModel) {
+        final BrowseReviewState state = browseReviewViewModel.getState();
+        final String orderBy = state.getOrderBy();
         switch (orderBy) {
             case "recent":
-                sort.setSelectedItem("Recent");
+                sort.setSelectedItem(SORT_RECENT);
                 break;
             case "highScore":
-                sort.setSelectedItem("Highest Score");
+                sort.setSelectedItem(SORT_HIGHSCORE);
                 break;
             case "lowScore":
-                sort.setSelectedItem("Lowest Score");
+                sort.setSelectedItem(SORT_LOWSCORE);
+                break;
+            default:
                 break;
         }
-        String searchText = state.getSearchText();
-        populateReviews(orderBy, searchText);
+        final String searchText = state.getSearchText();
+        try {
+            populateReviews(orderBy, searchText);
+        }
+        catch (IOException err) {
+            throw new RuntimeException(err);
+        }
     }
-
     private void populateReviews(String orderBy, String searchText) throws Exception {
         DBReviewDataAccessObject reviewDAO = new DBReviewDataAccessObject();
         MovieDataAccessObject movieDAO = new MovieDataAccessObject();
@@ -209,89 +218,101 @@ public class BrowseView extends JPanel{
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Failed to load reviews: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-        }
+
+    private static JPanel createReviewPanelBody() {
+        final JPanel reviewBody = new JPanel();
+        reviewBody.setLayout(new BoxLayout(reviewBody, BoxLayout.Y_AXIS));
+        // Adds padding around the reviewBody
+        reviewBody.setBorder(BorderFactory.createEmptyBorder(
+                REVIEW_PANEL_PADDING,
+                REVIEW_PANEL_PADDING,
+                REVIEW_PANEL_PADDING,
+                REVIEW_PANEL_PADDING));
+        return reviewBody;
     }
 
-
-    // Method to create a review panel
-    private static JPanel createReviewPanel(String movieTitleText, String usernameText, Date date, String reviewTextContent, String imageURL, int score) {
-        JPanel reviewBody = new JPanel();
-        reviewBody.setLayout(new BoxLayout(reviewBody, BoxLayout.Y_AXIS));
-        reviewBody.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Adds padding around the reviewBody
-
-        JLabel movieTitle = new JLabel(movieTitleText);
-        movieTitle.setFont(new Font("Arial", Font.BOLD, 14));
-        JLabel username = new JLabel("User: " + usernameText);
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-        JLabel dateLabel = new JLabel(df.format(date));
-
-        JTextArea reviewText = new JTextArea(reviewTextContent);
+    private static JTextArea createReviewPanelText(String reviewTextContent) {
+        final JTextArea reviewText = new JTextArea(reviewTextContent);
         reviewText.setLineWrap(true);
         reviewText.setWrapStyleWord(true);
         reviewText.setEditable(false);
-        reviewText.setColumns(30);
-        JLabel reviewScore = new JLabel("★".repeat(score) + "☆".repeat(5 - score), SwingConstants.CENTER);
+        reviewText.setColumns(REVIEW_TEXT_COLUMNS);
+        return reviewText;
+    }
+
+    private static JLabel createReviewPanelImageLabel(String imageUrl) {
         JLabel imageLabel = new JLabel("", SwingConstants.CENTER);
         try {
-            ImageIcon normalImage = new ImageIcon(new URL(imageURL));
-            ImageIcon scaledImage = new ImageIcon(normalImage.getImage()
-                    .getScaledInstance(normalImage.getIconWidth() / 4,
-                            normalImage.getIconHeight() / 4, Image.SCALE_SMOOTH));
+            final ImageIcon normalImage = new ImageIcon(new URL(imageUrl));
+            final ImageIcon scaledImage = new ImageIcon(normalImage.getImage()
+                    .getScaledInstance(normalImage.getIconWidth() / IMAGE_SCALE_FACTOR,
+                            normalImage.getIconHeight() / IMAGE_SCALE_FACTOR, Image.SCALE_SMOOTH));
 
             imageLabel = new JLabel(scaledImage);
         }
-        catch (IOException e) {
-            e.printStackTrace();}
+        catch (IOException err) {
+            err.printStackTrace();
+        }
+        imageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        imageLabel.setPreferredSize(new Dimension(IMAGE_LABEL_WIDTH, IMAGE_LABEL_HEIGHT));
+        return imageLabel;
+    }
 
-        JPanel imageScore = new JPanel();
+    private static JPanel createReviewPanelImageScore(String imageUrl, int score) {
+        final JLabel reviewScore = new JLabel(
+                "\u2605".repeat(score) + "\u2606".repeat(5 - score),
+                SwingConstants.CENTER);
+
+        final JLabel imageLabel = createReviewPanelImageLabel(imageUrl);
+
+        final JPanel imageScore = new JPanel();
         imageScore.setLayout(new BoxLayout(imageScore, BoxLayout.Y_AXIS));
 
         imageScore.add(imageLabel);
         imageScore.add(reviewScore);
+        return imageScore;
+    }
 
+    private static JPanel createReviewPanel(String movieTitleText, String usernameText, Date date,
+                                            String reviewTextContent, String imageUrl, int score) {
+        final JPanel reviewBody = createReviewPanelBody();
+
+        final JLabel movieTitle = new JLabel(movieTitleText);
+        movieTitle.setFont(new Font("Arial", Font.BOLD, MOVIE_TITLE_FONT_SIZE));
+        final JLabel username = new JLabel("User: " + usernameText);
+        final DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+        final JLabel dateLabel = new JLabel(df.format(date));
+
+        final JTextArea reviewText = createReviewPanelText(reviewTextContent);
+        final JPanel imageScore = createReviewPanelImageScore(imageUrl, score);
 
         // Align components
         movieTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
         username.setAlignmentX(Component.LEFT_ALIGNMENT);
         dateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         reviewText.setAlignmentX(Component.LEFT_ALIGNMENT);
-        imageLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
 
         // Add components to reviewBody panel
         reviewBody.add(movieTitle);
         reviewBody.add(username);
         reviewBody.add(dateLabel);
-        reviewBody.add(Box.createRigidArea(new Dimension(0, 5))); // Adds space between components
+        reviewBody.add(Box.createRigidArea(new Dimension(REVIEW_BODY_BOX_WIDTH, REVIEW_BODY_BOX_HEIGHT)));
         reviewBody.add(reviewText);
 
         // Resizing elements
-        reviewBody.setPreferredSize(new Dimension(500, 150));
-        imageLabel.setPreferredSize(new Dimension(169, 250));
-
-
-        // List score by number of stars
-//        for (int i = 0; i < score; i++){
-//
-//        }
+        reviewBody.setPreferredSize(new Dimension(REVIEW_BODY_WIDTH, REVIEW_BODY_HEIGHT));
 
         // Space for both poster and score
-        JPanel image = new JPanel();
+        final JPanel image = new JPanel();
         image.setLayout(new BoxLayout(image, BoxLayout.Y_AXIS));
 
-
         // Create a review block to ensure the poster and reviewBody are flowlayout.
-        JPanel review = new JPanel();
+        final JPanel review = new JPanel();
         review.add(imageScore);
         review.add(reviewBody);
 
         return review;
-
     }
-
-//    private drawStar(){
-//
-//    }
 
     public String getViewName() {
         return viewName;

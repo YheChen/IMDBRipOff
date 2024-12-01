@@ -1,15 +1,21 @@
 package entity;
+
 import java.util.Date;
 
-public class Review
-{
-    String reviewID;
-    String userID;
-    String mediaID;
-    String content;
-    int rating;
-    Date dateCreated;
-    Date dateUpdated;
+/**
+ * A review entity.
+ */
+public class Review {
+
+    private static final int USERID_LENGTH = 5;
+
+    private String reviewID;
+    private String userID;
+    private String mediaID;
+    private String content;
+    private int rating;
+    private Date dateCreated;
+    private Date dateUpdated;
 
     public Review(String userID, String mediaID, String content, int rating, Date dateCreated) {
         this.reviewID = generateReviewID();
@@ -59,25 +65,23 @@ public class Review
         return content;
     }
 
-    private String generateReviewID(){
-        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    private String generateReviewID() {
+        final String alphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 + "0123456789"
                 + "abcdefghijklmnopqrstuvxyz";
 
-        // create StringBuffer size of AlphaNumericString
-        final int USERID_LENGTH = 5;
-        StringBuilder sb = new StringBuilder(USERID_LENGTH);
+        // create StringBuffer size of alphaNumericString
+        final StringBuilder sb = new StringBuilder(USERID_LENGTH);
 
         for (int i = 0; i < USERID_LENGTH; i++) {
 
             // generate a random number between
-            // 0 to AlphaNumericString variable length
-            int index
-                    = (int)(AlphaNumericString.length()
-                    * Math.random());
+            // 0 to alphaNumericString variable length
+            final int index = (int)
+                    (alphaNumericString.length() * Math.random());
 
             // add Character one by one in end of sb
-            sb.append(AlphaNumericString
+            sb.append(alphaNumericString
                     .charAt(index));
         }
 

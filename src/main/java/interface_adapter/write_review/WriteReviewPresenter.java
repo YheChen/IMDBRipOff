@@ -2,12 +2,14 @@ package interface_adapter.write_review;
 
 import interface_adapter.ViewManagerModel;
 import interface_adapter.account.AccountViewModel;
-import interface_adapter.browse_review.BrowseReviewViewModel;
-import interface_adapter.change_password.LoggedInViewModel;
 import interface_adapter.browse_review.BrowseReviewState;
-import use_case.write_review.WriteReviewOutputData;
+import interface_adapter.browse_review.BrowseReviewViewModel;
 import use_case.write_review.WriteReviewOutputBoundary;
+import use_case.write_review.WriteReviewOutputData;
 
+/**
+ * Presenter for write review use case.
+ */
 public class WriteReviewPresenter implements WriteReviewOutputBoundary {
     private final BrowseReviewViewModel browseReviewViewModel;
     private final AccountViewModel accountViewModel;
@@ -28,7 +30,6 @@ public class WriteReviewPresenter implements WriteReviewOutputBoundary {
     public void prepareSuccessView(WriteReviewOutputData writeReviewOutputData) {
         // On success, switch to the logged in view.
 
-
         final BrowseReviewState browseReviewState = browseReviewViewModel.getState();
         this.browseReviewViewModel.setState(browseReviewState);
 
@@ -43,12 +44,14 @@ public class WriteReviewPresenter implements WriteReviewOutputBoundary {
         viewManagerModel.firePropertyChanged();
     }
 
+    @Override
     public void switchToAccountView() {
         viewManagerModel.setState(accountViewModel.getViewName());
         System.out.println(accountViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
 
+    @Override
     public void switchToBrowseView() {
         viewManagerModel.setState(browseReviewViewModel.getViewName());
         System.out.println(browseReviewViewModel.getViewName());

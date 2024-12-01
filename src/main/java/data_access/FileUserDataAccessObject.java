@@ -1,4 +1,4 @@
-package main.data_access;
+package data_access;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

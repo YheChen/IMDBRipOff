@@ -1,5 +1,8 @@
 package entity;
 
+/**
+ * A movie entity.
+ */
 public class Movie {
     private final String title;
     private final String overview;

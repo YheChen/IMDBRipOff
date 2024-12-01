@@ -17,7 +17,7 @@ class LoginOutputDataTest {
 
         // Assert
         assertEquals(expectedUsername, loginOutputData.getUsername());
-        assertFalse(loginOutputData.useCaseFailed);
+        assertFalse(loginOutputData.isUseCaseFailed());
     }
 
     @Test
@@ -31,7 +31,7 @@ class LoginOutputDataTest {
 
         // Assert
         assertEquals(username, loginOutputData.getUsername());
-        assertTrue(loginOutputData.useCaseFailed);
+        assertTrue(loginOutputData.isUseCaseFailed());
     }
 
     @Test
@@ -45,6 +45,6 @@ class LoginOutputDataTest {
 
         // Assert
         assertNull(loginOutputData.getUsername());
-        assertFalse(loginOutputData.useCaseFailed);
+        assertFalse(loginOutputData.isUseCaseFailed());
     }
 }
