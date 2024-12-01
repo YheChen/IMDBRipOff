@@ -1,5 +1,16 @@
 # IMDBRipOff Documentation
 
+## Table of Contents
+<!-- TOC -->
+* [IMDBRipOff Documentation](#imdbripoff-documentation)
+  * [Table of Contents](#table-of-contents)
+  * [Authors](#authors)
+  * [Summary](#summary)
+  * [Installation Instructions](#installation-instructions)
+  * [Software Features](#software-features)
+  * [Section for Feedback](#section-for-feedback)
+  * [Contribution Guidelines](#contribution-guidelines)
+<!-- TOC -->
 ## Authors
 Yanzhen Chen - YheChen,
 Shawn Kapcan - skap146,
@@ -35,9 +46,9 @@ following external libraries (not provided by Java) to function:
 Ensure your computer has the ability to enable pop-ups, as a JSwing pop up will be displayed when this program runs.
 
 ## Software Features
-Upon opening the software, you are greeted with the following screen:
 
-![](C:\Users\skapc\IdeaProjects\IMDBRipOffRevised\src\test\resources\proj_fromVCS.png)
+For this section, click on the following linl:
+https://docs.google.com/document/d/1WrZn4NF4zF2Q5t1t3NlUp7TlRyME9yvZMYFocvi2jBc/edit?tab=t.0
 
 ## Section for Feedback
 
@@ -74,6 +85,10 @@ to resolve such conflict.
 
 We will notify you by email regarding the results of your pull request. If it is denied, we will give a brief
 explanation regarding why it was denied and if it is accepted we will thank you for your contribution!
+
+## Licensing
+
+
 
 
 
