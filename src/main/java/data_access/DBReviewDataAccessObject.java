@@ -112,18 +112,25 @@ public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface
         }
     }
 
+    @SuppressWarnings("checkstyle:RightCurly")
     @Override
     public void save(Review review) {
         try (MongoDBClient db = new MongoDBClient()) {
-            final Document document = new Document()
-                    .append(ID_FIELD, review.getReviewID())
-                    .append(USER_ID_FIELD, review.getUserID())
-                    .append(MEDIA_ID_FIELD, review.getMediaID())
-                    .append(CONTENT_FIELD, review.getContent())
-                    .append(RATING_FIELD, review.getRating())
-                    .append(CREATED_FIELD, review.getDateCreated())
-                    .append(UPDATED_FIELD, review.getDateUpdated());
-            db.getCollection(COLLECTION).insertOne(document);
+            if (!existsByID(review.getReviewID())) {
+                final Document document = new Document()
+                        .append(ID_FIELD, review.getReviewID())
+                        .append(USER_ID_FIELD, review.getUserID())
+                        .append(MEDIA_ID_FIELD, review.getMediaID())
+                        .append(CONTENT_FIELD, review.getContent())
+                        .append(RATING_FIELD, review.getRating())
+                        .append(CREATED_FIELD, review.getDateCreated())
+                        .append(UPDATED_FIELD, new Date());
+                db.getCollection(COLLECTION).insertOne(document);
+            }
+            else {
+                System.out.println("Review with ID " + review.getReviewID() + " already exists.");
+            }
         }
     }
+
 }
