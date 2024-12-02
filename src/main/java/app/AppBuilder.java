@@ -242,8 +242,12 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addBrowseReviewUseCase() {
-        final BrowseReviewPresenter browseReviewOutputBoundary = new BrowseReviewPresenter(browseReviewViewModel,
-                writeReviewViewModel, accountViewModel, viewManagerModel);
+        final BrowseReviewPresenter browseReviewOutputBoundary = new BrowseReviewPresenter(
+                browseReviewViewModel,
+                writeReviewViewModel,
+                accountViewModel,
+                viewManagerModel
+        );
         final BrowseReviewDataAccessInterface reviewDao = new DBReviewDataAccessObject();
         final BrowseReviewInputBoundary browseReviewInteractor =
                 new BrowseReviewInteractor(browseReviewOutputBoundary, reviewDao);
