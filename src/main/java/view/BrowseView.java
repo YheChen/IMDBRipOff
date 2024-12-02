@@ -63,7 +63,6 @@ public class BrowseView extends JPanel {
 
     private final String viewName = "browse reviews";
     private BrowseReviewController browseReviewController;
-    private JTextField searchBar;
     private final JComboBox<String> sort;
     private JButton toBrowse;
     private JButton toReview;
@@ -127,12 +126,10 @@ public class BrowseView extends JPanel {
         toAccount = new JButton("Your Account");
 
         final JLabel searchLabel = new JLabel("Search:");
-        searchBar = new JTextField(SEARCHBAR_COLUMNS);
 
         topBar.add(toBrowse);
         topBar.add(toReview);
         topBar.add(searchLabel);
-        topBar.add(searchBar);
         topBar.add(toAccount);
 
         return topBar;
@@ -158,11 +155,6 @@ public class BrowseView extends JPanel {
                 System.out.println("Account button clicked.");
                 browseReviewController.switchToAccountView();
             }
-        });
-
-        searchBar.addActionListener(evt -> {
-            final String searchText = searchBar.getText();
-            browseReviewController.execute(null, searchText);
         });
 
         sort.addItemListener(this::sortItemListener);

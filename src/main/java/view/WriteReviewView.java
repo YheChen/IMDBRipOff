@@ -9,13 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.*;
 
 import data_access.DBReviewDataAccessObject;
 import data_access.MovieDataAccessObject;
@@ -40,6 +34,7 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
     private final JComboBox<String> mediaDropdown;
     private final Map<String, Integer> movieMap; // Map to store title -> ID mapping
 
+    private JTextField searchBar;
     private JButton toBrowse;
     private JButton toReview;
     private JButton toAccount;
@@ -56,7 +51,7 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
         final JPanel mediaPanel = new JPanel();
         final JPanel ratingPanel = new JPanel();
         final JPanel optionalPanel = new JPanel();
-        final JLabel media = new JLabel("Media Under Review: ");
+        final JLabel media = new JLabel("Search Results: ");
         final JLabel rating = new JLabel("Choose a rating: ");
         final JLabel optional = new JLabel("Type your review here (optional)");
         mediaPanel.add(media);
@@ -89,16 +84,55 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
         this.add(buttons);
     }
 
+    @SuppressWarnings({"checkstyle:TrailingComment", "checkstyle:HiddenField", "checkstyle:LambdaBodyLength", "checkstyle:FinalLocalVariable", "checkstyle:SuppressWarnings", "checkstyle:MagicNumber"})
     private JPanel createTopBar() {
         final JPanel topBar = new JPanel();
         toBrowse = new JButton("Browse Reviews");
-        topBar.add(toBrowse);
         toReview = new JButton("Write Review");
-        topBar.add(toReview);
-
         toAccount = new JButton("Your Account");
+        final JLabel searchLabel = new JLabel("Search:");
+        JTextField searchBar = new JTextField(20); // Define search bar
+
+        searchBar.addActionListener(evt -> {
+            String searchText = searchBar.getText();
+            if (searchText.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter text to search.");
+            } else {
+                System.out.println("Searching for: " + searchText);
+                // Add logic here to handle search functionality
+                // Example: Filter movies in the dropdown by the search text
+                updateMediaDropdown(searchText);
+            }
+        });
+
+        topBar.add(toBrowse);
+        topBar.add(toReview);
+        topBar.add(searchLabel);
+        topBar.add(searchBar);
         topBar.add(toAccount);
         return topBar;
+    }
+
+    @SuppressWarnings({"checkstyle:FinalLocalVariable", "checkstyle:SuppressWarnings", "checkstyle:TrailingComment", "checkstyle:RightCurly"})
+    private void updateMediaDropdown(String searchText) {
+        try {
+            MovieDataAccessObject movieDao = new MovieDataAccessObject();
+            Collection<Movie> matchingMovies = movieDao.searchMovies(searchText);
+            mediaDropdown.removeAllItems(); // Clear current dropdown items
+            movieMap.clear(); // Clear the existing map
+
+            for (Movie movie : matchingMovies) {
+                mediaDropdown.addItem(movie.getTitle());
+                movieMap.put(movie.getTitle(), movie.getMovieID()); // Update title-to-ID mapping
+            }
+
+            if (matchingMovies.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No movies found matching: " + searchText);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error fetching movies: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @SuppressWarnings({"checkstyle:TrailingComment", "checkstyle:SuppressWarnings"})
