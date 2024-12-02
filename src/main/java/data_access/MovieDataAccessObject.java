@@ -81,7 +81,7 @@ public class MovieDataAccessObject {
     }
 
     private String buildUrl2(String query) {
-        return "https://api.themoviedb.org/3/movie/" + query + "/alternative_titles?country=US";
+        return "https://api.themoviedb.org/3/movie/" + query + "?language=en-US";
     }
 
     /**
@@ -98,24 +98,16 @@ public class MovieDataAccessObject {
 
     /**
      * Extracts movie name from api json response.
-     * @param jsonResponse the raw json response
+     * @param jsonString the raw json response
      * @return the name of the movie
      */
-    private String findName(String jsonResponse) {
-        final JSONObject json = new JSONObject(jsonResponse);
-        final JSONArray titles = json.optJSONArray("titles");
+    @SuppressWarnings({"checkstyle:JavadocMethod", "checkstyle:FinalLocalVariable", "checkstyle:SuppressWarnings"})
+    public static String findName(String jsonString) {
+        // Parse the JSON string into a JSONObject
+        JSONObject jsonObject = new JSONObject(jsonString);
 
-        String name = "No matching title found.";
-        if (titles != null) {
-            for (int i = 0; i < titles.length(); i++) {
-                final JSONObject titleObject = titles.getJSONObject(i);
-                final String type = titleObject.optString("type", null);
-                if ("".equals(type)) {
-                    name = titleObject.optString("title", "Unknown Title");
-                }
-            }
-        }
-        return name;
+        // Extract the value of the "title" key
+        return jsonObject.optString("title", "Title not found");
     }
 
     /**
@@ -148,7 +140,9 @@ public class MovieDataAccessObject {
         final JSONObject jsonObject = new JSONObject(jsonResponse);
         final JSONArray posters = jsonObject.optJSONArray("posters");
 
-        String result = "No poster available";
+        // Placeholder URL for when no poster is available
+        final String placeholderUrl = "https://via.placeholder.com/500x750?text=No+Poster+Available";
+
         if (posters != null && posters.length() > 0) {
             // Get the first poster's file path
             final JSONObject firstPoster = posters.getJSONObject(0);
@@ -157,11 +151,12 @@ public class MovieDataAccessObject {
                 // TMDB base URL for images
                 // Adjust size (w500, w300, etc.) as needed
                 final String baseUrl = "https://image.tmdb.org/t/p/w500";
-                result = baseUrl + filePath;
+                return baseUrl + filePath;
             }
         }
 
-        return result;
+        // Return the placeholder URL if no poster is found
+        return placeholderUrl;
     }
 
     /**

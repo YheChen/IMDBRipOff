@@ -216,17 +216,34 @@ public class BrowseView extends JPanel {
         final MovieDataAccessObject movieDao = new MovieDataAccessObject();
 
         reviewsPanel.removeAll();
-        final Collection<Review> reviews = reviewDao.getAllSorted(orderBy, searchText);
+        // Fetch reviews using the getAll() method
+        final Collection<Review> reviews = reviewDao.getAll();
+
         for (Review review : reviews) {
+            String movieName;
+            String moviePoster;
+
+            try {
+                // Fetch movie name and poster
+                movieName = movieDao.movieNameFromID(review.getMediaID());
+                moviePoster = movieDao.moviePosterFromID(review.getMediaID());
+            } catch (Exception e) {
+                // Fallback in case fetching fails
+                movieName = "Unknown Movie";
+                moviePoster = null;
+            }
+
+            // Add review panel to the view
             reviewsPanel.add(createReviewPanel(
-                    movieDao.movieNameFromID(review.getMediaID()),
+                    movieName,
                     review.getUserID(),
                     review.getDateUpdated(),
                     review.getContent(),
-                    movieDao.moviePosterFromID(review.getMediaID()),
+                    moviePoster,
                     review.getRating()
             ));
         }
+
         reviewsPanel.revalidate();
         reviewsPanel.repaint();
     }
