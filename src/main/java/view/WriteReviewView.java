@@ -241,6 +241,7 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
                             java.util.UUID.randomUUID().toString(), // Generate a unique ID
                             username,
                             String.valueOf(selectedMovieID), // Movie ID mapped from selectedMedia
+                            selectedMedia,
                             reviewText,
                             selectedRating,
                             currentDate

@@ -102,23 +102,23 @@ public class InMemoryReviewDataAccessObject implements BrowseReviewDataAccessInt
     /**
      * Populates testing data for the DataAccessObject.
      */
-    public void seedData() {
-        final Date currentDate = new Date();
-        final int psRating = 3;
-        reviewsMap.put("671", new Review("User1", "671",
-                "This is the body of the review for 'Harry Potter and the Philosophers Stone'",
-                psRating, currentDate));
-        final int csRating = 4;
-        reviewsMap.put("672", new Review("User2", "672",
-                "This is the body of the review for 'Harry Potter and the Chamber of Secrets'",
-                csRating, currentDate));
-        final int fotrRating = 5;
-        reviewsMap.put("120", new Review("User3", "120",
-                "This is the body of the review for 'The Lord of the Rings: The Fellowship of the Ring'",
-                fotrRating, currentDate));
-        final int tttRating = 2;
-        reviewsMap.put("121", new Review("User4", "121",
-                "This is the body of the review for 'The Lord of the Rings: The Two Towers'",
-                tttRating, currentDate));
-    }
+//    public void seedData() {
+//        final Date currentDate = new Date();
+//        final int psRating = 3;
+//        reviewsMap.put("671", new Review("User1", "671",
+//                "This is the body of the review for 'Harry Potter and the Philosophers Stone'",
+//                psRating, currentDate));
+//        final int csRating = 4;
+//        reviewsMap.put("672", new Review("User2", "672",
+//                "This is the body of the review for 'Harry Potter and the Chamber of Secrets'",
+//                csRating, currentDate));
+//        final int fotrRating = 5;
+//        reviewsMap.put("120", new Review("User3", "120",
+//                "This is the body of the review for 'The Lord of the Rings: The Fellowship of the Ring'",
+//                fotrRating, currentDate));
+//        final int tttRating = 2;
+//        reviewsMap.put("121", new Review("User4", "121",
+//                "This is the body of the review for 'The Lord of the Rings: The Two Towers'",
+//                tttRating, currentDate));
+//    }
 }
