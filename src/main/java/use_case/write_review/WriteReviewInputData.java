@@ -7,15 +7,17 @@ import java.util.Date;
  */
 public class WriteReviewInputData {
     private final String userId;
+    private final String title;
     private final String content;
     private final int rating;
     private final String media;
     // add the date here?
     private final Date date;
 
-    public WriteReviewInputData(String userId, String content, int rating, String media) {
+    public WriteReviewInputData(String userId, String title, String content, int rating, String media) {
 
         this.userId = userId;
+        this.title = title;
         this.content = content;
         this.rating = rating;
         this.media = media;
@@ -25,6 +27,10 @@ public class WriteReviewInputData {
 
     String getUserID() {
         return userId;
+    }
+
+    String getTitle() {
+        return title;
     }
 
     String getContent() {

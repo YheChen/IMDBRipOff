@@ -12,25 +12,28 @@ public class Review {
     private String reviewID;
     private String userID;
     private String mediaID;
+    private String title;
     private String content;
     private int rating;
     private Date dateCreated;
     private Date dateUpdated;
 
-    public Review(String userID, String mediaID, String content, int rating, Date dateCreated) {
+    public Review(String userID, String mediaID, String title, String content, int rating, Date dateCreated) {
         this.reviewID = generateReviewID();
         this.userID = userID;
         this.mediaID = mediaID;
+        this.title = title;
         this.content = content;
         this.rating = rating;
         this.dateCreated = dateCreated;
         this.dateUpdated = dateCreated;
     }
 
-    public Review(String reviewID, String userID, String mediaID, String content, int rating, Date dateCreated) {
+    public Review(String reviewID, String userID, String mediaID, String title, String content, int rating, Date dateCreated) {
         this.reviewID = reviewID;
         this.userID = userID;
         this.mediaID = mediaID;
+        this.title = title;
         this.content = content;
         this.rating = rating;
         this.dateCreated = dateCreated;
@@ -59,6 +62,10 @@ public class Review {
 
     public int getRating() {
         return rating;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getContent() {

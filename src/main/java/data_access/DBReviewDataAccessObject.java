@@ -22,6 +22,7 @@ public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface
     private static final String ID_FIELD = "_id";
     private static final String USER_ID_FIELD = "user_id";
     private static final String MEDIA_ID_FIELD = "media_id";
+    private static final String TITLE_FIELD = "title";
     private static final String CONTENT_FIELD = "content";
     private static final String RATING_FIELD = "rating";
     private static final String CREATED_FIELD = "created";
@@ -40,10 +41,11 @@ public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface
             final String id = document.getString(ID_FIELD);
             final String userId = document.getString(USER_ID_FIELD);
             final String mediaId = document.getString(MEDIA_ID_FIELD);
+            final String title = document.getString(TITLE_FIELD);
             final String content = document.getString(CONTENT_FIELD);
             final int rating = document.getInteger(RATING_FIELD);
             final Date dateCreated = document.getDate(CREATED_FIELD);
-            review = new Review(id, userId, mediaId, content, rating, dateCreated);
+            review = new Review(id, userId, mediaId, title, content, rating, dateCreated);
         }
         return review;
     }
@@ -112,7 +114,6 @@ public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface
         }
     }
 
-    @SuppressWarnings("checkstyle:RightCurly")
     @Override
     public void save(Review review) {
         try (MongoDBClient db = new MongoDBClient()) {
@@ -121,6 +122,7 @@ public class DBReviewDataAccessObject implements BrowseReviewDataAccessInterface
                         .append(ID_FIELD, review.getReviewID())
                         .append(USER_ID_FIELD, review.getUserID())
                         .append(MEDIA_ID_FIELD, review.getMediaID())
+                        .append(TITLE_FIELD, review.getTitle())
                         .append(CONTENT_FIELD, review.getContent())
                         .append(RATING_FIELD, review.getRating())
                         .append(CREATED_FIELD, review.getDateCreated())
