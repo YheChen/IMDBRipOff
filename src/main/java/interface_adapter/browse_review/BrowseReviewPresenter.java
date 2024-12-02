@@ -1,10 +1,14 @@
 package interface_adapter.browse_review;
 
+import entity.Review;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.account.AccountViewModel;
 import interface_adapter.write_review.WriteReviewViewModel;
 import use_case.browse_reviews.BrowseReviewOutputBoundary;
 import use_case.browse_reviews.BrowseReviewOutputData;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Presenter for browse view.
@@ -32,11 +36,15 @@ public class BrowseReviewPresenter implements BrowseReviewOutputBoundary {
         final BrowseReviewState browseReviewState = browseReviewViewModel.getState();
         final String orderBy = response.getOrderBy();
         if (orderBy != null) {
-            browseReviewState.setOrderBy(response.getOrderBy());
+            browseReviewState.setOrderBy(orderBy);
         }
         final String searchText = response.getSearchText();
         if (searchText != null) {
-            browseReviewState.setSearchText(response.getSearchText());
+            browseReviewState.setSearchText(searchText);
+        }
+        final Collection<Review> reviews = response.getReviews();
+        if (reviews != null) {
+            browseReviewState.setReviews(reviews);
         }
         this.browseReviewViewModel.setState(browseReviewState);
         this.browseReviewViewModel.firePropertyChanged();
