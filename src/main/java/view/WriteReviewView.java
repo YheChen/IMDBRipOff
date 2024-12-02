@@ -90,18 +90,18 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
         toBrowse = new JButton("Browse Reviews");
         toReview = new JButton("Write Review");
         toAccount = new JButton("Your Account");
-        final JLabel searchLabel = new JLabel("Search:");
-        JTextField searchBar = new JTextField(20); // Define search bar
 
+        final JLabel searchLabel = new JLabel("Search:");
+        searchBar = new JTextField(20); // Initialize search bar
+
+        // Add action listener to handle Enter key press
         searchBar.addActionListener(evt -> {
             String searchText = searchBar.getText();
             if (searchText.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please enter text to search.");
             } else {
                 System.out.println("Searching for: " + searchText);
-                // Add logic here to handle search functionality
-                // Example: Filter movies in the dropdown by the search text
-                updateMediaDropdown(searchText);
+                updateMediaDropdownWithSearch(searchText);
             }
         });
 
@@ -111,6 +111,34 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
         topBar.add(searchBar);
         topBar.add(toAccount);
         return topBar;
+    }
+
+    private void updateMediaDropdownWithSearch(String query) {
+        try {
+            // Use MovieDataAccessObject to search movies
+            MovieDataAccessObject movieDao = new MovieDataAccessObject();
+            Collection<Movie> searchResults = movieDao.searchMovies(query);
+
+            // Clear existing dropdown items and movieMap
+            mediaDropdown.removeAllItems();
+            movieMap.clear();
+
+            // Populate dropdown and movieMap with search results
+            for (Movie movie : searchResults) {
+                String title = movie.getTitle();
+                int id = movie.getMovieID();
+                mediaDropdown.addItem(title); // Add title to dropdown
+                movieMap.put(title, id);     // Map title to ID
+            }
+
+            // Handle no results case
+            if (searchResults.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No movies found for the query: " + query);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error fetching movies: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @SuppressWarnings({"checkstyle:FinalLocalVariable", "checkstyle:SuppressWarnings", "checkstyle:TrailingComment", "checkstyle:RightCurly"})
@@ -191,16 +219,8 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
                         return;
                     }
 
-                    // Map the selected movie title to its ID
-                    MovieDataAccessObject movieDao = new MovieDataAccessObject();
-                    String selectedMovieID = null;
-                    for (Movie movie : movieDao.fetchPopularMovies()) { // Fetch the list of movies
-                        if (movie.getTitle().equals(selectedMedia)) {
-                            selectedMovieID = String.valueOf(movie.getMovieID());
-                            break;
-                        }
-                    }
-
+                    // Get the movie ID from the movieMap
+                    Integer selectedMovieID = movieMap.get(selectedMedia);
                     if (selectedMovieID == null) {
                         JOptionPane.showMessageDialog(this, "Failed to find the ID for the selected movie.");
                         return;
@@ -215,7 +235,7 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
                     Review review = new Review(
                             java.util.UUID.randomUUID().toString(), // Generate a unique ID
                             userId,
-                            selectedMovieID, // Movie ID mapped from selectedMedia
+                            String.valueOf(selectedMovieID), // Movie ID mapped from selectedMedia
                             reviewText,
                             selectedRating,
                             currentDate
@@ -236,8 +256,7 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
                             "Review submitted successfully:\n" +
                                     "Movie: " + selectedMedia + "\n" +
                                     "Rating: " + selectedRating + "\n" +
-                                    "Content: " + reviewText + "\n" +
-                                    "MOVIEID: " + selectedMovieID
+                                    "Content: " + reviewText
                     );
 
                     // Reset the form
@@ -250,6 +269,7 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
                 }
             }
         });
+
     }
 
     private void resetWriteReviewScreen() {
