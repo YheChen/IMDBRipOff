@@ -139,7 +139,7 @@ public class AppBuilder {
             throw new IllegalStateException("BrowseView must be initialized before WriteReviewView.");
         }
         writeReviewViewModel = new WriteReviewViewModel();
-        writeReviewView = new WriteReviewView(writeReviewViewModel, browseView);
+        writeReviewView = new WriteReviewView(writeReviewViewModel, browseView, loginViewModel);
         cardPanel.add(writeReviewView, writeReviewView.getViewName());
         return this;
     }

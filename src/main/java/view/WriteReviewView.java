@@ -16,6 +16,7 @@ import data_access.MovieDataAccessObject;
 import entity.Movie;
 import entity.Review;
 import interface_adapter.change_password.LoggedInState;
+import interface_adapter.login.LoginViewModel;
 import interface_adapter.write_review.WriteReviewController;
 import interface_adapter.write_review.WriteReviewState;
 import interface_adapter.write_review.WriteReviewViewModel;
@@ -28,6 +29,7 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
 
     private final String viewName = "write review";
     private final WriteReviewViewModel writeReviewViewModel;
+    private final LoginViewModel loginViewModel;
     private WriteReviewController writeReviewController;
     private final JComboBox<Integer> ratingDropdown;
     private final JTextArea content; // Made it an instance variable
@@ -42,7 +44,8 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
     private final BrowseView browseView;
 
     @SuppressWarnings({"checkstyle:ExecutableStatementCount", "checkstyle:SuppressWarnings"})
-    public WriteReviewView(WriteReviewViewModel writeReviewViewModel, BrowseView browseView) throws Exception {
+    public WriteReviewView(WriteReviewViewModel writeReviewViewModel, BrowseView browseView, LoginViewModel loginViewModel) throws Exception {
+        this.loginViewModel = loginViewModel;
         this.browseView = browseView;
         this.movieMap = new HashMap<>(); // Initialize the map
         final JPanel topBar = createTopBar();
@@ -229,14 +232,14 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
                     }
 
                     // Generate a unique user ID (replace with the actual logged-in user's ID)
-                    String userId = "userId"; // Replace this with actual user ID in your application
+                    String username = loginViewModel.getState().getUsername();
                     Date currentDate = new Date(); // Current date
 
                     // Save the review to MongoDB
                     DBReviewDataAccessObject reviewDao = new DBReviewDataAccessObject();
                     Review review = new Review(
                             java.util.UUID.randomUUID().toString(), // Generate a unique ID
-                            userId,
+                            username,
                             String.valueOf(selectedMovieID), // Movie ID mapped from selectedMedia
                             reviewText,
                             selectedRating,
@@ -246,7 +249,7 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
 
                     // Print details to the terminal
                     System.out.println("Review Details:");
-                    System.out.println("User ID: " + userId);
+                    System.out.println("User ID: " + username);
                     System.out.println("Movie ID: " + selectedMovieID);
                     System.out.println("Review Text: " + reviewText);
                     System.out.println("Rating: " + selectedRating);
