@@ -135,9 +135,11 @@ public class AppBuilder {
      * @throws Exception throws an exception if an api call fails
      */
     public AppBuilder addWriteReviewView() throws Exception {
+        if (browseView == null) {
+            throw new IllegalStateException("BrowseView must be initialized before WriteReviewView.");
+        }
         writeReviewViewModel = new WriteReviewViewModel();
-        writeReviewView = new WriteReviewView(writeReviewViewModel);
-        System.out.println(writeReviewView.getViewName());
+        writeReviewView = new WriteReviewView(writeReviewViewModel, browseView);
         cardPanel.add(writeReviewView, writeReviewView.getViewName());
         return this;
     }
@@ -150,7 +152,6 @@ public class AppBuilder {
     public AppBuilder addBrowseView() throws Exception {
         browseReviewViewModel = new BrowseReviewViewModel();
         browseView = new BrowseView(browseReviewViewModel);
-        // System.out.println(browseView.getViewName());
         cardPanel.add(browseView, browseView.getViewName());
         return this;
     }

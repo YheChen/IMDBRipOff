@@ -39,11 +39,13 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
     private JButton toReview;
     private JButton toAccount;
     private final JButton submitReview;
+    private final BrowseView browseView;
 
-    public WriteReviewView(WriteReviewViewModel writeReviewViewModel) throws Exception {
+    @SuppressWarnings({"checkstyle:ExecutableStatementCount", "checkstyle:SuppressWarnings"})
+    public WriteReviewView(WriteReviewViewModel writeReviewViewModel, BrowseView browseView) throws Exception {
+        this.browseView = browseView;
         this.movieMap = new HashMap<>(); // Initialize the map
         final JPanel topBar = createTopBar();
-
         this.add(topBar);
         this.writeReviewViewModel = writeReviewViewModel;
         this.writeReviewViewModel.addPropertyChangeListener(this);
@@ -263,13 +265,16 @@ public class WriteReviewView extends JPanel implements PropertyChangeListener {
                     mediaDropdown.setSelectedIndex(0);
                     ratingDropdown.setSelectedIndex(0);
                     content.setText("");
+
+                    // Refresh BrowseView
+                    browseView.refreshReviews();
+
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(this, "Failed to submit review: " + e.getMessage());
                     e.printStackTrace();
                 }
             }
         });
-
     }
 
     private void resetWriteReviewScreen() {

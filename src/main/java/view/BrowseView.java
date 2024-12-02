@@ -13,19 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import data_access.DBReviewDataAccessObject;
 import data_access.InMemoryReviewDataAccessObject;
@@ -117,6 +105,14 @@ public class BrowseView extends JPanel {
 
         setupButtonActions();
     }
+    public void refreshReviews() {
+        try {
+            populateReviews(null, null); // Update with default sorting and no search text
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Failed to refresh reviews: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
     private JPanel createTopBar() {
         final JPanel topBar = new JPanel();
@@ -197,8 +193,13 @@ public class BrowseView extends JPanel {
         final String searchText = state.getSearchText();
         try {
             populateReviews(orderBy, searchText);
-        }
-        catch (IOException err) {
+
+            // Scroll to the top after updating the reviews
+            SwingUtilities.invokeLater(() -> {
+                JScrollPane parentScrollPane = (JScrollPane) this.getParent().getParent();
+                parentScrollPane.getVerticalScrollBar().setValue(0);
+            });
+        } catch (IOException err) {
             throw new RuntimeException(err);
         }
     }
