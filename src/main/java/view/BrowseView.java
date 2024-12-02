@@ -15,8 +15,6 @@ import java.util.Date;
 
 import javax.swing.*;
 
-import data_access.DBReviewDataAccessObject;
-import data_access.InMemoryReviewDataAccessObject;
 import data_access.MovieDataAccessObject;
 import entity.Review;
 import interface_adapter.browse_review.BrowseReviewController;
@@ -51,6 +49,7 @@ public class BrowseView extends JPanel {
 
     private final String viewName = "browse reviews";
     private BrowseReviewController browseReviewController;
+    private JTextField searchBar;
     private final JComboBox<String> sort;
     private JButton toBrowse;
     private JButton toReview;
@@ -93,7 +92,6 @@ public class BrowseView extends JPanel {
 
         // Get state
         browseReviewViewModel.addPropertyChangeListener(evt -> updateState(browseReviewViewModel));
-        updateState(browseReviewViewModel);
 
         // Scroll pane
         final JScrollPane scroll = new JScrollPane(main);
@@ -105,13 +103,19 @@ public class BrowseView extends JPanel {
 
         setupButtonActions();
     }
+
+    /**
+     * Refresh the reviews list.
+     */
     public void refreshReviews() {
-        try {
-            populateReviews(null, null); // Update with default sorting and no search text
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Failed to refresh reviews: " + e.getMessage());
-            e.printStackTrace();
-        }
+//        try {
+//            browseReviewController.execute(null, null);
+//        }
+//        catch (IOException e) {
+//            JOptionPane.showMessageDialog(this, "Failed to refresh reviews: " + e.getMessage());
+//            e.printStackTrace();
+//        }
+        browseReviewController.execute(null, null);
     }
 
     private JPanel createTopBar() {
@@ -122,10 +126,12 @@ public class BrowseView extends JPanel {
         toAccount = new JButton("Your Account");
 
         final JLabel searchLabel = new JLabel("Search:");
+        searchBar = new JTextField(SEARCHBAR_COLUMNS);
 
         topBar.add(toBrowse);
         topBar.add(toReview);
         topBar.add(searchLabel);
+        topBar.add(searchBar);
         topBar.add(toAccount);
 
         return topBar;
@@ -151,6 +157,11 @@ public class BrowseView extends JPanel {
                 System.out.println("Account button clicked.");
                 browseReviewController.switchToAccountView();
             }
+        });
+
+        searchBar.addActionListener(evt -> {
+            final String searchText = searchBar.getText();
+            browseReviewController.execute(null, searchText);
         });
 
         sort.addItemListener(this::sortItemListener);
@@ -190,27 +201,27 @@ public class BrowseView extends JPanel {
             default:
                 break;
         }
-        final String searchText = state.getSearchText();
+        final Collection<Review> reviews = state.getReviews();
         try {
-            populateReviews(orderBy, searchText);
+            populateReviews(reviews);
 
             // Scroll to the top after updating the reviews
-            SwingUtilities.invokeLater(() -> {
-                JScrollPane parentScrollPane = (JScrollPane) this.getParent().getParent();
-                parentScrollPane.getVerticalScrollBar().setValue(0);
-            });
-        } catch (IOException err) {
+//            SwingUtilities.invokeLater(() -> {
+//                final JScrollPane parentScrollPane = (JScrollPane) this.getParent().getParent();
+//                parentScrollPane.getVerticalScrollBar().setValue(0);
+//            });
+        }
+        catch (IOException err) {
             throw new RuntimeException(err);
         }
     }
 
-    private void populateReviews(String orderBy, String searchText) throws IOException {
-        final DBReviewDataAccessObject reviewDao = new DBReviewDataAccessObject();
+    private void populateReviews(Collection<Review> reviews) throws IOException {
+        System.out.println("Populating reviews...");
+        System.out.println(reviews.size());
         final MovieDataAccessObject movieDao = new MovieDataAccessObject();
 
         reviewsPanel.removeAll();
-        // Fetch reviews using the getAll() method
-        final Collection<Review> reviews = reviewDao.getAll();
 
         for (Review review : reviews) {
             String movieName;
@@ -342,5 +353,6 @@ public class BrowseView extends JPanel {
 
     public void setBrowseController(BrowseReviewController controller) {
         this.browseReviewController = controller;
+        controller.execute("recent", null);
     }
 }

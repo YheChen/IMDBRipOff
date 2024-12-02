@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import data_access.DBReviewDataAccessObject;
 import data_access.InMemoryReviewDataAccessObject;
 import data_access.InMemoryUserDataAccessObject;
 import entity.UserFactory;
@@ -32,6 +33,7 @@ import interface_adapter.write_review.WriteReviewPresenter;
 import interface_adapter.write_review.WriteReviewViewModel;
 import use_case.account.AccountInputBoundary;
 import use_case.account.AccountInteractor;
+import use_case.browse_reviews.BrowseReviewDataAccessInterface;
 import use_case.browse_reviews.BrowseReviewInputBoundary;
 import use_case.browse_reviews.BrowseReviewInteractor;
 import use_case.change_password.ChangePasswordInputBoundary;
@@ -242,8 +244,9 @@ public class AppBuilder {
     public AppBuilder addBrowseReviewUseCase() {
         final BrowseReviewPresenter browseReviewOutputBoundary = new BrowseReviewPresenter(browseReviewViewModel,
                 writeReviewViewModel, accountViewModel, viewManagerModel);
+        final BrowseReviewDataAccessInterface reviewDao = new DBReviewDataAccessObject();
         final BrowseReviewInputBoundary browseReviewInteractor =
-                new BrowseReviewInteractor(browseReviewOutputBoundary);
+                new BrowseReviewInteractor(browseReviewOutputBoundary, reviewDao);
 
         final BrowseReviewController browseReviewController = new BrowseReviewController(browseReviewInteractor);
         browseView.setBrowseController(browseReviewController);
