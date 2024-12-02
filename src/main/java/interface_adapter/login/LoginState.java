@@ -24,12 +24,12 @@ public class LoginState {
         this.username = username;
     }
 
-    public void setLoginError(String usernameError) {
-        this.loginError = usernameError;
+    public void setLoginError(String loginError) {
+        this.loginError = loginError;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
-
 }
+
