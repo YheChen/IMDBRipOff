@@ -41,7 +41,8 @@ following external libraries (not provided by Java) to function:
 - com.mongodb.client 
 - org.bson
 - okhttp3
-- org.json
+- org.json 
+IMPORTANT: UNLESS OTHERWISE SPECIFIED, we use the latest version of these libraries.
 
 Ensure your computer has the ability to enable pop-ups, as a JSwing pop up will be displayed when this program runs.
 
