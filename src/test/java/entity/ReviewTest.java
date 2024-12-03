@@ -15,11 +15,12 @@ public class ReviewTest {
         final int rating = 5;
         String userID = "user123";
         String mediaID = "movie456";
+        String title = "Movie Title";
         String content = "A great movie!";
         Date dateCreated = new Date();
 
         // Act
-        Review review = new Review(userID, mediaID, content, rating, dateCreated);
+        Review review = new Review(userID, mediaID, title, content, rating, dateCreated);
 
         // Assert
         assertEquals(content, review.getContent());
@@ -58,8 +59,8 @@ public class ReviewTest {
     @Test
     void generateReviewIDCreatesUniqueID() {
         // Arrange
-        Review review1 = new Review("user1", "media1", "Content 1", 4, new Date());
-        Review review2 = new Review("user2", "media2", "Content 2", 5, new Date());
+        Review review1 = new Review("user1", "media1", "Title 1", "Content 1", 4, new Date());
+        Review review2 = new Review("user2", "media2", "Title 2", "Content 2", 5, new Date());
 
         // Act
         String id1 = review1.getReviewID();

@@ -27,10 +27,11 @@ class WriteReviewInteractorTest {
 
         // Create input Data
         WriteReviewInputData writeReviewInputData = new WriteReviewInputData("30ENX3",
-                "hello so yeah i really like this move idk why", 5,
+                "Harry Potter and the Philosopher's Stone",
+                "hello so yeah i really like this move idk why",5,
                 "Harry Potter and the Philosopher's Stone");
         InMemoryReviewDataAccessObject reviewMemObj = new InMemoryReviewDataAccessObject();
-        Review review = new Review("94xdj", "4o3me",
+        Review review = new Review("94xdj", "4o3me", "Harry Potter and the Philosopher's Stone",
                 "hello so yeah i really like this move idk why", 5, new Date());
         reviewMemObj.save(review);
 
