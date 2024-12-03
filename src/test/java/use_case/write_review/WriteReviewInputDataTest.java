@@ -13,11 +13,12 @@ class WriteReviewInputDataTest {
         // Arrange
         String userId = "testUser";
         String content = "This is a test review.";
+        String title = "test movie";
         int rating = 4;
         String media = "Test Movie";
 
         // Act
-        WriteReviewInputData inputData = new WriteReviewInputData(userId, content, rating, media);
+        WriteReviewInputData inputData = new WriteReviewInputData(userId, title, content, rating, media);
 
         // Assert
         assertEquals(userId, inputData.getUserID());
@@ -32,11 +33,12 @@ class WriteReviewInputDataTest {
         // Arrange
         String userId = "user123";
         String content = "Review content";
+        String title = "test movie";
         int rating = 5;
         String media = "Media Name";
 
         // Act
-        WriteReviewInputData inputData = new WriteReviewInputData(userId, content, rating, media);
+        WriteReviewInputData inputData = new WriteReviewInputData(userId, title, content, rating, media);
         Date now = new Date();
 
         // Assert
@@ -49,11 +51,12 @@ class WriteReviewInputDataTest {
         // Arrange
         String userId = "";
         String content = "";
+        String title = "test movie";
         int rating = 0;
         String media = "";
 
         // Act
-        WriteReviewInputData inputData = new WriteReviewInputData(userId, content, rating, media);
+        WriteReviewInputData inputData = new WriteReviewInputData(userId, title, content, rating, media);
 
         // Assert
         assertEquals("", inputData.getUserID());

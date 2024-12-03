@@ -27,11 +27,15 @@ class WriteReviewInteractorTest {
 
         // Create input Data
         WriteReviewInputData writeReviewInputData = new WriteReviewInputData("30ENX3",
-                "hello so yeah i really like this move idk why", 5,
-                "Harry Potter and the Philosopher's Stone");
+                "Harry Potter and the Philosopher's Stone", "hello so yeah i really like this move idk why",
+                5,
+                "4o3me");
         InMemoryReviewDataAccessObject reviewMemObj = new InMemoryReviewDataAccessObject();
-        Review review = new Review("94xdj", "4o3me",
-                "hello so yeah i really like this move idk why", 5, new Date());
+        final Review review = new Review(writeReviewInputData.getUserID(),
+                writeReviewInputData.getMedia(),
+                writeReviewInputData.getTitle(),
+                writeReviewInputData.getContent(), writeReviewInputData.getRating(),
+                writeReviewInputData.getDate());
         reviewMemObj.save(review);
 
 
@@ -48,7 +52,7 @@ class WriteReviewInteractorTest {
                 // Check if the movie/media is correct lo
                 assertEquals("hello so yeah i really like this move idk why", writeReviewOutputData.getContent());
                 assertEquals(5, writeReviewOutputData.getRating());
-                assertEquals("Harry Potter and the Philosopher's Stone", writeReviewOutputData.getMedia());
+                assertEquals("4o3me", writeReviewOutputData.getMedia());
                 assertEquals("30ENX3", writeReviewOutputData.getUserID());
                 assertEquals(new Date().toString(), writeReviewOutputData.getDate().toString());
             }

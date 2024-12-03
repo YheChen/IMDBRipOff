@@ -1,5 +1,6 @@
 package use_case.browse_reviews;
 
+import data_access.InMemoryReviewDataAccessObject;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,7 +12,8 @@ public class BrowseReviewInteractorTest {
     void testExecute() {
         // Arrange: Mock Output Boundary
         MockBrowseReviewOutputBoundary mockOutputBoundary = new MockBrowseReviewOutputBoundary();
-        BrowseReviewInteractor interactor = new BrowseReviewInteractor(mockOutputBoundary);
+        BrowseReviewDataAccessInterface mockDAO = new InMemoryReviewDataAccessObject();
+        BrowseReviewInteractor interactor = new BrowseReviewInteractor(mockOutputBoundary, mockDAO);
 
         // Input Data
         String orderBy = "date";
@@ -31,7 +33,8 @@ public class BrowseReviewInteractorTest {
     void testSwitchToWriteView() {
         // Arrange
         MockBrowseReviewOutputBoundary mockOutputBoundary = new MockBrowseReviewOutputBoundary();
-        BrowseReviewInteractor interactor = new BrowseReviewInteractor(mockOutputBoundary);
+        BrowseReviewDataAccessInterface mockDAO = new InMemoryReviewDataAccessObject();
+        BrowseReviewInteractor interactor = new BrowseReviewInteractor(mockOutputBoundary, mockDAO);
 
         // Act
         interactor.switchToWriteView();
@@ -44,7 +47,8 @@ public class BrowseReviewInteractorTest {
     void testSwitchToAccountView() {
         // Arrange
         MockBrowseReviewOutputBoundary mockOutputBoundary = new MockBrowseReviewOutputBoundary();
-        BrowseReviewInteractor interactor = new BrowseReviewInteractor(mockOutputBoundary);
+        BrowseReviewDataAccessInterface mockDAO = new InMemoryReviewDataAccessObject();
+        BrowseReviewInteractor interactor = new BrowseReviewInteractor(mockOutputBoundary, mockDAO);
 
         // Act
         interactor.switchToAccountView();
@@ -57,7 +61,8 @@ public class BrowseReviewInteractorTest {
     void testSwitchToBrowseView() {
         // Arrange
         MockBrowseReviewOutputBoundary mockOutputBoundary = new MockBrowseReviewOutputBoundary();
-        BrowseReviewInteractor interactor = new BrowseReviewInteractor(mockOutputBoundary);
+        BrowseReviewDataAccessInterface mockDAO = new InMemoryReviewDataAccessObject();
+        BrowseReviewInteractor interactor = new BrowseReviewInteractor(mockOutputBoundary, mockDAO);
 
         // Act
         interactor.switchToBrowseView();
